@@ -27,6 +27,7 @@ const formattedDate = event.data.date.toLocaleDateString('en-CA', {
       {formattedDate}{event.data.time ? ` · ${event.data.time}` : ''}
       {event.data.location ? ` · ${event.data.location}` : ''}
     </p>
+    {event.data.image && <img src={event.data.image} alt={event.data.title} style="width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius);margin:1rem 0;" />}
     <Content />
     {event.data.rsvpLink && (
       <p><a class="button" href={event.data.rsvpLink} target="_blank" rel="noopener noreferrer">RSVP</a></p>

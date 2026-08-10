@@ -9,12 +9,26 @@ const allEvents = (await getCollection('events')).sort(
 const now = new Date();
 const upcoming = allEvents.filter((e) => e.data.date >= now);
 const past = allEvents.filter((e) => e.data.date < now).reverse();
+
+const galleryImages = [
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/09/IMG_9716-1024x683.jpg',
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/08/Black-Engineer-Mixer-09-1-768x512.jpg',
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/09/IMG_9731-scaled.jpg',
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/09/IMG_9834-1024x683.jpg',
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/09/IMG_9730-scaled.jpg',
+  'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/08/VAL2415-1-scaled.jpg',
+];
 ---
 <BaseLayout title="Events" description="Upcoming and past NSBE Queen's events.">
+  <p class="kicker">What's Happening</p>
   <h1>Events</h1>
+  <p class="muted">
+    Events designed to connect, empower, and inspire — from study labs and
+    career panels to socials and conferences.
+  </p>
 
   <h2>Upcoming</h2>
-  {upcoming.length === 0 && <p class="muted">No upcoming events yet — check back soon.</p>}
+  {upcoming.length === 0 && <p class="muted">No upcoming events yet — check back soon, or <a href="/contact">join our email list</a> for updates.</p>}
   <div class="card-grid">
     {upcoming.map((event) => (
       <EventCard
@@ -22,6 +36,7 @@ const past = allEvents.filter((e) => e.data.date < now).reverse();
         date={event.data.date}
         time={event.data.time}
         location={event.data.location}
+        image={event.data.image}
         href={`/events/${event.id}`}
       />
     ))}
@@ -37,10 +52,19 @@ const past = allEvents.filter((e) => e.data.date < now).reverse();
             date={event.data.date}
             time={event.data.time}
             location={event.data.location}
+            image={event.data.image}
             href={`/events/${event.id}`}
           />
         ))}
       </div>
     </>
   )}
+
+  <h2>Community In Motion</h2>
+  <p class="muted">A look back at the socials, conferences, and gatherings that make NSBE Queen's a home away from home.</p>
+  <div class="gallery-grid">
+    {galleryImages.map((src) => (
+      <a href={src} target="_blank" rel="noopener noreferrer"><img src={src} alt="NSBE Queen's event moment" loading="lazy" /></a>
+    ))}
+  </div>
 </BaseLayout>

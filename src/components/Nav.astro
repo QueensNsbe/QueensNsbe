@@ -9,10 +9,14 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ];
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const logoUrl = 'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/08/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png';
 ---
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="brand" href="/">NSBE Queen's</a>
+    <a class="brand" href="/">
+      <img src={logoUrl} alt="NSBE Queen's logo" width="36" height="36" />
+      <span>NSBE Queen's</span>
+    </a>
     <nav>
       <ul>
         {links.map((link) => {
@@ -43,10 +47,17 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     gap: 0.75rem;
   }
   .brand {
-    font-weight: 800;
-    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
     text-decoration: none;
-    color: var(--color-navy);
+    color: var(--color-ink);
+  }
+  .brand img {
+    border-radius: 50%;
   }
   nav ul {
     list-style: none;
@@ -59,10 +70,10 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   nav a {
     text-decoration: none;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-ink);
   }
   nav a[aria-current='page'] {
-    color: var(--color-navy);
+    color: var(--color-purple);
     border-bottom: 2px solid var(--color-gold);
   }
 </style>

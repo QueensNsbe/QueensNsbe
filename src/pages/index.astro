@@ -3,37 +3,133 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import EventCard from '../components/EventCard.astro';
 import { getCollection } from 'astro:content';
 
-const events = (await getCollection('events'))
-  .filter((e) => e.data.date >= new Date())
-  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
-  .slice(0, 3);
+const allEvents = (await getCollection('events')).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
+);
+const now = new Date();
+const upcoming = allEvents.filter((e) => e.data.date >= now);
+const featured = upcoming.length > 0
+  ? upcoming.slice(0, 3)
+  : allEvents.filter((e) => e.data.date < now).reverse().slice(0, 3);
+const featuredLabel = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
+
+const stats = [
+  { num: '16,000+', label: 'Members Worldwide' },
+  { num: '500+', label: 'Chapters Globally' },
+  { num: '1975', label: 'NSBE Founded' },
+  { num: '13', label: "Queen's Exec Leaders" },
+];
+
+const testimonials = [
+  {
+    quote: "NSBE not only gave me a safe space and a community of new friends but also a place to develop my professional skills and enhance my portfolio.",
+    name: 'Muyi Omorogbe',
+    role: "Queen's NSBE Alumni",
+  },
+  {
+    quote: "In first year, I had a student mentor and they helped support me academically and taught me about the culture of Queen's.",
+    name: 'Savannah Gray',
+    role: "Current Queen's NSBE General Member",
+  },
+  {
+    quote: 'NSBE made school feel a lot less isolating. It gave me a space where I felt supported and could just be myself.',
+    name: 'Msendoo Nongo',
+    role: "Queen's NSBE Alumni",
+  },
+];
 ---
 <BaseLayout title="Home">
   <section class="hero">
-    <h1>NSBE Queen's Chapter</h1>
-    <p class="muted">
-      Empowering Black students in engineering and applied science at Queen's
-      University — through community, mentorship, and professional development.
+    <p class="kicker">Queen's University Chapter</p>
+    <h1>Welcome to NSBE Queen's</h1>
+    <p class="lead">
+      The National Society of Black Engineers — Queen's Chapter. We support
+      academic success and celebrate Black excellence on campus through
+      events, mentorship, and leadership opportunities.
     </p>
     <div class="hero-actions">
-      <a class="button" href="/events">Upcoming Events</a>
-      <a class="button" href="/about">Learn More</a>
+      <a class="button" href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener noreferrer">Become a Member</a>
+      <a class="button-outline" href="/about">Who We Are</a>
     </div>
   </section>
 
+  <section class="stats-grid">
+    {stats.map((s) => (
+      <div class="stat-tile">
+        <div class="stat-num">{s.num}</div>
+        <div class="muted">{s.label}</div>
+      </div>
+    ))}
+  </section>
+
   <section>
-    <h2>Upcoming Events</h2>
-    {events.length === 0 && <p class="muted">No upcoming events yet — check back soon.</p>}
+    <p class="kicker">Who We Are</p>
+    <h2>Building culturally responsible Black engineers.</h2>
+    <p>
+      The Queen's University NSBE chapter is one of many chapters of the
+      North American NSBE organization. Our mission is to increase the
+      number of culturally responsible Black engineers who excel
+      academically, succeed professionally, and positively impact the
+      community.
+    </p>
+    <a class="button" href="/about">Learn More</a>
+  </section>
+
+  <section>
+    <p class="kicker">{featuredLabel}</p>
+    <h2>{featuredLabel}</h2>
+    {featured.length === 0 && <p class="muted">No events yet — check back soon.</p>}
     <div class="card-grid">
-      {events.map((event) => (
+      {featured.map((event) => (
         <EventCard
           title={event.data.title}
           date={event.data.date}
           time={event.data.time}
           location={event.data.location}
+          image={event.data.image}
           href={`/events/${event.id}`}
         />
       ))}
+    </div>
+    <p style="margin-top:1.5rem;"><a class="button-outline" href="/events">View All Events</a></p>
+  </section>
+
+  <section>
+    <p class="kicker">Mentorship</p>
+    <h2>Mentorship That Matters</h2>
+    <p>
+      Our mentorship program connects Black engineering students with
+      upper-year students and graduates who understand their journey.
+      Through guidance, support, and shared experiences, we help members
+      navigate academic challenges, career opportunities, and personal
+      growth.
+    </p>
+    <a class="button" href="/mentorship">Learn More</a>
+  </section>
+
+  <section>
+    <p class="kicker">In Their Words</p>
+    <h2>What Our Members Say</h2>
+    <div class="card-grid">
+      {testimonials.map((t) => (
+        <div class="card">
+          <p>&ldquo;{t.quote}&rdquo;</p>
+          <p class="muted"><strong>{t.name}</strong> — {t.role}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Become a Member</h2>
+    <p>
+      Stay connected with NSBE Queen's University by joining our email list.
+      Get the latest updates, explore upcoming events, and learn more about
+      how you can be part of our mission to empower Black students in STEM.
+    </p>
+    <div class="hero-actions">
+      <a class="button" href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener noreferrer">Join Our Community</a>
+      <a class="button-outline" href="mailto:nsbe@engsoc.queensu.ca">Email Us</a>
     </div>
   </section>
 
@@ -41,11 +137,60 @@ const events = (await getCollection('events'))
     .hero {
       padding: 2rem 0 1rem;
     }
+    .lead {
+      font-size: 1.1rem;
+      color: var(--color-muted);
+      max-width: 65ch;
+    }
     .hero-actions {
       display: flex;
       gap: 1rem;
       margin-top: 1.5rem;
       flex-wrap: wrap;
+    }
+    section {
+      margin-top: 3rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      text-align: center;
+      background: #faf8fc;
+      border-radius: var(--radius);
+      padding: 2rem 1rem;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: var(--color-purple);
+    }
+    .cta-section {
+      background: var(--color-ink);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .cta-section h2 {
+      color: #fff;
+    }
+    .cta-section p {
+      max-width: 60ch;
+      margin: 0 auto 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .cta-section .hero-actions {
+      justify-content: center;
+    }
+    .cta-section .button-outline {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+    .cta-section .button-outline:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
     }
   </style>
 </BaseLayout>
