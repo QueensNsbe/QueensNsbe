@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+<BaseLayout title="Blog" description="Announcements and updates from NSBE Queen's.">
+  <h1>Blog & Announcements</h1>
+  {posts.length === 0 && <p class="muted">No posts yet.</p>}
+  <div class="card-grid">
+    {posts.map((post) => (
+      <a class="card" href={`/blog/${post.id}`} style="text-decoration:none;color:inherit;display:block;">
+        <h3>{post.data.title}</h3>
+        <p class="muted">{post.data.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</p>
+        {post.data.excerpt && <p>{post.data.excerpt}</p>}
+      </a>
+    ))}
+  </div>
+</BaseLayout>

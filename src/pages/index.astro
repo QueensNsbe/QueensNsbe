@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EventCard from '../components/EventCard.astro';
+import { getCollection } from 'astro:content';
+
+const events = (await getCollection('events'))
+  .filter((e) => e.data.date >= new Date())
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
+  .slice(0, 3);
+---
+<BaseLayout title="Home">
+  <section class="hero">
+    <h1>NSBE Queen's Chapter</h1>
+    <p class="muted">
+      Empowering Black students in engineering and applied science at Queen's
+      University — through community, mentorship, and professional development.
+    </p>
+    <div class="hero-actions">
+      <a class="button" href="/events">Upcoming Events</a>
+      <a class="button" href="/about">Learn More</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Upcoming Events</h2>
+    {events.length === 0 && <p class="muted">No upcoming events yet — check back soon.</p>}
+    <div class="card-grid">
+      {events.map((event) => (
+        <EventCard
+          title={event.data.title}
+          date={event.data.date}
+          time={event.data.time}
+          location={event.data.location}
+          href={`/events/${event.id}`}
+        />
+      ))}
+    </div>
+  </section>
+
+  <style>
+    .hero {
+      padding: 2rem 0 1rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</BaseLayout>

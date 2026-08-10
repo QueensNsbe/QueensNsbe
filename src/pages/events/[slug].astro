@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({
+    params: { slug: event.id },
+    props: { event },
+  }));
+}
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+const formattedDate = event.data.date.toLocaleDateString('en-CA', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+<BaseLayout title={event.data.title}>
+  <article>
+    <h1>{event.data.title}</h1>
+    <p class="muted">
+      {formattedDate}{event.data.time ? ` · ${event.data.time}` : ''}
+      {event.data.location ? ` · ${event.data.location}` : ''}
+    </p>
+    <Content />
+    {event.data.rsvpLink && (
+      <p><a class="button" href={event.data.rsvpLink} target="_blank" rel="noopener noreferrer">RSVP</a></p>
+    )}
+  </article>
+</BaseLayout>

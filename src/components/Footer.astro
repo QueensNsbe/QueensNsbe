@@ -1,0 +1,26 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>&copy; {year} NSBE Queen's Chapter. All rights reserved.</p>
+    <p class="muted">National Society of Black Engineers — Queen's University</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 3rem;
+  }
+  .site-footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .site-footer-inner p {
+    margin: 0.25rem 0;
+  }
+</style>

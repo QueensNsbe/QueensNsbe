@@ -1,0 +1,9 @@
+# Tells Netlify how to build and serve this site. Netlify reads this file
+# automatically on every deploy — no dashboard build-settings needed once
+# this is committed.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

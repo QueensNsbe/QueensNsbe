@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExecCard from '../../components/ExecCard.astro';
+import { getCollection } from 'astro:content';
+
+const execMembers = (await getCollection('exec')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Exec Team" description="Meet the NSBE Queen's executive team.">
+  <h1>Exec Team</h1>
+  <p class="muted">Meet the students who run NSBE Queen's.</p>
+  <div class="card-grid">
+    {execMembers.map((member) => (
+      <ExecCard
+        name={member.data.name}
+        role={member.data.role}
+        department={member.data.department}
+        photo={member.data.photo}
+        email={member.data.email}
+        linkedin={member.data.linkedin}
+      />
+    ))}
+  </div>
+</BaseLayout>

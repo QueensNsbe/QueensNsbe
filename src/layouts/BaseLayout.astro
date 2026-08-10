@@ -1,0 +1,48 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "NSBE Queen's Chapter — National Society of Black Engineers" } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <title>{title} | NSBE Queen's</title>
+    <!--
+      Netlify Identity invite/confirmation emails link to the site root by
+      default (not directly to /admin). This snippet detects that a user
+      just clicked an invite link, then bounces them to /admin, where the
+      full Decap CMS + Identity widget can show the "set your password" form.
+      See: https://docs.netlify.com/manage/security/secure-access-to-sites/identity/identity-widget/
+    -->
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
