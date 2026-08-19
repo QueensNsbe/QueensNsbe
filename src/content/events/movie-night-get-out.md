@@ -1,7 +1,7 @@
 ---
 title: "Movie Night — Get Out"
 date: 2025-10-25
-image: "https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/11/20251023_222630520_iOS-768x576.jpg"
+image: "/images/uploads/20251023_222630520_iOS-768x576.jpg"
 ---
 
 The NSBE Movie Night featuring *Get Out* was an exciting mix of fun and

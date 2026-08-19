@@ -1,0 +1,26 @@
+---
+// Everyone who isn't a president, as hover-overlay cards.
+import { getCollection } from 'astro:content';
+import { LI_PATH } from './icons';
+
+const all = (await getCollection('exec')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
+);
+const rest = all.filter((e) => !/president/i.test(e.data.role));
+---
+<div class="exec-grid reveal-stagger">
+  {rest.map((e) => (
+    <div class="exec-card">
+      <img src={e.data.photo} alt={e.data.name} loading="lazy">
+      <div class="exec-overlay">
+        <h4>{e.data.name.split(' ')[0]}</h4>
+        <div class="role">{e.data.role}</div>
+        {e.data.linkedin && (
+          <a class="li-icon" href={e.data.linkedin} target="_blank" rel="noopener" aria-label={`${e.data.name} on LinkedIn`}>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+          </a>
+        )}
+      </div>
+    </div>
+  ))}
+</div>

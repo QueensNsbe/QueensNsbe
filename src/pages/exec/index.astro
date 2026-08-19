@@ -1,23 +1,39 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ExecCard from '../../components/ExecCard.astro';
+import ExecLeadGrid from '../../components/ExecLeadGrid.astro';
+import ExecGrid from '../../components/ExecGrid.astro';
 import { getCollection } from 'astro:content';
 
-const execMembers = (await getCollection('exec')).sort((a, b) => a.data.order - b.data.order);
+const count = (await getCollection('exec')).length;
 ---
-<BaseLayout title="Exec Team" description="Meet the NSBE Queen's executive team.">
-  <h1>Exec Team</h1>
-  <p class="muted">Meet the students who run NSBE Queen's.</p>
-  <div class="card-grid">
-    {execMembers.map((member) => (
-      <ExecCard
-        name={member.data.name}
-        role={member.data.role}
-        department={member.data.department}
-        photo={member.data.photo}
-        email={member.data.email}
-        linkedin={member.data.linkedin}
-      />
-    ))}
-  </div>
+<BaseLayout title="Exec Team" description="Meet the NSBE Queen's executive team leading the chapter this year.">
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('/images/uploads/IMG_9728-1-1024x741.jpg');"></div>
+    <div class="page-hero-scrim"></div>
+    <div class="container page-hero-content">
+      <div class="breadcrumb"><a href="/">Home</a><span>/</span>Exec Team</div>
+      <h1>Meet the Exec Team</h1>
+      <p>The {count} students running NSBE Queen's — leading events, mentorship, finance, sponsorship, marketing, and IT for the chapter.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head center reveal">
+        <p class="kicker" style="justify-content:center;">Meet Our Leadership</p>
+        <h2>Co-Presidents</h2>
+      </div>
+      <ExecLeadGrid />
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head center reveal">
+        <p class="kicker" style="justify-content:center;">The Full Roster</p>
+        <h2>Directors &amp; Coordinators</h2>
+      </div>
+      <ExecGrid />
+    </div>
+  </section>
 </BaseLayout>

@@ -1,73 +1,41 @@
 ---
+const li = 'M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05C19.9 8 21 10.13 21 13.53V23h-4v-8.5c0-2.03-.04-4.65-2.83-4.65-2.84 0-3.28 2.22-3.28 4.5V23h-4V8z';
 const year = new Date().getFullYear();
-const socials = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/nsbe-queen-s-university/posts/?feedView=all' },
-  { label: 'Instagram', href: 'https://www.instagram.com/nsbe.queens/' },
-  { label: 'TikTok', href: 'https://www.tiktok.com/@queens.nsbe' },
-];
 ---
 <footer class="site-footer">
-  <div class="site-footer-inner">
-    <div class="footer-col">
-      <p class="footer-heading">NSBE Queen's</p>
-      <p class="muted">
-        99 University Ave<br />
-        Kingston, Ontario K7L 3N6
-      </p>
-      <p><a href="mailto:nsbe@engsoc.queensu.ca">nsbe@engsoc.queensu.ca</a></p>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <img src="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png" alt="NSBE Queen's logo">
+          <span>NSBE QUEEN'S</span>
+        </div>
+        <p>The Queen's University chapter of the National Society of Black Engineers — increasing the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.</p>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/company/nsbe-queen-s-university/posts/?feedView=all" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d={li}/></svg></a>
+          <a href="https://www.instagram.com/nsbe.queens/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
+          <a href="https://www.tiktok.com/@queens.nsbe" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-3.32-3.82h-3.4v13.6a2.6 2.6 0 1 1-1.84-2.49V9.6a6 6 0 1 0 5.24 5.95V9.1a7.6 7.6 0 0 0 4.5 1.46V7.16a4.28 4.28 0 0 1-1.18-1.34z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/mentorship">Mentorship</a>
+        <a href="/events">Events</a>
+        <a href="/exec">Exec Team</a>
+        <a href="/blog">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>99 University Ave<br>Kingston, Ontario K7L 3N6</p>
+        <a href="mailto:nsbe@engsoc.queensu.ca">nsbe@engsoc.queensu.ca</a>
+        <a href="/contact">Contact Page</a>
+      </div>
     </div>
-    <div class="footer-col">
-      <p class="footer-heading">Follow Us</p>
-      <ul class="footer-social">
-        {socials.map((s) => (
-          <li><a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a></li>
-        ))}
-      </ul>
+    <div class="footer-bottom">
+      <p>&copy; {year} NSBE Queen's University. All rights reserved.</p>
+      <p>National Society of Black Engineers — Queen's Chapter</p>
     </div>
-  </div>
-  <div class="site-footer-bottom">
-    <p>&copy; {year} NSBE Queen's University. All rights reserved.</p>
-    <p class="muted">National Society of Black Engineers — Queen's Chapter</p>
   </div>
 </footer>
-
-<style>
-  .site-footer {
-    border-top: 1px solid var(--color-border);
-    margin-top: 3rem;
-    background: #faf8fc;
-  }
-  .site-footer-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2.5rem;
-    justify-content: space-between;
-  }
-  .footer-heading {
-    font-family: var(--font-display);
-    font-weight: 700;
-    margin: 0 0 0.5rem;
-  }
-  .footer-social {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-  .site-footer-bottom {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 1rem 1.5rem 1.5rem;
-    text-align: center;
-    font-size: 0.85rem;
-    border-top: 1px solid var(--color-border);
-  }
-  .site-footer-bottom p {
-    margin: 0.25rem 0;
-  }
-</style>

@@ -1,14 +1,105 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, render } from 'astro:content';
-
-const entry = await getEntry('pages', 'mentorship');
-if (!entry) throw new Error('Missing src/content/pages/mentorship.md');
-const { Content } = await render(entry);
 ---
-<BaseLayout title={entry.data.title} description={entry.data.seoDescription}>
-  <article>
-    <h1>{entry.data.title}</h1>
-    <Content />
-  </article>
+<BaseLayout title="Mentorship" description="The NSBE Queen's peer mentorship program — connecting Black engineering students with upper-year mentors and graduates.">
+<!-- ============ PAGE HERO ============ -->
+<header class="page-hero">
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/VAL2415-2-1024x683.jpg');"></div>
+  <div class="page-hero-scrim"></div>
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span>Mentorship</div>
+    <h1>NSBE Queen's Mentorship Program</h1>
+    <p>Connecting students to opportunities, guidance, and community.</p>
+  </div>
+</header>
+
+<!-- ============ FEATURES ============ -->
+<section class="section">
+  <div class="container">
+    <div class="feature-grid reveal-stagger">
+      <div class="feature-card">
+        <div class="num">01</div>
+        <h3>Academic Guidance</h3>
+        <p>Support with coursework, study strategies, and navigating university life.</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">02</div>
+        <h3>Career Development</h3>
+        <p>Advice on internships, job search strategies, and professional networking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">03</div>
+        <h3>Peer Connection</h3>
+        <p>Build friendships and a sense of belonging within the NSBE community.</p>
+      </div>
+      <div class="feature-card">
+        <div class="num">04</div>
+        <h3>Personal Growth</h3>
+        <p>Gain confidence, motivation, and a support system to help you succeed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GET INVOLVED ============ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head center">
+      <p class="kicker" style="justify-content:center;">How It Works</p>
+      <h2>Get Involved</h2>
+    </div>
+    <div class="mentor-grid reveal-stagger">
+      <div class="mentor-card mentor">
+        <h3>🔑 Become a Mentor</h3>
+        <p>Take on a leadership role and guide the next generation of Black engineers and computer scientists. Share your experiences, offer advice on academics and careers, and help students navigate challenges with confidence. In the process, you'll grow your own leadership, communication, and networking skills.</p>
+        <a href="https://forms.office.com/pages/responsepage.aspx?id=eCPPiRaKW0S_qx14hTcxIfIfrevCp2pDmAz_Tu6kRKJUM1JJR08wWDFKMFpZNzdHOUQyVEM3Wk83RS4u&route=shorturl" target="_blank" rel="noopener" class="btn">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="mentor-card mentee">
+        <h3>🌱 Become a Mentee</h3>
+        <p>Join a supportive community where you can learn from upper-year students and professionals who have already walked the path you're on. Gain advice on studying, career opportunities, and personal growth while building meaningful connections that will carry you through university and beyond.</p>
+        <a href="https://forms.office.com/pages/responsepage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUQlNJV0Q2RVdCQ0FVMzRXSVVDMTdZVTdWWi4u&route=shorturl" target="_blank" rel="noopener" class="btn">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY SPLIT ============ -->
+<section class="section">
+  <div class="container split">
+    <div class="split-body reveal">
+      <p class="kicker">Real Connections</p>
+      <h2>Building Lasting Relationships</h2>
+      <p>Our mentorship program pairs first and second-year students with upper-year mentors who've walked the same halls, faced the same courses, and found their footing at Queen's. From coffee chats to résumé reviews, mentorship at NSBE is hands-on and personal.</p>
+      <p>Whether you're looking for guidance or ready to give back, there's a place for you in the program.</p>
+    </div>
+    <div class="split-media reveal">
+      <img src="/images/uploads/IMG_9728-1-1024x741.jpg" alt="NSBE Queen's mentorship session" loading="lazy">
+      <div class="frame-accent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESOURCES ============ -->
+<section class="section-tight section-alt">
+  <div class="container">
+    <div class="resource-box reveal">
+      <p>Learn more with our 2025&ndash;26 Mentorship Package, or contact us at <a class="mail" href="mailto:nsbe.mentorship@engsoc.queensu.ca">nsbe.mentorship@engsoc.queensu.ca</a></p>
+      <a href="https://www.canva.com/design/DAGyWr0voSg/hnKorV_xhrJ3nouw59Z3vw/view" target="_blank" rel="noopener" class="btn btn-purple btn-sm">First Year Transition Manual <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section">
+  <div class="cta-section reveal">
+    <h2>Ready to Get Matched?</h2>
+    <p>Sign up for our email list and Discord to hear when mentor and mentee applications open for the 2025&ndash;26 year.</p>
+    <div class="cta-actions">
+      <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold">Join Our Community <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      <a href="mailto:nsbe.mentorship@engsoc.queensu.ca" class="btn btn-outline">Email Mentorship Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
 </BaseLayout>

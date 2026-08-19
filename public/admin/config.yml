@@ -2,11 +2,16 @@
 # Full reference: https://decapcms.org/docs/configuration-options/
 #
 # "backend" tells Decap how to authenticate and where to commit changes.
-# git-gateway routes through Netlify Identity, so we never expose a GitHub
-# token in the browser — Netlify handles the actual GitHub API calls.
+# The GitHub backend signs editors in with their own GitHub account; the OAuth
+# handshake runs in /api/auth and /api/callback on this same Vercel project, so
+# the client secret never reaches the browser. Anyone with write access to the
+# repo below can edit the site.
 backend:
-  name: git-gateway
+  name: github
+  repo: QueensNsbe/QueensNsbe
   branch: main
+  base_url: https://queens-nsbe.vercel.app
+  auth_endpoint: api/auth
 
 # Where uploaded images get committed, and what URL path Astro should use
 # to reference them once built.
@@ -25,23 +30,9 @@ collections:
   - name: "pages"
     label: "Pages"
     files:
-      - name: "about"
-        label: "About Page"
-        file: "src/content/pages/about.md"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "SEO Description", name: "seoDescription", widget: "string", required: false }
-          - { label: "Body", name: "body", widget: "markdown" }
       - name: "contact"
         label: "Contact Page"
         file: "src/content/pages/contact.md"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "SEO Description", name: "seoDescription", widget: "string", required: false }
-          - { label: "Body", name: "body", widget: "markdown" }
-      - name: "mentorship"
-        label: "Mentorship Page"
-        file: "src/content/pages/mentorship.md"
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "SEO Description", name: "seoDescription", widget: "string", required: false }
@@ -94,3 +85,17 @@ collections:
       - { label: "Cover Image", name: "image", widget: "image", required: false }
       - { label: "Excerpt", name: "excerpt", widget: "string", required: false, hint: "Short summary shown on the blog listing page" }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  # Member/alumni quotes shown in the homepage slider.
+  - name: "testimonials"
+    label: "Testimonials"
+    folder: "src/content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string", required: false, hint: "e.g. Queen's NSBE Alumni" }
+      - { label: "Photo", name: "photo", widget: "image", required: false }
+      - { label: "Quote", name: "quote", widget: "text" }
+      - { label: "Sort Order", name: "order", widget: "number", default: 0, hint: "Lower numbers show first" }

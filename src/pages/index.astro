@@ -1,196 +1,237 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import EventCard from '../components/EventCard.astro';
 import { getCollection } from 'astro:content';
+import { ARROW } from '../components/icons';
+import ExecLeadGrid from '../components/ExecLeadGrid.astro';
+import ExecGrid from '../components/ExecGrid.astro';
+
+const execAll = (await getCollection('exec')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
+);
+const testimonials = (await getCollection('testimonials')).sort(
+  (a, b) => a.data.order - b.data.order
+);
 
 const allEvents = (await getCollection('events')).sort(
-  (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 const now = new Date();
-const upcoming = allEvents.filter((e) => e.data.date >= now);
-const featured = upcoming.length > 0
-  ? upcoming.slice(0, 3)
-  : allEvents.filter((e) => e.data.date < now).reverse().slice(0, 3);
-const featuredLabel = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
+const upcoming = allEvents.filter((e) => e.data.date >= now).reverse();
+const featured = upcoming.length > 0 ? upcoming.slice(0, 3) : allEvents.slice(0, 3);
+const eventsHeading = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 const stats = [
-  { num: '16,000+', label: 'Members Worldwide' },
-  { num: '500+', label: 'Chapters Globally' },
-  { num: '1975', label: 'NSBE Founded' },
-  { num: '13', label: "Queen's Exec Leaders" },
+  { count: 16000, suffix: '+', label: 'Members Worldwide', icon: 'people' },
+  { count: 500, suffix: '+', label: 'Chapters Globally', icon: 'globe' },
+  { count: 1975, suffix: '', label: 'NSBE Founded (Est.)', icon: 'star' },
+  { count: execAll.length, suffix: '', label: "Queen's Exec Leaders", icon: 'cap' },
 ];
 
-const testimonials = [
-  {
-    quote: "NSBE not only gave me a safe space and a community of new friends but also a place to develop my professional skills and enhance my portfolio.",
-    name: 'Muyi Omorogbe',
-    role: "Queen's NSBE Alumni",
-  },
-  {
-    quote: "In first year, I had a student mentor and they helped support me academically and taught me about the culture of Queen's.",
-    name: 'Savannah Gray',
-    role: "Current Queen's NSBE General Member",
-  },
-  {
-    quote: 'NSBE made school feel a lot less isolating. It gave me a space where I felt supported and could just be myself.',
-    name: 'Msendoo Nongo',
-    role: "Queen's NSBE Alumni",
-  },
+const pillars = [
+  { icon: 'briefcase', title: 'Professional Development', body: 'Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.' },
+  { icon: 'people', title: 'Mentorship & Connections', body: 'Foster a strong community by connecting students across years through workshops, socials, and mentorship.' },
+  { icon: 'cap', title: 'Academic Support', body: 'Help members thrive academically with study pods, exam prep, and peer tutoring.' },
 ];
+
+const ICONS: Record<string, string> = {
+  people: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/>',
+  cap: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+};
+const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1-.6z"/>';
 ---
 <BaseLayout title="Home">
-  <section class="hero">
-    <p class="kicker">Queen's University Chapter</p>
-    <h1>Welcome to NSBE Queen's</h1>
-    <p class="lead">
-      The National Society of Black Engineers — Queen's Chapter. We support
-      academic success and celebrate Black excellence on campus through
-      events, mentorship, and leadership opportunities.
-    </p>
-    <div class="hero-actions">
-      <a class="button" href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener noreferrer">Become a Member</a>
-      <a class="button-outline" href="/about">Who We Are</a>
-    </div>
-  </section>
-
-  <section class="stats-grid">
-    {stats.map((s) => (
-      <div class="stat-tile">
-        <div class="stat-num">{s.num}</div>
-        <div class="muted">{s.label}</div>
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-bg" style="background-image:url('/images/uploads/IMG_0441-scaled.jpg');"></div>
+    <div class="hero-scrim"></div>
+    <div class="container hero-content">
+      <p class="kicker on-dark">Queen's University Chapter</p>
+      <h1>Welcome to <em>NSBE Queen's</em></h1>
+      <p class="lead">The National Society of Black Engineers — Queen's Chapter. We support academic success and celebrate Black excellence on campus through events, mentorship, and leadership opportunities.</p>
+      <div class="hero-actions">
+        <a href="#join" class="btn btn-gold">Become a Member <Fragment set:html={ARROW} /></a>
+        <a href="/about" class="btn btn-outline">Who We Are</a>
       </div>
-    ))}
-  </section>
-
-  <section>
-    <p class="kicker">Who We Are</p>
-    <h2>Building culturally responsible Black engineers.</h2>
-    <p>
-      The Queen's University NSBE chapter is one of many chapters of the
-      North American NSBE organization. Our mission is to increase the
-      number of culturally responsible Black engineers who excel
-      academically, succeed professionally, and positively impact the
-      community.
-    </p>
-    <a class="button" href="/about">Learn More</a>
-  </section>
-
-  <section>
-    <p class="kicker">{featuredLabel}</p>
-    <h2>{featuredLabel}</h2>
-    {featured.length === 0 && <p class="muted">No events yet — check back soon.</p>}
-    <div class="card-grid">
-      {featured.map((event) => (
-        <EventCard
-          title={event.data.title}
-          date={event.data.date}
-          time={event.data.time}
-          location={event.data.location}
-          image={event.data.image}
-          href={`/events/${event.id}`}
-        />
-      ))}
     </div>
-    <p style="margin-top:1.5rem;"><a class="button-outline" href="/events">View All Events</a></p>
-  </section>
+    <div class="hero-scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  </header>
 
-  <section>
-    <p class="kicker">Mentorship</p>
-    <h2>Mentorship That Matters</h2>
-    <p>
-      Our mentorship program connects Black engineering students with
-      upper-year students and graduates who understand their journey.
-      Through guidance, support, and shared experiences, we help members
-      navigate academic challenges, career opportunities, and personal
-      growth.
-    </p>
-    <a class="button" href="/mentorship">Learn More</a>
-  </section>
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Excellence<span></span>Exposure<span></span>Community<span></span>Empathy<span></span>Leadership</span>
+      <span>Excellence<span></span>Exposure<span></span>Community<span></span>Empathy<span></span>Leadership</span>
+    </div>
+  </div>
 
-  <section>
-    <p class="kicker">In Their Words</p>
-    <h2>What Our Members Say</h2>
-    <div class="card-grid">
-      {testimonials.map((t) => (
-        <div class="card">
-          <p>&ldquo;{t.quote}&rdquo;</p>
-          <p class="muted"><strong>{t.name}</strong> — {t.role}</p>
+  <!-- ============ STATS ============ -->
+  <section class="stats">
+    <div class="container stats-grid">
+      {stats.map((s) => (
+        <div class="stat-tile reveal">
+          <div class="stat-icon-badge">
+            {s.icon === 'star'
+              ? <svg viewBox="0 0 24 24" fill="currentColor" set:html={STAR} />
+              : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[s.icon]} />}
+          </div>
+          <div class="stat-num"><span data-count={s.count}>0</span>{s.suffix && <span class="suffix">{s.suffix}</span>}</div>
+          <div class="stat-label">{s.label}</div>
         </div>
       ))}
+      <div class="stat-tile stat-soon reveal">
+        <div class="stat-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></div>
+        <div class="stat-num"><span data-count="0">0</span></div>
+        <div class="stat-label">Mentors Matched</div>
+        <div class="stat-sublabel">Growing soon</div>
+      </div>
     </div>
   </section>
 
-  <section class="cta-section">
-    <h2>Become a Member</h2>
-    <p>
-      Stay connected with NSBE Queen's University by joining our email list.
-      Get the latest updates, explore upcoming events, and learn more about
-      how you can be part of our mission to empower Black students in STEM.
-    </p>
-    <div class="hero-actions">
-      <a class="button" href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener noreferrer">Join Our Community</a>
-      <a class="button-outline" href="mailto:nsbe@engsoc.queensu.ca">Email Us</a>
+  <!-- ============ WHO WE ARE ============ -->
+  <section class="section">
+    <div class="container split">
+      <div class="split-body reveal">
+        <p class="kicker">Who We Are</p>
+        <h2>Building culturally responsible Black engineers.</h2>
+        <p>The Queen's University National Society of Black Engineers (NSBE) chapter is one of the many chapters of the North American NSBE organization. Our mission is to increase the number of culturally responsible black engineers who excel academically, succeed professionally and positively impact the community.</p>
+        <p>Through our events, mentorship, and leadership opportunities, we support academic success and celebrate Black excellence on campus.</p>
+        <a href="/about" class="btn btn-purple">Learn More <Fragment set:html={ARROW} /></a>
+      </div>
+      <div class="split-media reveal">
+        <img src="/images/uploads/IMG_9730-scaled.jpg" alt="NSBE Queen's members connecting at a chapter social" loading="lazy">
+        <div class="frame-accent"></div>
+      </div>
     </div>
   </section>
 
-  <style>
-    .hero {
-      padding: 2rem 0 1rem;
-    }
-    .lead {
-      font-size: 1.1rem;
-      color: var(--color-muted);
-      max-width: 65ch;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-    section {
-      margin-top: 3rem;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
-      text-align: center;
-      background: #faf8fc;
-      border-radius: var(--radius);
-      padding: 2rem 1rem;
-    }
-    .stat-num {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.75rem;
-      color: var(--color-purple);
-    }
-    .cta-section {
-      background: var(--color-ink);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 2.5rem;
-      text-align: center;
-    }
-    .cta-section h2 {
-      color: #fff;
-    }
-    .cta-section p {
-      max-width: 60ch;
-      margin: 0 auto 1rem;
-      color: rgba(255, 255, 255, 0.85);
-    }
-    .cta-section .hero-actions {
-      justify-content: center;
-    }
-    .cta-section .button-outline {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.55);
-    }
-    .cta-section .button-outline:hover {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-    }
-  </style>
+  <!-- ============ PILLARS ============ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker" style="justify-content:center;">Our Goals</p>
+        <h2>Our Core Pillars of Impact</h2>
+        <p>At NSBE Queen's University, our pillars reflect our commitment to empowering Black students through leadership, community, and academic success.</p>
+      </div>
+      <div class="pillars-grid reveal-stagger">
+        {pillars.map((p) => (
+          <div class="pillar-card">
+            <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[p.icon]} /></div>
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXEC TEAM ============ -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker on-dark" style="justify-content:center;">Meet Our Leadership</p>
+        <h2>The 2025&ndash;2026 Executive Team</h2>
+        <p>{execAll.length} students leading NSBE Queen's this year — guided by our co-presidents and a team dedicated to professional development, mentorship, finance, sponsorship, marketing, and IT.</p>
+      </div>
+
+      <ExecLeadGrid />
+
+      <ExecGrid />
+
+      <div class="text-center reveal" style="margin-top:48px;">
+        <a href="/exec" class="btn btn-outline">Meet the Full Team <Fragment set:html={ARROW} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MENTORSHIP TEASER ============ -->
+  <section class="section">
+    <div class="container split reverse">
+      <div class="split-body reveal">
+        <p class="kicker">Mentorship</p>
+        <h2>Mentorship That Matters</h2>
+        <p>Our mentorship program connects Black engineering students with upper-year students and graduates who understand their journey. Through guidance, support, and shared experiences, we help members navigate academic challenges, career opportunities, and personal growth.</p>
+        <p>Mentorship at NSBE is about building lasting connections that inspire confidence, success, and a commitment to giving back.</p>
+        <a href="/mentorship" class="btn btn-purple">Learn More <Fragment set:html={ARROW} /></a>
+      </div>
+      <div class="split-media reveal">
+        <img src="/images/uploads/IMG_9834-1024x683.jpg" alt="NSBE Queen's mentorship program members" loading="lazy">
+        <div class="frame-accent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  {testimonials.length > 0 && (
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head center">
+          <p class="kicker" style="justify-content:center;">In Their Words</p>
+          <h2>What Our Members Say</h2>
+        </div>
+        <div class="testimonial-slider reveal">
+          <button class="testimonial-arrow prev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="testimonial-arrow next" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="testimonial-track">
+            <div class="testimonial-slides">
+              {testimonials.map((t) => (
+                <div class="testimonial-slide">
+                  <div class="testimonial-card">
+                    {t.data.photo && <img src={t.data.photo} alt={t.data.name} loading="lazy">}
+                    <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
+                    <div class="name">{t.data.name}</div>
+                    {t.data.role && <div class="role">{t.data.role}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div class="testimonial-nav"></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ============ EVENTS TEASER ============ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker" style="justify-content:center;">What's Happening</p>
+        <h2>{eventsHeading}</h2>
+        <p>From study labs and career panels to socials and conferences — spaces to connect, learn, and celebrate Black excellence in STEM.</p>
+      </div>
+      {featured.length === 0 && <p class="text-center">No events yet — check back soon.</p>}
+      <div class="event-grid reveal-stagger">
+        {featured.map((e) => (
+          <a class="event-card" href={`/events/${e.id}`}>
+            {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
+            <div class="event-body">
+              <div class="event-date">{fmtDate(e.data.date)}</div>
+              <h3>{e.data.title}</h3>
+              {e.data.location && <p>{e.data.location}</p>}
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="text-center reveal" style="margin-top:48px;">
+        <a href="/events" class="btn btn-dark-outline">View All Events <Fragment set:html={ARROW} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOIN CTA ============ -->
+  <section class="section" id="join">
+    <div class="cta-section reveal">
+      <h2>Become a Member</h2>
+      <p>Stay connected with NSBE Queen's University by joining our email list and Discord community. Get the latest updates, explore upcoming events, and learn more about how you can be part of our mission to empower Black students in STEM.</p>
+      <div class="cta-actions">
+        <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold">Join Our Community <Fragment set:html={ARROW} /></a>
+        <a href="mailto:nsbe@engsoc.queensu.ca" class="btn btn-outline">Email Us</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

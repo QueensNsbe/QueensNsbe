@@ -4,33 +4,33 @@ import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const events = await getCollection('events');
-  return events.map((event) => ({
-    params: { slug: event.id },
-    props: { event },
-  }));
+  return events.map((event) => ({ params: { slug: event.id }, props: { event } }));
 }
 
 const { event } = Astro.props;
 const { Content } = await render(event);
-const formattedDate = event.data.date.toLocaleDateString('en-CA', {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
+const formatted = event.data.date.toLocaleDateString('en-US', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
 });
 ---
-<BaseLayout title={event.data.title}>
-  <article>
-    <h1>{event.data.title}</h1>
-    <p class="muted">
-      {formattedDate}{event.data.time ? ` · ${event.data.time}` : ''}
-      {event.data.location ? ` · ${event.data.location}` : ''}
-    </p>
-    {event.data.image && <img src={event.data.image} alt={event.data.title} style="width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius);margin:1rem 0;" />}
-    <Content />
-    {event.data.rsvpLink && (
-      <p><a class="button" href={event.data.rsvpLink} target="_blank" rel="noopener noreferrer">RSVP</a></p>
-    )}
-  </article>
+<BaseLayout title={event.data.title} description={event.data.description}>
+  <header class="page-hero page-hero-short">
+    {event.data.image && <div class="page-hero-bg" style={`background-image:url('${event.data.image}');`}></div>}
+    <div class="page-hero-scrim"></div>
+    <div class="container page-hero-content">
+      <div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/events">Events</a><span>/</span>{event.data.title}</div>
+      <h1>{event.data.title}</h1>
+      <p>{formatted}{event.data.time ? ` · ${event.data.time}` : ''}{event.data.location ? ` · ${event.data.location}` : ''}</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container narrow">
+      <article class="prose reveal"><Content /></article>
+      <div class="cta-actions" style="margin-top:40px;">
+        {event.data.rsvpLink && <a href={event.data.rsvpLink} target="_blank" rel="noopener" class="btn btn-gold">RSVP</a>}
+        <a href="/events" class="btn btn-purple">&larr; All Events</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

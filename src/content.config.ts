@@ -43,6 +43,18 @@ const blog = defineCollection({
   }),
 });
 
+// Member/alumni quotes shown in the homepage slider.
+const testimonials = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/testimonials' }),
+  schema: z.object({
+    name: z.string(),
+    role: z.string().optional(),
+    photo: z.string().optional(),
+    quote: z.string(),
+    order: z.number().default(0),
+  }),
+});
+
 // Singleton editable pages (About, Contact, Mentorship) — one file each,
 // edited as a "file collection" in Decap rather than a folder of many entries.
 const pages = defineCollection({
@@ -53,4 +65,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { events, exec, blog, pages };
+export const collections = { events, exec, blog, pages, testimonials };

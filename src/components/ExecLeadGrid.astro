@@ -1,0 +1,30 @@
+---
+// Co-presidents, rendered as the larger "lead" cards.
+import { getCollection } from 'astro:content';
+import { LI_PATH } from './icons';
+
+interface Props { style?: string }
+const { style } = Astro.props;
+
+const all = (await getCollection('exec')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
+);
+const leads = all.filter((e) => /president/i.test(e.data.role));
+---
+<div class="exec-lead-grid reveal-stagger" style={style}>
+  {leads.map((e) => (
+    <div class="exec-lead-card">
+      <div class="lead-avatar"><img src={e.data.photo} alt={e.data.name} loading="lazy"></div>
+      <div>
+        <h3>{e.data.name}</h3>
+        <div class="role">{e.data.role}</div>
+        {e.data.linkedin && (
+          <a class="li-link" href={e.data.linkedin} target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+            LinkedIn
+          </a>
+        )}
+      </div>
+    </div>
+  ))}
+</div>

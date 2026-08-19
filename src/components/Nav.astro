@@ -1,79 +1,24 @@
 ---
+// Site navigation. Active-link highlighting is applied client-side in
+// /js/main.js so this stays a static component.
 const links = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/events', label: 'Events' },
-  { href: '/exec', label: 'Exec Team' },
   { href: '/mentorship', label: 'Mentorship' },
+  { href: '/events', label: 'Events' },
   { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
 ];
-const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
-const logoUrl = 'https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/08/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png';
 ---
-<header class="site-header">
-  <div class="site-header-inner">
-    <a class="brand" href="/">
-      <img src={logoUrl} alt="NSBE Queen's logo" width="36" height="36" />
-      <span>NSBE Queen's</span>
+<nav class="site-nav">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <img src="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png" alt="NSBE Queen's logo">
+      <span>NSBE QUEEN'S</span>
     </a>
-    <nav>
-      <ul>
-        {links.map((link) => {
-          const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
-          return (
-            <li>
-              <a href={link.href} aria-current={isActive ? 'page' : undefined}>{link.label}</a>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+    <ul class="nav-links" id="navLinks">
+      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      <li><a href="/#join" class="nav-cta">Become a Member</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>
-</header>
-
-<style>
-  .site-header {
-    border-bottom: 1px solid var(--color-border);
-  }
-  .site-header-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.15rem;
-    text-decoration: none;
-    color: var(--color-ink);
-  }
-  .brand img {
-    border-radius: 50%;
-  }
-  nav ul {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin: 0;
-    padding: 0;
-  }
-  nav a {
-    text-decoration: none;
-    font-weight: 500;
-    color: var(--color-ink);
-  }
-  nav a[aria-current='page'] {
-    color: var(--color-purple);
-    border-bottom: 2px solid var(--color-gold);
-  }
-</style>
+</nav>

@@ -1,48 +1,39 @@
 ---
+import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = "NSBE Queen's Chapter — National Society of Black Engineers" } = Astro.props;
+const {
+  title,
+  description = "The Queen's University chapter of the National Society of Black Engineers (NSBE) — increasing the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.",
+} = Astro.props;
+
+const fullTitle =
+  title === 'Home'
+    ? "NSBE Queen's University | National Society of Black Engineers"
+    : `${title} | NSBE Queen's`;
 ---
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="https://www.engsoc.queensu.ca/nsbe/wp-content/uploads/2025/08/cropped-NSBE-Logo-Redesigned-2025-Transparent-80x80.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <title>{title} | NSBE Queen's</title>
-    <!--
-      Netlify Identity invite/confirmation emails link to the site root by
-      default (not directly to /admin). This snippet detects that a user
-      just clicked an invite link, then bounces them to /admin, where the
-      full Decap CMS + Identity widget can show the "set your password" form.
-      See: https://docs.netlify.com/manage/security/secure-access-to-sites/identity/identity-widget/
-    -->
-    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script is:inline>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', (user) => {
-          if (!user) {
-            window.netlifyIdentity.on('login', () => {
-              document.location.href = '/admin/';
-            });
-          }
-        });
-      }
-    </script>
+    <link rel="icon" href="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-80x80.png" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
   <body>
+    <div class="scroll-progress"></div>
     <Nav />
-    <main>
-      <slot />
-    </main>
+    <slot />
     <Footer />
+    <button class="back-to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
+    <script is:inline src="/js/main.js"></script>
   </body>
 </html>

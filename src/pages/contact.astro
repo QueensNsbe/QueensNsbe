@@ -7,8 +7,19 @@ if (!entry) throw new Error('Missing src/content/pages/contact.md');
 const { Content } = await render(entry);
 ---
 <BaseLayout title={entry.data.title} description={entry.data.seoDescription}>
-  <article>
-    <h1>{entry.data.title}</h1>
-    <Content />
-  </article>
+  <header class="page-hero page-hero-short">
+    <div class="page-hero-bg" style="background-image:url('/images/uploads/VAL2415-2-1024x683.jpg');"></div>
+    <div class="page-hero-scrim"></div>
+    <div class="container page-hero-content">
+      <div class="breadcrumb"><a href="/">Home</a><span>/</span>Contact</div>
+      <h1>{entry.data.title}</h1>
+      <p>Get in touch with NSBE Queen's — we'd love to hear from you.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container narrow">
+      <article class="prose reveal"><Content /></article>
+    </div>
+  </section>
 </BaseLayout>
