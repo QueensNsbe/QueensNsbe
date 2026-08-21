@@ -15,6 +15,11 @@ backend:
 
 # Where uploaded images get committed, and what URL path Astro should use
 # to reference them once built.
+# Puts a link back to the live site in the CMS header, so editors can jump
+# from the editor to the page they just changed.
+site_url: https://queens-nsbe.vercel.app
+display_url: https://queens-nsbe.vercel.app
+
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
