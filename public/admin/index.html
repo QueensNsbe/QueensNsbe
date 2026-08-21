@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager | NSBE Queen's</title>
+    <!-- Absolute path to the config. Without this, Decap requests "config.yml"
+         relative to the page URL — and because /admin is served without a
+         trailing slash, that resolves to /config.yml at the site root (404). -->
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
     <!-- Decap CMS reads public/admin/config.yml and builds the entire admin UI from it.
