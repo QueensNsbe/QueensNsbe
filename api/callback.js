@@ -1,20 +1,28 @@
 // Step 2: GitHub redirects back here with a code. Swap it for an access token
 // and hand that to the Decap window that opened this popup.
+// Decap's popup handshake is three steps: the popup announces itself with
+// "authorizing:github", the CMS window echoes that back, and only then does the
+// popup send the token. Sending the token first lands on a listener that isn't
+// attached yet, so the popup closes and nothing happens.
 function page(status, payload) {
-  const body = JSON.stringify(payload);
-  return `<!doctype html><html><body><script>
+  const body = JSON.stringify(JSON.stringify(payload));
+  return `<!doctype html><html><body><p>Completing sign-in&hellip;</p><script>
   (function () {
-    function send() {
-      window.opener && window.opener.postMessage(
-        'authorization:github:${status}:' + ${JSON.stringify(body)},
-        window.location.origin
-      );
+    var payload = ${body};
+    function receive(e) {
+      if (e.data !== 'authorizing:github') return;
+      window.removeEventListener('message', receive, false);
+      window.opener.postMessage('authorization:github:${status}:' + payload, e.origin);
+      setTimeout(function () { window.close(); }, 500);
     }
-    window.addEventListener('message', send, { once: true });
-    send();
-    setTimeout(function () { window.close(); }, 1200);
+    window.addEventListener('message', receive, false);
+    if (window.opener) {
+      window.opener.postMessage('authorizing:github', window.location.origin);
+    } else {
+      document.body.innerHTML = '<p>Open this from the CMS login button.</p>';
+    }
   })();
-  </script><p>Completing sign-in…</p></body></html>`;
+  </script></body></html>`;
 }
 
 function readCookie(header, name) {
