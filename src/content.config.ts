@@ -16,6 +16,9 @@ const events = defineCollection({
     image: z.string().optional(),
     rsvpLink: z.string().url().optional(),
     description: z.string().optional(),
+    gallery: z
+      .array(z.object({ image: z.string(), alt: z.string().optional() }))
+      .optional(),
   }),
 });
 
@@ -29,17 +32,6 @@ const exec = defineCollection({
     email: z.string().email().optional(),
     linkedin: z.string().url().optional(),
     order: z.number().default(0),
-  }),
-});
-
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    author: z.string().optional(),
-    image: z.string().optional(),
-    excerpt: z.string().optional(),
   }),
 });
 
@@ -65,4 +57,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { events, exec, blog, pages, testimonials };
+export const collections = { events, exec, pages, testimonials };

@@ -18,7 +18,6 @@ const formatted = event.data.date.toLocaleDateString('en-US', {
     {event.data.image && <div class="page-hero-bg" style={`background-image:url('${event.data.image}');`}></div>}
     <div class="page-hero-scrim"></div>
     <div class="container page-hero-content">
-      <div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/events">Events</a><span>/</span>{event.data.title}</div>
       <h1>{event.data.title}</h1>
       <p>{formatted}{event.data.time ? ` · ${event.data.time}` : ''}{event.data.location ? ` · ${event.data.location}` : ''}</p>
     </div>
@@ -27,6 +26,16 @@ const formatted = event.data.date.toLocaleDateString('en-US', {
   <section class="section">
     <div class="container narrow">
       <article class="prose reveal"><Content /></article>
+      {event.data.gallery && event.data.gallery.length > 0 && (
+        <div class="event-gallery reveal-stagger">
+          {event.data.gallery.map((shot) => (
+            <a href={shot.image} target="_blank" rel="noopener">
+              <img src={shot.image} alt={shot.alt ?? `${event.data.title} photo`} loading="lazy">
+            </a>
+          ))}
+        </div>
+      )}
+
       <div class="cta-actions" style="margin-top:40px;">
         {event.data.rsvpLink && <a href={event.data.rsvpLink} target="_blank" rel="noopener" class="btn btn-gold">RSVP</a>}
         <a href="/events" class="btn btn-purple">&larr; All Events</a>

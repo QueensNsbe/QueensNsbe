@@ -10,7 +10,7 @@ interface Props {
 
 const {
   title,
-  description = "The Queen's University chapter of the National Society of Black Engineers (NSBE) — increasing the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.",
+  description = "The Queen's University chapter of the National Society of Black Engineers (NSBE), increasing the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.",
 } = Astro.props;
 
 const fullTitle =
@@ -33,6 +33,12 @@ const fullTitle =
     <Nav />
     <slot />
     <Footer />
+    <aside class="signup-popup" id="signupPopup" role="dialog" aria-label="Join the NSBE Queen's email list">
+      <button class="signup-close" id="signupClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <h3>Stay in the loop</h3>
+      <p>Join the NSBE Queen's email list for event invites, mentorship openings, and chapter news.</p>
+      <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold btn-sm" id="signupJoin">Join Our Email List</a>
+    </aside>
     <button class="back-to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
     <script is:inline src="/js/main.js"></script>
   </body>

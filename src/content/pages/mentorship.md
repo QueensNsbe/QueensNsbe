@@ -7,10 +7,10 @@ Connecting students to opportunities, guidance, and community.
 
 ## What Mentorship Offers
 
-- **Academic Guidance** — Support with coursework, study strategies, and navigating university life.
-- **Career Development** — Advice on internships, job search strategies, and professional networking.
-- **Peer Connection** — Build friendships and a sense of belonging within the NSBE community.
-- **Personal Growth** — Gain confidence, motivation, and a support system to help you succeed.
+- **Academic Guidance**: Support with coursework, study strategies, and navigating university life.
+- **Career Development**: Advice on internships, job search strategies, and professional networking.
+- **Peer Connection**: Build friendships and a sense of belonging within the NSBE community.
+- **Personal Growth**: Gain confidence, motivation, and a support system to help you succeed.
 
 ## Get Involved
 

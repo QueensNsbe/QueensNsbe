@@ -128,19 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     sweep();
   }, 400);
 
-  /* ---------- Exec card 3D tilt ---------- */
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.exec-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `perspective(700px) rotateY(${px * 12}deg) rotateX(${-py * 12}deg) translateY(-6px)`;
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-    });
-  }
-
   /* ---------- Testimonial slider ---------- */
   document.querySelectorAll('.testimonial-slider').forEach(slider => {
     const track = slider.querySelector('.testimonial-slides');
@@ -334,4 +321,21 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCalendar();
     renderEventList();
   }
+});
+
+/* ---------- Email-list popup (fires 5s after arrival, once per session) ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  const popup = document.getElementById('signupPopup');
+  if (!popup) return;
+  if (sessionStorage.getItem('nsbeSignupDismissed') === '1') return;
+
+  const dismiss = () => popup.classList.remove('is-open');
+
+  setTimeout(() => {
+    popup.classList.add('is-open');
+    // Show once per browsing session, not once per page view.
+    sessionStorage.setItem('nsbeSignupDismissed', '1');
+  }, 5000);
+  document.getElementById('signupClose')?.addEventListener('click', dismiss);
+  document.getElementById('signupJoin')?.addEventListener('click', dismiss);
 });

@@ -16,15 +16,14 @@ const calendarData = sorted.map((e) => ({
   href: `/events/${e.id}`,
 }));
 ---
-<BaseLayout title="Events" description="Upcoming and past events from NSBE Queen's University — socials, conferences, panels, and study sessions.">
+<BaseLayout title="Events" description="Upcoming and past events from NSBE Queen's University, socials, conferences, panels, and study sessions.">
 <!-- ============ PAGE HERO ============ -->
 <header class="page-hero">
-  <div class="page-hero-bg" style="background-image:url('/images/uploads/IMG_5515-1-768x1024.jpg'); background-position: center 25%;"></div>
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/black-history-month-social-2026.jpg'); background-position: center 78%;"></div>
   <div class="page-hero-scrim"></div>
   <div class="container page-hero-content">
-    <div class="breadcrumb"><a href="/">Home</a><span>/</span>Events</div>
     <h1>What's Happening at NSBE</h1>
-    <p>Events designed to connect, empower, and inspire. From study labs and career panels to socials and conferences, each event is designed to help you grow academically, professionally, and personally.</p>
+    <p>Events designed to connect, empower, and inspire.</p>
   </div>
 </header>
 
@@ -33,7 +32,7 @@ const calendarData = sorted.map((e) => ({
   <div class="container">
     <div class="section-head reveal">
       <p class="kicker">Recent Events</p>
-      <h2>Highlights From This Year</h2>
+      <h2>Highlights From 2025&ndash;2026</h2>
     </div>
     <div class="event-grid reveal-stagger">
       {sorted.map((e) => (
@@ -47,7 +46,7 @@ const calendarData = sorted.map((e) => ({
         </a>
       ))}
     </div>
-    {sorted.length === 0 && <p class="text-center">No events logged yet — check back soon.</p>}
+    {sorted.length === 0 && <p class="text-center">No events logged yet, check back soon.</p>}
   </div>
 </section>
 
@@ -57,7 +56,7 @@ const calendarData = sorted.map((e) => ({
     <div class="section-head center reveal">
       <p class="kicker" style="justify-content:center;">Calendar</p>
       <h2>NSBE Queen's Events Calendar</h2>
-      <p>Browse by month to see what's on. Days with a gold dot have a logged event — click one, or pick from the list, to see details.</p>
+      <p>Browse by month to see what's on. Days with a dot have a logged event. Click one, or pick from the list, to see details.</p>
     </div>
     <div class="cal-wrap reveal">
       <div class="nsbe-calendar">
@@ -75,7 +74,7 @@ const calendarData = sorted.map((e) => ({
       <div class="cal-side">
         <h3>Logged Events</h3>
         <ul class="cal-event-list" id="calEventList"></ul>
-        <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold btn-sm">Get Notified of New Events</a>
+        <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-ink btn-sm">Get Notified of New Events</a>
       </div>
     </div>
   </div>
@@ -86,7 +85,7 @@ const calendarData = sorted.map((e) => ({
   <div class="container">
     <div class="section-head center">
       <p class="kicker" style="justify-content:center;">Moments</p>
-      <h2>Community In Motion</h2>
+      <h2>Community in Motion</h2>
       <p>A look back at the socials, conferences, and gatherings that make NSBE Queen's a home away from home.</p>
     </div>
     <div class="gallery-grid reveal-stagger">
@@ -97,18 +96,6 @@ const calendarData = sorted.map((e) => ({
       <a href="/images/uploads/IMG_9834-1024x683.jpg" target="_blank" rel="noopener"><img src="/images/uploads/IMG_9834-1024x683.jpg" alt="NSBE Queen's mentorship event" loading="lazy"></a>
       <a href="/images/uploads/IMG_9730-scaled.jpg" target="_blank" rel="noopener" class="tall"><img src="/images/uploads/IMG_9730-scaled.jpg" alt="NSBE Queen's social" loading="lazy"></a>
       <a href="/images/uploads/VAL2415-1-scaled.jpg" target="_blank" rel="noopener"><img src="/images/uploads/VAL2415-1-scaled.jpg" alt="NSBE Queen's event moment" loading="lazy"></a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ STAY UPDATED CTA ============ -->
-<section class="section">
-  <div class="cta-section reveal">
-    <h2>Never Miss an Event</h2>
-    <p>New events are added throughout the year — join our email list and Discord community to get the full calendar, RSVP links, and reminders straight to your inbox.</p>
-    <div class="cta-actions">
-      <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold">Join Our Community <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-      <a href="https://www.instagram.com/nsbe.queens/" target="_blank" rel="noopener" class="btn btn-outline">Follow on Instagram</a>
     </div>
   </div>
 </section>

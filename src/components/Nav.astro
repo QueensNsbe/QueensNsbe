@@ -6,7 +6,6 @@ const links = [
   { href: '/about', label: 'About' },
   { href: '/mentorship', label: 'Mentorship' },
   { href: '/events', label: 'Events' },
-  { href: '/blog', label: 'Blog' },
 ];
 ---
 <nav class="site-nav">
@@ -17,7 +16,7 @@ const links = [
     </a>
     <ul class="nav-links" id="navLinks">
       {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      <li><a href="/#join" class="nav-cta">Become a Member</a></li>
+      <li><a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="nav-cta">Become a Member</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>

@@ -2,81 +2,95 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExecLeadGrid from '../components/ExecLeadGrid.astro';
 import ExecGrid from '../components/ExecGrid.astro';
+
+const storyPhotos = [
+  { src: '/images/uploads/IMG_9716-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
+  { src: '/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg', alt: 'Black Engineer Mixer' },
+  { src: '/images/uploads/IMG_9731-scaled.jpg', alt: "NSBE Queen's social" },
+  { src: '/images/uploads/IMG_9834-1024x683.jpg', alt: "NSBE Queen's mentorship session" },
+];
+
+const pillars = [
+  { icon: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>', title: 'Professional Development', body: 'Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.' },
+  { icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', title: 'Mentorship & Connections', body: 'Foster a strong community by connecting students across years through workshops, socials, and mentorship.' },
+  { icon: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>', title: 'Academic Support', body: 'Help members thrive academically with study pods, exam prep, and peer tutoring.' },
+];
 ---
-<BaseLayout title="About Us" description="Learn about NSBE Queen's University — our mission, our pillars of impact, and the executive team leading the chapter.">
+<BaseLayout title="About Us" description="Learn about NSBE Queen's University, our mission, our pillars of impact, and the executive team leading the chapter.">
 <!-- ============ PAGE HERO ============ -->
 <header class="page-hero">
-  <div class="page-hero-bg" style="background-image:url('/images/uploads/IMG_9721-1024x683.jpg');"></div>
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/bsse-group-railing.jpg'); background-position: center 42%;"></div>
   <div class="page-hero-scrim"></div>
   <div class="container page-hero-content">
-    <div class="breadcrumb"><a href="/">Home</a><span>/</span>About Us</div>
     <h1>About NSBE Queen's</h1>
     <p>Empowering Black students in STEM at Queen's University.</p>
   </div>
 </header>
 
-<!-- ============ QUICK NAV ============ -->
-<div class="quick-nav" id="quickNav">
-  <div class="container quick-nav-inner">
-    <a href="#story">Our Story</a>
-    <a href="#pillars">Pillars</a>
-    <a href="#leadership">Leadership</a>
-    <a href="#team">Full Team</a>
-  </div>
-</div>
-
-<!-- ============ INTRO ============ -->
+<!-- ============ 1. OUR STORY ============ -->
 <section class="section" id="story">
-  <div class="container">
-    <div class="section-head reveal" style="max-width:820px;">
+  <div class="container story-grid reveal">
+    <div class="story-copy">
       <p class="kicker">Our Story</p>
-      <p style="font-size:1.1rem; color:var(--gray-600); margin-bottom:20px;">The National Society of Black Engineers (NSBE) is one of the largest student-governed organizations in the world, founded in 1975 and now home to over 16,000 members across 500+ chapters worldwide. NSBE's mission is to increase the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.</p>
-      <p style="font-size:1.1rem; color:var(--gray-600);">At Queen's University, NSBE provides a vibrant community where Black students in STEM can thrive through academic support, professional development, mentorship, leadership opportunities, and community service. Guided by our core values of Excellence, Exposure, Community, Empathy, and Leadership, we strive to create spaces where every member feels empowered to achieve their goals.</p>
+      <h2 style="margin-bottom:22px;">A chapter built on Black excellence.</h2>
+      <p>The National Society of Black Engineers (NSBE) is one of the largest student-governed organizations in the world, founded in 1975 and now home to over 16,000 members across 500+ chapters worldwide. NSBE's mission is to increase the number of culturally responsible Black engineers who excel academically, succeed professionally, and positively impact the community.</p>
+      <p>At Queen's University, NSBE provides a vibrant community where Black students in STEM can thrive through academic support, professional development, mentorship, leadership opportunities, and community service.</p>
+      <p>Guided by our core values of Excellence, Exposure, Community, Empathy, and Leadership, we strive to create spaces where every member feels empowered to achieve their goals.</p>
+    </div>
+    <div class="story-photos">
+      {storyPhotos.map((p) => <img src={p.src} alt={p.alt} loading="lazy">)}
     </div>
   </div>
 </section>
 
-<!-- ============ PILLARS ============ -->
-<section class="section-tight section-alt" id="pillars">
+<!-- ============ 2. PILLARS ============ -->
+<section class="section section-rule" id="pillars">
   <div class="container">
     <div class="section-head center">
       <p class="kicker" style="justify-content:center;">Our Goals</p>
-      <h2>Our Core Pillars Of Impact</h2>
+      <h2>Our Core Pillars of Impact</h2>
       <p>At NSBE Queen's University, our pillars reflect our commitment to empowering Black students through leadership, community, and academic success.</p>
     </div>
     <div class="pillars-grid reveal-stagger">
-      <div class="pillar-card">
-        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-        <h3>Professional Development</h3>
-        <p>Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.</p>
-      </div>
-      <div class="pillar-card">
-        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <h3>Mentorship &amp; Connections</h3>
-        <p>Foster a strong community by connecting students across years through workshops, socials, and mentorship.</p>
-      </div>
-      <div class="pillar-card">
-        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
-        <h3>Academic Support</h3>
-        <p>Help members thrive academically with study pods, exam prep, and peer tutoring.</p>
-      </div>
+      {pillars.map((p) => (
+        <div class="pillar-card">
+          <h3 set:html={p.title} />
+          <p>{p.body}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>
 
-<!-- ============ LEADERSHIP INTRO ============ -->
-<section class="section" id="leadership">
+<!-- ============ 3. WHO WE ARE ============ -->
+<section class="section" id="who">
+  <div class="container split">
+    <div class="split-body reveal">
+      <p class="kicker">Who We Are</p>
+      <h2>Building culturally responsible Black engineers.</h2>
+      <p>We are Black engineering and computing students at Queen's, along with the allies, alumni, and industry partners who support us. What holds the chapter together is a shared belief that community is what makes a demanding degree survivable, and enjoyable.</p>
+      <p>Across the year we run study pods, career panels, socials, conference trips, and a peer mentorship program, all of it student-led and open to every member.</p>
+      <a href="/mentorship" class="btn btn-purple">Explore Mentorship <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="split-media reveal">
+      <img src="/images/uploads/IMG_9703-2048x1365.jpg" alt="NSBE Queen's members together at a chapter event" loading="lazy">
+      <div class="frame-accent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. LEADERSHIP ============ -->
+<section class="section section-alt" id="leadership">
   <div class="container">
     <div class="section-head center">
       <p class="kicker" style="justify-content:center;">Meet Our Leadership</p>
-      <h2>Meet Our Leadership Team!</h2>
     </div>
     <ExecLeadGrid style="margin-bottom:0;" />
   </div>
 </section>
 
-<!-- ============ WELCOME LETTER ============ -->
-<section class="section-tight section-dark">
+<!-- ============ 5. MESSAGE FROM THE PRESIDENTS ============ -->
+<section class="section-tight section-dark" id="president">
   <div class="container">
     <div class="reveal" style="max-width:820px; margin:0 auto; text-align:center;">
       <p class="kicker on-dark" style="justify-content:center;">A Note From Our Co-Presidents</p>
@@ -84,33 +98,18 @@ import ExecGrid from '../components/ExecGrid.astro';
       <p style="font-size:1.1rem; color:rgba(255,255,255,0.85); margin-bottom:18px;">At NSBE Queen's University, we are dedicated to fostering a supportive community for Black engineering students. Our mission is to increase the representation of Black engineers and provide resources for personal and professional growth.</p>
       <p style="font-size:1.1rem; color:rgba(255,255,255,0.85); margin-bottom:18px;">We aim to inspire, connect, and empower our members through mentorship, networking, and leadership opportunities. NSBE Queen's University is not just about academic success, but about building a lasting impact on both our members and the communities we serve.</p>
       <p style="font-size:1.1rem; color:rgba(255,255,255,0.85); margin-bottom:32px;">On behalf of the Co-Presidents and the entire executive team, thank you for visiting our page. We invite you to join us as we continue to make strides in shaping the future of engineering!</p>
-      <p style="font-family:var(--font-display); font-weight:700; color:var(--gold-400); font-size:1.05rem;">&mdash; Golden Onyekere &amp; Mahuel Bunsie<br><span style="font-weight:500; color:rgba(255,255,255,0.6); font-size:0.85rem;">Co-Presidents, NSBE Queen's University</span></p>
+      <p style="font-family:var(--font-display); font-weight:700; color:var(--gold-400); font-size:1.05rem;">Golden Onyekere &amp; Mahuel Bunsie<br><span style="font-weight:500; color:rgba(255,255,255,0.6); font-size:0.85rem;">Co-Presidents, NSBE Queen's University</span></p>
     </div>
   </div>
 </section>
 
-<!-- ============ FULL EXEC GRID ============ -->
+<!-- ============ 6. TEAM ============ -->
 <section class="section" id="team">
   <div class="container">
     <div class="section-head center">
-      <p class="kicker" style="justify-content:center;">The Full Roster</p>
       <h2>Meet the 2025&ndash;2026 Executive Team</h2>
     </div>
     <ExecGrid />
   </div>
 </section>
-
-<!-- ============ CTA ============ -->
-<section class="section" style="padding-top:0;">
-  <div class="cta-section reveal">
-    <h2>Become a Member</h2>
-    <p>Join our email list and Discord community to get the latest updates, explore upcoming events, and be part of our mission to empower Black students in STEM.</p>
-    <div class="cta-actions">
-      <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold">Join Our Community <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
-      <a href="mailto:nsbe@engsoc.queensu.ca" class="btn btn-outline">Email Us</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
 </BaseLayout>

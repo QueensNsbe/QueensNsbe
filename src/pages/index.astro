@@ -2,12 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { ARROW } from '../components/icons';
-import ExecLeadGrid from '../components/ExecLeadGrid.astro';
-import ExecGrid from '../components/ExecGrid.astro';
 
-const execAll = (await getCollection('exec')).sort(
-  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
-);
+const execAll = await getCollection('exec');
 const testimonials = (await getCollection('testimonials')).sort(
   (a, b) => a.data.order - b.data.order
 );
@@ -20,6 +16,10 @@ const upcoming = allEvents.filter((e) => e.data.date >= now).reverse();
 const featured = upcoming.length > 0 ? upcoming.slice(0, 3) : allEvents.slice(0, 3);
 const eventsHeading = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
 
+const JOIN_URL = 'https://preview.mailerlite.io/forms/2022036/176152616540047196/share';
+const IG_URL = 'https://www.instagram.com/nsbe.queens/';
+const LI_URL = 'https://www.linkedin.com/company/nsbe-queen-s-university/posts/?feedView=all';
+
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
@@ -30,10 +30,10 @@ const stats = [
   { count: execAll.length, suffix: '', label: "Queen's Exec Leaders", icon: 'cap' },
 ];
 
-const pillars = [
-  { icon: 'briefcase', title: 'Professional Development', body: 'Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.' },
-  { icon: 'people', title: 'Mentorship & Connections', body: 'Foster a strong community by connecting students across years through workshops, socials, and mentorship.' },
-  { icon: 'cap', title: 'Academic Support', body: 'Help members thrive academically with study pods, exam prep, and peer tutoring.' },
+// Instagram tiles: chapter photos that link out to @nsbe.queens.
+const igTiles = [
+  { img: '/images/uploads/IMG_9703-2048x1365.jpg', caption: 'Chapter socials on Instagram' },
+  { img: '/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg', caption: 'Black Engineer Mixer recap' },
 ];
 
 const ICONS: Record<string, string> = {
@@ -43,6 +43,7 @@ const ICONS: Record<string, string> = {
   briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
 };
 const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1-.6z"/>';
+const LI_PATH = 'M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05C19.9 8 21 10.13 21 13.53V23h-4v-8.5c0-2.03-.04-4.65-2.83-4.65-2.84 0-3.28 2.22-3.28 4.5V23h-4V8z';
 ---
 <BaseLayout title="Home">
   <!-- ============ HERO ============ -->
@@ -52,13 +53,11 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
     <div class="container hero-content">
       <p class="kicker on-dark">Queen's University Chapter</p>
       <h1>Welcome to <em>NSBE Queen's</em></h1>
-      <p class="lead">The National Society of Black Engineers — Queen's Chapter. We support academic success and celebrate Black excellence on campus through events, mentorship, and leadership opportunities.</p>
+      <p class="lead">The National Society of Black Engineers, Queen's Chapter. We support academic success and celebrate Black excellence on campus through events, mentorship, and leadership opportunities.</p>
       <div class="hero-actions">
-        <a href="#join" class="btn btn-gold">Become a Member <Fragment set:html={ARROW} /></a>
-        <a href="/about" class="btn btn-outline">Who We Are</a>
+        <a href={JOIN_URL} target="_blank" rel="noopener" class="btn btn-gold">Become a Member <Fragment set:html={ARROW} /></a>
       </div>
     </div>
-    <div class="hero-scroll-cue"><span>Scroll</span><span class="line"></span></div>
   </header>
 
   <!-- ============ MARQUEE ============ -->
@@ -83,16 +82,10 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
           <div class="stat-label">{s.label}</div>
         </div>
       ))}
-      <div class="stat-tile stat-soon reveal">
-        <div class="stat-icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></div>
-        <div class="stat-num"><span data-count="0">0</span></div>
-        <div class="stat-label">Mentors Matched</div>
-        <div class="stat-sublabel">Growing soon</div>
-      </div>
     </div>
   </section>
 
-  <!-- ============ WHO WE ARE ============ -->
+  <!-- ============ WHO WE ARE (+ member voices) ============ -->
   <section class="section">
     <div class="container split">
       <div class="split-body reveal">
@@ -107,45 +100,26 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
         <div class="frame-accent"></div>
       </div>
     </div>
-  </section>
 
-  <!-- ============ PILLARS ============ -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-head center">
-        <p class="kicker" style="justify-content:center;">Our Goals</p>
-        <h2>Our Core Pillars of Impact</h2>
-        <p>At NSBE Queen's University, our pillars reflect our commitment to empowering Black students through leadership, community, and academic success.</p>
+    {testimonials.length > 0 && (
+      <div class="container quote-strip reveal">
+        <p class="quote-strip-head">In Their Words</p>
+        <div class="quote-grid">
+          {testimonials.slice(0, 3).map((t) => (
+            <blockquote class="quote-card">
+              <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
+              <div class="attrib">
+                {t.data.photo && <img src={t.data.photo} alt={t.data.name} loading="lazy">}
+                <div>
+                  <div class="name">{t.data.name}</div>
+                  {t.data.role && <div class="role">{t.data.role}</div>}
+                </div>
+              </div>
+            </blockquote>
+          ))}
+        </div>
       </div>
-      <div class="pillars-grid reveal-stagger">
-        {pillars.map((p) => (
-          <div class="pillar-card">
-            <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[p.icon]} /></div>
-            <h3>{p.title}</h3>
-            <p>{p.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ EXEC TEAM ============ -->
-  <section class="section section-dark">
-    <div class="container">
-      <div class="section-head center">
-        <p class="kicker on-dark" style="justify-content:center;">Meet Our Leadership</p>
-        <h2>The 2025&ndash;2026 Executive Team</h2>
-        <p>{execAll.length} students leading NSBE Queen's this year — guided by our co-presidents and a team dedicated to professional development, mentorship, finance, sponsorship, marketing, and IT.</p>
-      </div>
-
-      <ExecLeadGrid />
-
-      <ExecGrid />
-
-      <div class="text-center reveal" style="margin-top:48px;">
-        <a href="/exec" class="btn btn-outline">Meet the Full Team <Fragment set:html={ARROW} /></a>
-      </div>
-    </div>
+    )}
   </section>
 
   <!-- ============ MENTORSHIP TEASER ============ -->
@@ -165,46 +139,15 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
     </div>
   </section>
 
-  <!-- ============ TESTIMONIALS ============ -->
-  {testimonials.length > 0 && (
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-head center">
-          <p class="kicker" style="justify-content:center;">In Their Words</p>
-          <h2>What Our Members Say</h2>
-        </div>
-        <div class="testimonial-slider reveal">
-          <button class="testimonial-arrow prev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="testimonial-arrow next" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
-          <div class="testimonial-track">
-            <div class="testimonial-slides">
-              {testimonials.map((t) => (
-                <div class="testimonial-slide">
-                  <div class="testimonial-card">
-                    {t.data.photo && <img src={t.data.photo} alt={t.data.name} loading="lazy">}
-                    <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
-                    <div class="name">{t.data.name}</div>
-                    {t.data.role && <div class="role">{t.data.role}</div>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div class="testimonial-nav"></div>
-        </div>
-      </div>
-    </section>
-  )}
-
   <!-- ============ EVENTS TEASER ============ -->
   <section class="section">
     <div class="container">
       <div class="section-head center">
         <p class="kicker" style="justify-content:center;">What's Happening</p>
         <h2>{eventsHeading}</h2>
-        <p>From study labs and career panels to socials and conferences — spaces to connect, learn, and celebrate Black excellence in STEM.</p>
+        <p>From study labs and career panels to socials and conferences, these are spaces to connect, learn, and celebrate Black excellence in STEM.</p>
       </div>
-      {featured.length === 0 && <p class="text-center">No events yet — check back soon.</p>}
+      {featured.length === 0 && <p class="text-center">No events yet. Check back soon.</p>}
       <div class="event-grid reveal-stagger">
         {featured.map((e) => (
           <a class="event-card" href={`/events/${e.id}`}>
@@ -217,20 +160,35 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
           </a>
         ))}
       </div>
-      <div class="text-center reveal" style="margin-top:48px;">
+      <div class="text-center reveal" style="margin-top:40px;">
         <a href="/events" class="btn btn-dark-outline">View All Events <Fragment set:html={ARROW} /></a>
       </div>
-    </div>
-  </section>
 
-  <!-- ============ JOIN CTA ============ -->
-  <section class="section" id="join">
-    <div class="cta-section reveal">
-      <h2>Become a Member</h2>
-      <p>Stay connected with NSBE Queen's University by joining our email list and Discord community. Get the latest updates, explore upcoming events, and learn more about how you can be part of our mission to empower Black students in STEM.</p>
-      <div class="cta-actions">
-        <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-gold">Join Our Community <Fragment set:html={ARROW} /></a>
-        <a href="mailto:nsbe@engsoc.queensu.ca" class="btn btn-outline">Email Us</a>
+      <div class="social-strip reveal chapter-motion">
+      <div>
+        <p class="kicker">Follow Along</p>
+        <h2>See the chapter in motion</h2>
+        <p>Event recaps, reels, and announcements land on Instagram first. Professional updates, sponsor news, and alumni features live on LinkedIn.</p>
+        <div class="social-actions">
+          <a href={IG_URL} target="_blank" rel="noopener" class="btn btn-purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1"/></svg>
+            @nsbe.queens
+          </a>
+          <a href={LI_URL} target="_blank" rel="noopener" class="btn btn-dark-outline">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+      <div class="ig-tiles">
+        {igTiles.map((t) => (
+          <a class="ig-tile" href={IG_URL} target="_blank" rel="noopener" aria-label={t.caption}>
+            <img src={t.img} alt={t.caption} loading="lazy">
+            <span class="ig-play"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></span>
+            <span class="ig-caption">{t.caption}</span>
+          </a>
+        ))}
+        </div>
       </div>
     </div>
   </section>

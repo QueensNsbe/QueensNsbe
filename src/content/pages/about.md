@@ -18,9 +18,9 @@ to achieve their goals.
 
 ## Our Core Pillars of Impact
 
-- **Professional Development** — Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.
-- **Mentorship & Connections** — Foster a strong community by connecting students across years through workshops, socials, and mentorship.
-- **Academic Support** — Help members thrive academically with study pods, exam prep, and peer tutoring.
+- **Professional Development**: Equip members with the tools to succeed in the workplace through alumni talks, networking, and career resources.
+- **Mentorship & Connections**: Foster a strong community by connecting students across years through workshops, socials, and mentorship.
+- **Academic Support**: Help members thrive academically with study pods, exam prep, and peer tutoring.
 
 ## A Note From Our Co-Presidents
 
@@ -38,6 +38,6 @@ On behalf of the Co-Presidents and the entire executive team, thank you for
 visiting our page. We invite you to join us as we continue to make strides
 in shaping the future of engineering!
 
-— Golden Onyekere & Mahuel Bunsie, Co-Presidents, NSBE Queen's University
+Golden Onyekere & Mahuel Bunsie, Co-Presidents, NSBE Queen's University
 
 Meet the full team on our [Exec Team](/exec) page.
