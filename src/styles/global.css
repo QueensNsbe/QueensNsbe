@@ -513,7 +513,8 @@ section { position: relative; }
 .event-card .event-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
 .event-card:hover .event-img img { transform: scale(1.06); }
 .event-card .event-body { padding: 26px; flex: 1; display: flex; flex-direction: column; }
-.event-date { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--purple-600); margin-bottom: 10px; }
+.event-date { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--purple-600); margin-bottom: 10px; }
+.event-date .event-tag { margin-left: 0; }
 .event-card h3 { font-size: 1.18rem; margin-bottom: 12px; color: var(--purple-800); }
 .event-card p { color: var(--gray-600); font-size: 0.94rem; flex: 1; }
 
@@ -533,12 +534,17 @@ section { position: relative; }
 .cal-day { position: relative; aspect-ratio: 1 / 0.88; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 10px; font-size: 0.86rem; font-weight: 600; color: var(--gray-900); transition: background 0.2s, color 0.2s; }
 .cal-day.is-empty { visibility: hidden; }
 .cal-day.is-today { background: var(--gray-100); color: var(--ink); font-weight: 700; box-shadow: inset 0 0 0 1px var(--gray-200); }
-.cal-day .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+.cal-day .dots { display: flex; gap: 3px; }
+.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+.dot--general { background: var(--ink); }
+.dot--mentorship { background: var(--purple-600); }
 .cal-day.has-event { background: var(--gray-100); cursor: pointer; }
 .cal-day.has-event:hover { background: var(--ink); color: var(--white); }
-.cal-day.has-event:hover .dot { background: var(--white); }
+.cal-day.has-event:hover .dot--general { background: var(--white); }
+.cal-day.has-event:hover .dot--mentorship { background: var(--gold-400); }
 .cal-day.is-selected { background: var(--ink); color: var(--white); }
-.cal-day.is-selected .dot { background: var(--white); }
+.cal-day.is-selected .dot--general { background: var(--white); }
+.cal-day.is-selected .dot--mentorship { background: var(--gold-400); }
 .cal-side { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px 24px; color: var(--gray-900); box-shadow: var(--shadow-sm); }
 .cal-side h3 { font-size: 1rem; margin-bottom: 14px; color: var(--ink); }
 .cal-event-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
@@ -546,8 +552,26 @@ section { position: relative; }
 .cal-event-item:hover, .cal-event-item.is-active { background: var(--white); border-color: var(--ink); }
 .cal-event-date { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 4px; }
 .cal-event-title { font-size: 0.9rem; font-weight: 600; }
+.cal-event-title .dot { display: inline-block; margin-right: 7px; }
 .cal-side .btn { width: 100%; }
 .cal-empty { text-align: center; padding: 14px 0; color: var(--gray-400); font-size: 0.86rem; }
+
+/* ---------- Event category legend & tags ---------- */
+.cal-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 14px; }
+.cal-legend span { display: inline-flex; align-items: center; gap: 7px; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); }
+.cal-legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.cal-legend-dot--general { background: var(--ink); }
+.cal-legend-dot--mentorship { background: var(--purple-600); }
+
+.event-tag {
+  display: inline-block;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+  margin-left: 8px; vertical-align: middle;
+}
+.event-tag--mentorship { background: var(--purple-100); color: var(--purple-700); }
+.page-hero-content .event-tag--mentorship { margin-left: 0; margin-bottom: 14px; background: rgba(255,255,255,0.16); color: var(--white); }
+.event-card--mentorship { border-top: 3px solid var(--purple-600); }
 
 /* ---------- Gallery ---------- */
 .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 190px; gap: 16px; }
@@ -777,6 +801,9 @@ body::after {
   .insta-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-actions { flex-direction: column; align-items: stretch; }
   .hero { align-items: flex-end; padding-bottom: 70px; }
+  /* The -22px offset lands past the 20px container padding, so the gold frame
+     gets clipped by body{overflow-x:hidden}. Tuck it back inside the viewport. */
+  .split-media .frame-accent { bottom: -12px; left: -12px; }
   .testimonial-card { padding: 34px 24px; }
   .resource-box { flex-direction: column; align-items: flex-start; }
   .nsbe-calendar { padding: 20px 14px; }
@@ -880,6 +907,14 @@ a.cal-event-title:hover { text-decoration: underline; }
   position: absolute; left: 16px; right: 16px; bottom: 14px; z-index: 2;
   color: var(--white); font-size: 0.82rem; font-weight: 600;
 }
+.ig-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(12,17,21,0.55);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white);
+}
+.ig-badge svg { width: 15px; height: 15px; }
 
 /* ---------- About: story grid ---------- */
 .story-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
@@ -896,9 +931,10 @@ a.cal-event-title:hover { text-decoration: underline; }
   border-radius: var(--radius-md);
   padding: 40px;
 }
+.firstyear > * { min-width: 0; }
 .firstyear h2 { color: var(--purple-950); margin-bottom: 16px; }
 .firstyear p { color: var(--gray-600); margin-bottom: 18px; }
-.firstyear .btn { margin-top: 8px; }
+.firstyear .btn { margin-top: 8px; white-space: normal; text-align: center; }
 .firstyear-list { display: flex; flex-direction: column; gap: 14px; }
 .firstyear-list li { display: flex; gap: 12px; align-items: flex-start; color: var(--gray-900); font-size: 0.98rem; }
 .firstyear-list .n {
@@ -908,34 +944,104 @@ a.cal-event-title:hover { text-decoration: underline; }
   display: flex; align-items: center; justify-content: center;
 }
 
-/* ---------- Signup popup ---------- */
-.signup-popup {
+/* ---------- Signup card (drops in at the top-right) ---------- */
+.signup-banner {
   position: fixed; z-index: 900;
-  right: 24px; bottom: 24px;
-  width: min(360px, calc(100vw - 32px));
-  background: var(--ink);
-  color: var(--white);
+  right: 24px; top: calc(env(safe-area-inset-top, 0px) + 122px);
+  width: min(320px, calc(100vw - 32px));
+  background: var(--white);
+  color: var(--gray-900);
+  border: 1px solid var(--gray-200);
+  border-top: 3px solid var(--gold-500);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255,255,255,0.12);
   box-shadow: var(--shadow-lg);
-  padding: 26px 24px 24px;
-  transform: translateY(24px);
+  padding: 18px;
   opacity: 0;
   pointer-events: none;
+  transform: translateY(-130%);
   transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
 }
-.signup-popup.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.signup-popup h3 { font-size: 1.1rem; margin-bottom: 10px; }
-.signup-popup p { font-size: 0.9rem; color: rgba(255,255,255,0.72); margin-bottom: 20px; }
-.signup-popup .btn { width: 100%; }
+.signup-banner.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.signup-banner-copy { margin-bottom: 14px; padding-right: 26px; }
+.signup-banner-copy h3 { font-size: 0.96rem; margin-bottom: 3px; color: var(--purple-950); }
+.signup-banner-copy p { font-size: 0.8rem; line-height: 1.45; color: var(--gray-600); }
 .signup-close {
-  position: absolute; top: 12px; right: 12px;
-  width: 30px; height: 30px; border-radius: 50%;
+  position: absolute; top: 10px; right: 10px;
+  width: 26px; height: 26px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  color: rgba(255,255,255,0.6);
+  color: var(--gray-400);
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
 }
-.signup-close:hover { background: rgba(255,255,255,0.1); color: var(--white); }
-.signup-close svg { width: 15px; height: 15px; }
+.signup-close:hover { background: var(--gray-100); color: var(--gray-900); }
+.signup-close svg { width: 13px; height: 13px; }
+
+@media (max-width: 860px) {
+  .signup-banner { right: 16px; }
+}
+
+/* ---------- Branded signup form ---------- */
+.signup-form { display: flex; flex-direction: column; gap: 16px; }
+.signup-fields { display: flex; flex-direction: column; gap: 14px; }
+.signup-field { display: flex; flex-direction: column; gap: 7px; }
+.signup-field span {
+  font-family: var(--font-display);
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gray-600);
+}
+.signup-field input {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  color: var(--gray-900);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  width: 100%;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.signup-field input::placeholder { color: var(--gray-400); }
+.signup-field input:focus {
+  outline: none;
+  border-color: var(--purple-600);
+  box-shadow: 0 0 0 3px rgba(101, 40, 247, 0.15);
+}
+.signup-submit { width: 100%; border: none; cursor: pointer; font-family: var(--font-body); }
+.signup-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
+.signup-status:empty { display: none; }
+.signup-status { font-size: 0.86rem; color: var(--gray-600); }
+.signup-status.is-success { color: var(--purple-600); font-weight: 600; }
+.signup-status.is-error { color: #c0392b; font-weight: 600; }
+
+/* Banner variant: one compact row, placeholders instead of stacked labels. */
+.signup-form--banner { gap: 9px; }
+.signup-form--banner .signup-fields { gap: 8px; }
+/* Placeholders carry the labels in the compact card. */
+.signup-form--banner .signup-field span {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+.signup-form--banner .signup-field input { padding: 9px 12px; font-size: 0.88rem; }
+.signup-form--banner .signup-submit { padding: 10px 20px; font-size: 0.87rem; }
+.signup-form--banner .signup-status { font-size: 0.8rem; }
+
+/* ---------- Join page ---------- */
+.join-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-top: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 40px;
+}
+.join-card h2 { color: var(--purple-950); margin-bottom: 12px; }
+.join-card > p { color: var(--gray-600); margin-bottom: 26px; }
+.join-perks { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--gray-200); }
+.join-perks li { display: flex; gap: 11px; align-items: flex-start; color: var(--gray-900); font-size: 0.95rem; }
+.join-perks svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; color: var(--purple-600); }
+@media (max-width: 560px) { .join-card { padding: 28px 22px; } }
 
 /* ---------- Footer CTA ---------- */
 .footer-cta { margin-top: 20px; }
@@ -947,7 +1053,7 @@ a.cal-event-title:hover { text-decoration: underline; }
 @media (max-width: 640px) {
   .nav-brand img { width: 48px; height: 48px; }
   .nav-brand span { font-size: 1.05rem; }
-  .signup-popup { right: 12px; left: 12px; bottom: 12px; width: auto; }
+  .signup-popup { right: 12px; left: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); width: auto; }
 }
 
 /* Chapter-in-motion block sharing the events section */

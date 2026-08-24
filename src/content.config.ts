@@ -14,6 +14,7 @@ const events = defineCollection({
     time: z.string().optional(),
     location: z.string().optional(),
     image: z.string().optional(),
+    category: z.enum(['general', 'mentorship']).default('general'),
     rsvpLink: z.string().url().optional(),
     description: z.string().optional(),
     gallery: z
@@ -47,6 +48,20 @@ const testimonials = defineCollection({
   }),
 });
 
+// Tiles in the homepage "See the chapter in motion" strip. Each one points at
+// a real Instagram or TikTok post so exec can refresh them from the CMS as new
+// videos go up, without a code change.
+const socialPosts = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/social-posts' }),
+  schema: z.object({
+    caption: z.string(),
+    thumbnail: z.string(),
+    link: z.string().url(),
+    platform: z.enum(['instagram', 'tiktok']).default('instagram'),
+    order: z.number().default(0),
+  }),
+});
+
 // Singleton editable pages (About, Contact, Mentorship) — one file each,
 // edited as a "file collection" in Decap rather than a folder of many entries.
 const pages = defineCollection({
@@ -57,4 +72,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { events, exec, pages, testimonials };
+export const collections = { events, exec, pages, socialPosts, testimonials };

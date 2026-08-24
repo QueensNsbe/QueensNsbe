@@ -1,0 +1,33 @@
+---
+// Branded replacement for the hosted MailerLite form. It posts to the same
+// MailerLite endpoint the hosted form uses, so subscribers still land in the
+// existing list. The POST targets a hidden iframe: MailerLite sends no CORS
+// headers, so a fetch() is blocked, but a native form submit is not.
+interface Props {
+  variant?: 'page' | 'banner';
+}
+const { variant = 'page' } = Astro.props;
+const ML_ACTION = 'https://dashboard.mailerlite.com/jsonp/2022036/forms/176152616540047196/subscribe';
+---
+<form
+  class={`signup-form signup-form--${variant}`}
+  action={ML_ACTION}
+  method="post"
+  target="ml-signup-frame"
+  data-signup-form
+>
+  <div class="signup-fields">
+    <label class="signup-field">
+      <span>Name</span>
+      <input type="text" name="fields[name]" autocomplete="name" placeholder="Your name" required>
+    </label>
+    <label class="signup-field">
+      <span>Email</span>
+      <input type="email" name="fields[email]" autocomplete="email" placeholder="you@queensu.ca" required>
+    </label>
+  </div>
+  <input type="hidden" name="ml-submit" value="1">
+  <input type="hidden" name="anticsrf" value="true">
+  <button type="submit" class="btn btn-gold signup-submit">Subscribe</button>
+  <p class="signup-status" data-signup-status role="status" aria-live="polite"></p>
+</form>

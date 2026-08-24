@@ -6,6 +6,30 @@ const sorted = (await getCollection('events')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
+// "Community in Motion" collage. A `tall` tile spans two rows, so its cell is
+// portrait — only mark portrait photos tall, or `object-fit: cover` crops the
+// middle out of a landscape shot and cuts people's heads off.
+const gallery = [
+  { src: '/images/uploads/IMG_9716-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
+  { src: '/images/uploads/IMG_9682-scaled-e1758409214405-758x1024.jpg', alt: "NSBE Queen's event moment", tall: true },
+  { src: '/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg', alt: 'Black Engineer Mixer' },
+  { src: '/images/uploads/IMG_9731-scaled.jpg', alt: "NSBE Queen's social" },
+  { src: '/images/uploads/IMG_9834-1024x683.jpg', alt: "NSBE Queen's mentorship event" },
+  { src: '/images/uploads/IMG_9730-scaled.jpg', alt: "NSBE Queen's members connecting" },
+  { src: '/images/uploads/VAL2415-1-scaled.jpg', alt: "NSBE Queen's community event" },
+  { src: '/images/uploads/hunt-conference-01.jpg', alt: "NSBE Queen's members at the HUNT Conference" },
+  { src: '/images/uploads/IMG_5515-1-768x1024.jpg', alt: "NSBE Queen's members walking on campus", tall: true },
+  { src: '/images/uploads/internship-panel-01.jpg', alt: "NSBE Queen's members at the Internship Panel" },
+  { src: '/images/uploads/internship-panel-04.jpg', alt: 'A past intern speaking during the panel discussion' },
+  { src: '/images/uploads/IMG_9703-2048x1365.jpg', alt: "NSBE Queen's group photo" },
+  { src: '/images/uploads/IMG_9721-1024x683.jpg', alt: "NSBE Queen's members at a chapter social" },
+  { src: '/images/uploads/bsse-group-railing.jpg', alt: "NSBE Queen's members together on campus" },
+  { src: '/images/uploads/black-history-month-social-2026.jpg', alt: 'Black History Month social' },
+  { src: '/images/uploads/IMG_9728-1-1024x741.jpg', alt: "NSBE Queen's mentorship session" },
+  { src: '/images/uploads/VAL2415-2-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
+  { src: '/images/uploads/IMG_7027-768x576.jpg', alt: "NSBE Queen's members" },
+];
+
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
@@ -14,6 +38,7 @@ const calendarData = sorted.map((e) => ({
   date: e.data.date.toISOString().slice(0, 10),
   title: e.data.title,
   href: `/events/${e.id}`,
+  category: e.data.category,
 }));
 ---
 <BaseLayout title="Events" description="Upcoming and past events from NSBE Queen's University, socials, conferences, panels, and study sessions.">
@@ -36,10 +61,13 @@ const calendarData = sorted.map((e) => ({
     </div>
     <div class="event-grid reveal-stagger">
       {sorted.map((e) => (
-        <a class="event-card" href={`/events/${e.id}`}>
+        <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
           {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
           <div class="event-body">
-            <div class="event-date">{fmtDate(e.data.date)}</div>
+            <div class="event-date">
+              {fmtDate(e.data.date)}
+              {e.data.category === 'mentorship' && <span class="event-tag event-tag--mentorship">Mentorship</span>}
+            </div>
             <h3>{e.data.title}</h3>
             {e.data.location && <p class="event-meta">{e.data.location}{e.data.time ? ` · ${e.data.time}` : ''}</p>}
           </div>
@@ -57,6 +85,10 @@ const calendarData = sorted.map((e) => ({
       <p class="kicker" style="justify-content:center;">Calendar</p>
       <h2>NSBE Queen's Events Calendar</h2>
       <p>Browse by month to see what's on. Days with a dot have a logged event. Click one, or pick from the list, to see details.</p>
+      <div class="cal-legend">
+        <span><span class="cal-legend-dot cal-legend-dot--general"></span>General Event</span>
+        <span><span class="cal-legend-dot cal-legend-dot--mentorship"></span>Mentorship</span>
+      </div>
     </div>
     <div class="cal-wrap reveal">
       <div class="nsbe-calendar">
@@ -74,7 +106,7 @@ const calendarData = sorted.map((e) => ({
       <div class="cal-side">
         <h3>Logged Events</h3>
         <ul class="cal-event-list" id="calEventList"></ul>
-        <a href="https://preview.mailerlite.io/forms/2022036/176152616540047196/share" target="_blank" rel="noopener" class="btn btn-ink btn-sm">Get Notified of New Events</a>
+        <a href="/join" class="btn btn-ink btn-sm">Get Notified of New Events</a>
       </div>
     </div>
   </div>
@@ -89,13 +121,11 @@ const calendarData = sorted.map((e) => ({
       <p>A look back at the socials, conferences, and gatherings that make NSBE Queen's a home away from home.</p>
     </div>
     <div class="gallery-grid reveal-stagger">
-      <a href="/images/uploads/IMG_9716-1024x683.jpg" target="_blank" rel="noopener" class="tall"><img src="/images/uploads/IMG_9716-1024x683.jpg" alt="NSBE Queen's event moment" loading="lazy"></a>
-      <a href="/images/uploads/IMG_9682-scaled-e1758409214405-758x1024.jpg" target="_blank" rel="noopener" class="tall"><img src="/images/uploads/IMG_9682-scaled-e1758409214405-758x1024.jpg" alt="NSBE Queen's event moment" loading="lazy"></a>
-      <a href="/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg" target="_blank" rel="noopener"><img src="/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg" alt="Black Engineer Mixer" loading="lazy"></a>
-      <a href="/images/uploads/IMG_9731-scaled.jpg" target="_blank" rel="noopener"><img src="/images/uploads/IMG_9731-scaled.jpg" alt="NSBE Queen's event moment" loading="lazy"></a>
-      <a href="/images/uploads/IMG_9834-1024x683.jpg" target="_blank" rel="noopener"><img src="/images/uploads/IMG_9834-1024x683.jpg" alt="NSBE Queen's mentorship event" loading="lazy"></a>
-      <a href="/images/uploads/IMG_9730-scaled.jpg" target="_blank" rel="noopener" class="tall"><img src="/images/uploads/IMG_9730-scaled.jpg" alt="NSBE Queen's social" loading="lazy"></a>
-      <a href="/images/uploads/VAL2415-1-scaled.jpg" target="_blank" rel="noopener"><img src="/images/uploads/VAL2415-1-scaled.jpg" alt="NSBE Queen's event moment" loading="lazy"></a>
+      {gallery.map((g) => (
+        <a href={g.src} target="_blank" rel="noopener" class={g.tall ? 'tall' : undefined}>
+          <img src={g.src} alt={g.alt} loading="lazy">
+        </a>
+      ))}
     </div>
   </div>
 </section>

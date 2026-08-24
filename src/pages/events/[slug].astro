@@ -18,6 +18,7 @@ const formatted = event.data.date.toLocaleDateString('en-US', {
     {event.data.image && <div class="page-hero-bg" style={`background-image:url('${event.data.image}');`}></div>}
     <div class="page-hero-scrim"></div>
     <div class="container page-hero-content">
+      {event.data.category === 'mentorship' && <span class="event-tag event-tag--mentorship">Mentorship</span>}
       <h1>{event.data.title}</h1>
       <p>{formatted}{event.data.time ? ` · ${event.data.time}` : ''}{event.data.location ? ` · ${event.data.location}` : ''}</p>
     </div>

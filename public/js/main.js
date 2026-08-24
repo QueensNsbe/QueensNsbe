@@ -260,7 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
           + (dateStr === todayStr ? ' is-today' : '')
           + (dayEvents.length ? ' has-event' : '')
           + (dateStr === selectedDate ? ' is-selected' : '');
-        cell.innerHTML = `<span>${d}</span>` + (dayEvents.length ? '<span class="dot"></span>' : '');
+        const dots = dayEvents
+          .map((e) => `<span class="dot dot--${e.category === 'mentorship' ? 'mentorship' : 'general'}"></span>`)
+          .join('');
+        cell.innerHTML = `<span>${d}</span>` + (dayEvents.length ? `<span class="dots">${dots}</span>` : '');
         if (dayEvents.length) {
           cell.addEventListener('click', () => {
             selectedDate = dateStr;
@@ -284,9 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const item = document.createElement('div');
         item.className = 'cal-event-item' + (e.date === selectedDate ? ' is-active' : '');
+        const dot = `<span class="dot dot--${e.category === 'mentorship' ? 'mentorship' : 'general'}"></span>`;
         item.innerHTML = e.href
-          ? `<div class="cal-event-date">${label}</div><a class="cal-event-title" href="${e.href}">${e.title}</a>`
-          : `<div class="cal-event-date">${label}</div><div class="cal-event-title">${e.title}</div>`;
+          ? `<div class="cal-event-date">${label}</div><a class="cal-event-title" href="${e.href}">${dot}${e.title}</a>`
+          : `<div class="cal-event-date">${label}</div><div class="cal-event-title">${dot}${e.title}</div>`;
         item.addEventListener('click', () => {
           const [y, m] = e.date.split('-').map(Number);
           viewYear = y;
@@ -323,6 +327,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+/* ---------- Branded signup form -> MailerLite ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  const forms = document.querySelectorAll('[data-signup-form]');
+  if (!forms.length) return;
+
+  // The POST target. MailerLite serves no CORS headers, so the response is
+  // opaque to us — the iframe's load event is the only completion signal.
+  let frame = document.getElementById('ml-signup-frame');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'ml-signup-frame';
+    frame.name = 'ml-signup-frame';
+    frame.setAttribute('aria-hidden', 'true');
+    frame.setAttribute('tabindex', '-1');
+    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px;';
+    document.body.appendChild(frame);
+  }
+
+  let pending = null;
+
+  frame.addEventListener('load', () => {
+    if (!pending) return;
+    const { status, submit, form } = pending;
+    status.className = 'signup-status is-success';
+    status.textContent = "You're on the list. Watch your inbox for chapter news.";
+    form.reset();
+    submit.disabled = false;
+    form.dispatchEvent(new CustomEvent('signup:success'));
+    pending = null;
+  });
+
+  forms.forEach((form) => {
+    const status = form.querySelector('[data-signup-status]');
+    const submit = form.querySelector('.signup-submit');
+
+    form.addEventListener('submit', () => {
+      submit.disabled = true;
+      status.className = 'signup-status';
+      status.textContent = 'Signing you up…';
+      pending = { status, submit, form };
+    });
+  });
+});
+
 /* ---------- Email-list popup (fires 5s after arrival, once per session) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('signupPopup');
@@ -337,5 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem('nsbeSignupDismissed', '1');
   }, 5000);
   document.getElementById('signupClose')?.addEventListener('click', dismiss);
-  document.getElementById('signupJoin')?.addEventListener('click', dismiss);
+  // Give the success message a beat to read before the card slides away.
+  popup.querySelector('[data-signup-form]')?.addEventListener('signup:success', () => {
+    setTimeout(dismiss, 2600);
+  });
 });

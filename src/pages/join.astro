@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SignupForm from '../components/SignupForm.astro';
+
+const CHECK =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+const perks = [
+  'Event invites for socials, panels, and conferences.',
+  'Mentorship openings before they fill up.',
+  'Chapter news, opportunities, and scholarship deadlines.',
+];
+---
+<BaseLayout title="Become a Member" description="Join the NSBE Queen's email list for event invites, mentorship openings, and chapter news.">
+  <header class="page-hero page-hero-short">
+    <div class="page-hero-bg" style="background-image:url('/images/uploads/IMG_9703-2048x1365.jpg'); background-position: center 40%;"></div>
+    <div class="page-hero-scrim"></div>
+    <div class="container page-hero-content">
+      <div class="breadcrumb"><a href="/">Home</a><span>/</span>Become a Member</div>
+      <h1>Become a Member</h1>
+      <p>Join the chapter and stay connected all year.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="join-card reveal">
+        <h2>Stay connected with NSBE Queen's</h2>
+        <p>Receive updates on events, initiatives, and opportunities to get involved.</p>
+        <SignupForm />
+        <ul class="join-perks">
+          {perks.map((p) => (
+            <li><Fragment set:html={CHECK} />{p}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -34,6 +34,16 @@ export default defineConfig({
           { type: 'string', name: 'location', label: 'Location' },
           { type: 'image', name: 'image', label: 'Image' },
           {
+            type: 'string',
+            name: 'category',
+            label: 'Category',
+            description: 'Controls the color tag shown on the event card and calendar.',
+            options: [
+              { label: 'General Event', value: 'general' },
+              { label: 'Mentorship', value: 'mentorship' },
+            ],
+          },
+          {
             type: 'object',
             name: 'gallery',
             label: 'Photo Collage',
@@ -76,6 +86,31 @@ export default defineConfig({
           { type: 'image', name: 'photo', label: 'Photo' },
           { type: 'string', name: 'quote', label: 'Quote', required: true, ui: { component: 'textarea' } },
           { type: 'number', name: 'order', label: 'Sort Order' },
+          { type: 'rich-text', name: 'body', isBody: true, label: 'Unused' },
+        ],
+      },
+      {
+        name: 'socialPosts',
+        label: 'Social Videos',
+        path: 'src/content/social-posts',
+        format: 'md',
+        ui: {
+          filename: { readonly: false, slugify: (v) => (v?.caption || 'post').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') },
+        },
+        fields: [
+          { type: 'string', name: 'caption', label: 'Caption', isTitle: true, required: true, description: 'Shown over the tile on the homepage.' },
+          { type: 'image', name: 'thumbnail', label: 'Thumbnail', required: true, description: 'Screenshot or cover frame of the video.' },
+          { type: 'string', name: 'link', label: 'Post URL', required: true, description: 'Full link to the Instagram or TikTok post.' },
+          {
+            type: 'string',
+            name: 'platform',
+            label: 'Platform',
+            options: [
+              { label: 'Instagram', value: 'instagram' },
+              { label: 'TikTok', value: 'tiktok' },
+            ],
+          },
+          { type: 'number', name: 'order', label: 'Sort Order', description: 'Lower numbers show first.' },
           { type: 'rich-text', name: 'body', isBody: true, label: 'Unused' },
         ],
       },
