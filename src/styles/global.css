@@ -196,7 +196,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 .btn-gold { background: var(--gold-500); border-color: var(--gold-500); color: var(--ink); }
 .btn-gold:hover { background: var(--gold-400); border-color: var(--gold-400); }
-.btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.55); }
+.btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.7); }
 .btn-outline:hover { background: var(--white); border-color: var(--white); color: var(--ink); }
 .btn-purple { background: var(--purple-800); border-color: var(--purple-800); color: var(--white); }
 .btn-purple:hover { background: var(--ink); border-color: var(--ink); }
@@ -204,6 +204,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .btn-dark-outline:hover { background: var(--purple-800); border-color: var(--purple-800); color: var(--white); }
 .btn-ink { background: var(--ink); border-color: var(--ink); color: var(--white); }
 .btn-ink:hover { background: var(--purple-800); border-color: var(--purple-800); }
+.btn-light { background: var(--white); border-color: var(--ink); color: var(--ink); }
+.btn-light:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
 .btn-sm { padding: 10px 20px; font-size: 0.84rem; }
 .btn svg { width: 17px; height: 17px; }
 
@@ -970,33 +972,33 @@ a.cal-event-title:hover { text-decoration: underline; }
 .signup-banner {
   position: fixed; z-index: 900;
   right: 24px; top: calc(env(safe-area-inset-top, 0px) + 122px);
-  width: min(320px, calc(100vw - 32px));
+  width: min(268px, calc(100vw - 32px));
   background: var(--white);
   color: var(--gray-900);
   border: 1px solid var(--gray-200);
   border-top: 3px solid var(--gold-500);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  padding: 18px;
+  padding: 14px;
   opacity: 0;
   pointer-events: none;
   transform: translateY(-130%);
   transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
 }
 .signup-banner.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.signup-banner-copy { margin-bottom: 14px; padding-right: 26px; }
-.signup-banner-copy h3 { font-size: 0.96rem; margin-bottom: 3px; color: var(--purple-950); }
-.signup-banner-copy p { font-size: 0.8rem; line-height: 1.45; color: var(--gray-600); }
+.signup-banner-copy { margin-bottom: 11px; padding-right: 22px; }
+.signup-banner-copy h3 { font-size: 0.86rem; margin-bottom: 2px; color: var(--purple-950); }
+.signup-banner-copy p { font-size: 0.72rem; line-height: 1.4; color: var(--gray-600); }
 .signup-close {
-  position: absolute; top: 10px; right: 10px;
-  width: 26px; height: 26px; border-radius: 2px;
+  position: absolute; top: 8px; right: 8px;
+  width: 22px; height: 22px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
   color: var(--gray-400);
   background: transparent;
   transition: background 0.2s, color 0.2s;
 }
 .signup-close:hover { background: var(--gray-100); color: var(--gray-900); }
-.signup-close svg { width: 13px; height: 13px; }
+.signup-close svg { width: 11px; height: 11px; }
 
 @media (max-width: 860px) {
   .signup-banner { right: 16px; }
@@ -1036,16 +1038,16 @@ a.cal-event-title:hover { text-decoration: underline; }
 .signup-status.is-error { color: #c0392b; font-weight: 600; }
 
 /* Banner variant: one compact row, placeholders instead of stacked labels. */
-.signup-form--banner { gap: 9px; }
-.signup-form--banner .signup-fields { gap: 8px; }
+.signup-form--banner { gap: 7px; }
+.signup-form--banner .signup-fields { gap: 6px; }
 /* Placeholders carry the labels in the compact card. */
 .signup-form--banner .signup-field span {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
 }
-.signup-form--banner .signup-field input { padding: 9px 12px; font-size: 0.88rem; }
-.signup-form--banner .signup-submit { padding: 10px 20px; font-size: 0.87rem; }
-.signup-form--banner .signup-status { font-size: 0.8rem; }
+.signup-form--banner .signup-field input { padding: 7px 10px; font-size: 0.79rem; }
+.signup-form--banner .signup-submit { padding: 8px 16px; font-size: 0.79rem; }
+.signup-form--banner .signup-status { font-size: 0.72rem; }
 
 /* ---------- Join page ---------- */
 .join-card {
