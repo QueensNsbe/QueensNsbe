@@ -973,10 +973,9 @@ a.cal-event-title:hover { text-decoration: underline; }
   position: fixed; z-index: 900;
   right: 24px; top: calc(env(safe-area-inset-top, 0px) + 122px);
   width: min(268px, calc(100vw - 32px));
-  background: var(--white);
-  color: var(--gray-900);
-  border: 1px solid var(--gray-200);
-  border-top: 3px solid var(--gold-500);
+  background: var(--purple-950);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   padding: 14px;
@@ -987,17 +986,17 @@ a.cal-event-title:hover { text-decoration: underline; }
 }
 .signup-banner.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .signup-banner-copy { margin-bottom: 11px; padding-right: 22px; }
-.signup-banner-copy h3 { font-size: 0.86rem; margin-bottom: 2px; color: var(--purple-950); }
-.signup-banner-copy p { font-size: 0.72rem; line-height: 1.4; color: var(--gray-600); }
+.signup-banner-copy h3 { font-size: 0.86rem; margin-bottom: 2px; color: var(--white); }
+.signup-banner-copy p { font-size: 0.72rem; line-height: 1.4; color: rgba(255, 255, 255, 0.62); }
 .signup-close {
   position: absolute; top: 8px; right: 8px;
   width: 22px; height: 22px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--gray-400);
+  color: rgba(255, 255, 255, 0.5);
   background: transparent;
   transition: background 0.2s, color 0.2s;
 }
-.signup-close:hover { background: var(--gray-100); color: var(--gray-900); }
+.signup-close:hover { background: rgba(255, 255, 255, 0.1); color: var(--white); }
 .signup-close svg { width: 11px; height: 11px; }
 
 @media (max-width: 860px) {
@@ -1048,6 +1047,51 @@ a.cal-event-title:hover { text-decoration: underline; }
 .signup-form--banner .signup-field input { padding: 7px 10px; font-size: 0.79rem; }
 .signup-form--banner .signup-submit { padding: 8px 16px; font-size: 0.79rem; }
 .signup-form--banner .signup-status { font-size: 0.72rem; }
+
+/* The banner sits on a dark card, so its fields invert. The join-page form
+   keeps the light treatment above. */
+.signup-banner .signup-field input {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--white);
+}
+.signup-banner .signup-field input::placeholder { color: rgba(255, 255, 255, 0.45); }
+.signup-banner .signup-field input:focus {
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 3px rgba(237, 197, 54, 0.2);
+}
+.signup-banner .signup-status { color: rgba(255, 255, 255, 0.62); }
+.signup-banner .signup-status.is-success { color: var(--gold-400); }
+.signup-banner .signup-status.is-error { color: #ff9b8f; }
+
+/* "or Join our Discord" — the second way in. */
+.signup-alt { margin-top: 11px; }
+.signup-alt-rule {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 9px;
+}
+.signup-alt-rule::before, .signup-alt-rule::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.14);
+}
+.signup-discord {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 8px 16px;
+  font-size: 0.79rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--white);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 2px;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.signup-discord svg { width: 15px; height: 15px; flex-shrink: 0; }
+.signup-discord:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--purple-950);
+}
 
 /* ---------- Join page ---------- */
 .join-card {

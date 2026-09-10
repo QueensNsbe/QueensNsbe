@@ -22,7 +22,7 @@ and careers, and help students navigate challenges with confidence. In the
 process, you'll grow your own leadership, communication, and networking
 skills.
 
-[Apply to be a Mentor](https://forms.office.com/pages/responsepage.aspx?id=eCPPiRaKW0S_qx14hTcxIfIfrevCp2pDmAz_Tu6kRKJUM1JJR08wWDFKMFpZNzdHOUQyVEM3Wk83RS4u&route=shorturl)
+[Apply to be a Mentor](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUNDJUV0RNMVZDWjJGWlcwVDdYMlZQWEZSMS4u)
 
 ### 🌱 Become a Mentee
 
