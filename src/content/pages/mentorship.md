@@ -31,7 +31,7 @@ professionals who have already walked the path you're on. Gain advice on
 studying, career opportunities, and personal growth while building
 meaningful connections that will carry you through university and beyond.
 
-[Apply to be a Mentee](https://forms.office.com/pages/responsepage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUQlNJV0Q2RVdCQ0FVMzRXSVVDMTdZVTdWWi4u&route=shorturl)
+[Apply to be a Mentee](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUM1NERzRVVkpBNjNMREQ4QlpWWURYVlA0VC4u)
 
 ## Building Lasting Relationships
 
