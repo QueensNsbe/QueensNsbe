@@ -103,7 +103,7 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
     {testimonials.length > 0 && (
       <div class="container quote-strip reveal">
         <p class="quote-strip-head">In Their Words</p>
-        <div class="quote-grid">
+        <div class="quote-grid quote-grid--swipe">
           {testimonials.slice(0, 3).map((t) => (
             <blockquote class="quote-card">
               <p class="quote">&ldquo;{t.data.quote}&rdquo;</p>
@@ -147,7 +147,7 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
         <p>From study labs and career panels to socials and conferences, these are spaces to connect, learn, and celebrate Black excellence in STEM.</p>
       </div>
       {featured.length === 0 && <p class="text-center">No events yet. Check back soon.</p>}
-      <div class="event-grid reveal-stagger">
+      <div class="event-grid event-grid--swipe reveal-stagger">
         {featured.map((e) => (
           <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
             {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}

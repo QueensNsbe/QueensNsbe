@@ -821,8 +821,8 @@ body::after {
   .cal-wrap { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
-  .nav-links { position: fixed; top: 0; right: 0; height: 100svh; width: min(340px, 82vw); background: var(--purple-950); flex-direction: column; justify-content: center; align-items: flex-start; padding: 40px; gap: 26px; transform: translateX(100%); transition: transform 0.4s var(--ease); box-shadow: -20px 0 50px rgba(0,0,0,0.3); }
-  .nav-links.is-open { transform: translateX(0); }
+  .nav-links { position: fixed; top: 0; right: 0; height: 100svh; width: min(340px, 82vw); background: var(--purple-950); flex-direction: column; justify-content: center; align-items: flex-start; padding: 40px; gap: 26px; transform: translateX(100%); transition: transform 0.4s var(--ease), visibility 0.4s; visibility: hidden; }
+  .nav-links.is-open { transform: translateX(0); visibility: visible; box-shadow: -20px 0 50px rgba(0,0,0,0.3); }
   .nav-links a { font-size: 1.1rem; }
   .nav-toggle { display: flex; }
   .nav-cta { margin-top: 10px; margin-left: 0; }
@@ -1184,6 +1184,69 @@ a.cal-event-title:hover { text-decoration: underline; }
 .event-gallery a:hover img { transform: scale(1.06); }
 @media (max-width: 860px) { .event-gallery { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .event-gallery { grid-template-columns: 1fr; } }
+
+/* ---------- Phone polish ----------
+   Keeps the laptop layout's feel on small screens: tighter rhythm, fewer
+   full-width stacks, and swipeable rows where desktop shows cards side by side. */
+@media (max-width: 640px) {
+  .section { padding: 48px 0; }
+  .section-head { margin-bottom: 26px; }
+  .section-head p { font-size: 1rem; margin-top: 12px; }
+
+  /* Stats: a compact 2 x 2 band instead of four tall tiles. */
+  .stats { padding: 36px 0; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .stat-tile { min-width: 0; padding: 18px 8px; border-left: none !important; }
+  .stat-tile:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.1) !important; }
+  .stat-tile:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .stat-icon-badge { display: none; }
+  .stat-num { font-size: 1.75rem; }
+  .stat-label { margin-top: 4px; font-size: 0.76rem; }
+
+  /* Photos beside copy on desktop become shorter, wider crops. */
+  .split { gap: 32px; }
+  .split-media img { height: auto; aspect-ratio: 4 / 3; }
+
+  /* Side-by-side cards become a swipeable row with the next card peeking in. */
+  .quote-grid--swipe, .event-grid--swipe {
+    display: grid; grid-auto-flow: column; grid-template-columns: none;
+    grid-auto-columns: 84%; gap: 14px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    margin: 0 -20px; padding: 0 20px 6px;
+    scrollbar-width: none;
+  }
+  .quote-grid--swipe::-webkit-scrollbar, .event-grid--swipe::-webkit-scrollbar { display: none; }
+  .quote-grid--swipe > *, .event-grid--swipe > * { scroll-snap-align: start; }
+  .quote-strip { margin-top: 40px; padding-top: 32px; }
+  .quote-card { padding: 20px; }
+  .event-card .event-body { padding: 20px; }
+  .event-card .event-img { height: 170px; }
+
+  /* Social buttons share one even row (they wrap evenly if a fourth is added). */
+  .social-actions { gap: 8px; }
+  .social-actions .btn { flex: 1 1 0; min-width: 30%; justify-content: center; gap: 6px; padding: 11px 8px; font-size: 0.8rem; }
+  .chapter-motion { margin-top: 48px; padding-top: 40px; }
+
+  .back-to-top { width: 40px; height: 40px; right: 16px; bottom: 16px; }
+
+  /* Hero stops short of the full screen so the gold marquee peeks in below,
+     a cue that there's more to scroll to. */
+  .hero { min-height: 86svh; padding-bottom: 48px; }
+  .hero-content h1 { margin-bottom: 16px; }
+  .hero-content p.lead { margin-bottom: 28px; }
+
+  /* Footer (every page): Address and Email side by side, socials on one line. */
+  .site-footer { padding: 40px 0 20px; }
+  .footer-top { grid-template-columns: 1fr auto; gap: 24px 20px; padding-bottom: 24px; }
+  .footer-col h4 { font-size: 0.74rem; margin-bottom: 8px; }
+  .footer-col p, .footer-col a { font-size: 0.84rem; margin-bottom: 0; }
+  .footer-col a[href^="mailto:"] { white-space: nowrap; }
+  .footer-col:last-child { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; }
+  .footer-col:last-child h4 { margin-bottom: 0; }
+  .footer-social { margin-top: 0; gap: 10px; }
+  .footer-social a { width: 36px; height: 36px; }
+  .footer-bottom { padding-top: 18px; font-size: 0.76rem; }
+}
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
