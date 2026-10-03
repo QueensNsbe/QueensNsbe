@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { CATEGORY_KEYS } from './eventCategories';
 
 // Each collection below mirrors a Decap CMS collection in public/admin/config.yml.
 // The schema validates frontmatter at build time — if an exec fills in a CMS form
@@ -11,10 +12,12 @@ const events = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
+    // Last day of a multi-day event (e.g. a study week). Leave out for one-day events.
+    endDate: z.date().optional(),
     time: z.string().optional(),
     location: z.string().optional(),
     image: z.string().optional(),
-    category: z.enum(['general', 'mentorship']).default('general'),
+    category: z.enum(CATEGORY_KEYS).default('community'),
     rsvpLink: z.string().url().optional(),
     description: z.string().optional(),
     gallery: z

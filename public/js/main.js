@@ -237,8 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let viewYear = now.getFullYear();
     let viewMonth = now.getMonth();
     let selectedDate = null;
+    // The side list starts short; "Show all" reveals the rest.
+    const LIST_LIMIT = 5;
+    let listExpanded = false;
 
-    const eventsOn = (dateStr) => calEvents.filter(e => e.date === dateStr);
+    // Multi-day events (endDate) mark every day in their range.
+    const eventsOn = (dateStr) => calEvents.filter(e => dateStr >= e.date && dateStr <= (e.endDate || e.date));
 
     function renderCalendar() {
       calTitle.textContent = `${monthNames[viewMonth]} ${viewYear}`;
@@ -261,12 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
           + (dayEvents.length ? ' has-event' : '')
           + (dateStr === selectedDate ? ' is-selected' : '');
         const dots = dayEvents
-          .map((e) => `<span class="dot dot--${e.category === 'mentorship' ? 'mentorship' : 'general'}"></span>`)
+          .map((e) => `<span class="dot dot--${e.category}"></span>`)
           .join('');
         cell.innerHTML = `<span>${d}</span>` + (dayEvents.length ? `<span class="dots">${dots}</span>` : '');
         if (dayEvents.length) {
           cell.addEventListener('click', () => {
             selectedDate = dateStr;
+            // Expand the list if the picked event sits past the cut-off.
+            if (calEvents.findIndex((e) => eventsOn(dateStr).includes(e)) >= LIST_LIMIT) listExpanded = true;
             renderCalendar();
             renderEventList();
           });
@@ -281,13 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
         calEventList.innerHTML = '<li class="cal-empty">No events logged yet — check back soon.</li>';
         return;
       }
-      calEvents.forEach(e => {
+      const shown = listExpanded ? calEvents : calEvents.slice(0, LIST_LIMIT);
+      shown.forEach(e => {
         const li = document.createElement('li');
-        const d = new Date(e.date + 'T00:00:00');
-        const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const fmt = (s) => new Date(s + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const label = e.endDate ? `${fmt(e.date)} – ${fmt(e.endDate)}` : fmt(e.date);
         const item = document.createElement('div');
-        item.className = 'cal-event-item' + (e.date === selectedDate ? ' is-active' : '');
-        const dot = `<span class="dot dot--${e.category === 'mentorship' ? 'mentorship' : 'general'}"></span>`;
+        item.className = 'cal-event-item' + (eventsOn(selectedDate || '').includes(e) ? ' is-active' : '');
+        const dot = `<span class="dot dot--${e.category}"></span>`;
         item.innerHTML = e.href
           ? `<div class="cal-event-date">${label}</div><a class="cal-event-title" href="${e.href}">${dot}${e.title}</a>`
           : `<div class="cal-event-date">${label}</div><div class="cal-event-title">${dot}${e.title}</div>`;
@@ -302,6 +309,20 @@ document.addEventListener('DOMContentLoaded', () => {
         li.appendChild(item);
         calEventList.appendChild(li);
       });
+
+      calEventList.nextElementSibling?.classList.contains('cal-more') && calEventList.nextElementSibling.remove();
+      if (calEvents.length > LIST_LIMIT) {
+        const more = document.createElement('button');
+        more.type = 'button';
+        more.className = 'cal-more';
+        more.textContent = listExpanded ? 'Show less' : `Show all ${calEvents.length} events`;
+        more.addEventListener('click', () => {
+          listExpanded = !listExpanded;
+          renderEventList();
+          if (!listExpanded) calEventList.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        calEventList.after(more);
+      }
     }
 
     calPrev.addEventListener('click', () => {
@@ -327,46 +348,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------- Branded signup form -> MailerLite ---------- */
+/* ---------- Branded signup form -> Loops ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  const forms = document.querySelectorAll('[data-signup-form]');
-  if (!forms.length) return;
-
-  // The POST target. MailerLite serves no CORS headers, so the response is
-  // opaque to us — the iframe's load event is the only completion signal.
-  let frame = document.getElementById('ml-signup-frame');
-  if (!frame) {
-    frame = document.createElement('iframe');
-    frame.id = 'ml-signup-frame';
-    frame.name = 'ml-signup-frame';
-    frame.setAttribute('aria-hidden', 'true');
-    frame.setAttribute('tabindex', '-1');
-    frame.style.cssText = 'position:absolute;width:0;height:0;border:0;left:-9999px;';
-    document.body.appendChild(frame);
-  }
-
-  let pending = null;
-
-  frame.addEventListener('load', () => {
-    if (!pending) return;
-    const { status, submit, form } = pending;
-    status.className = 'signup-status is-success';
-    status.textContent = "You're on the list. Watch your inbox for chapter news.";
-    form.reset();
-    submit.disabled = false;
-    form.dispatchEvent(new CustomEvent('signup:success'));
-    pending = null;
-  });
-
-  forms.forEach((form) => {
+  document.querySelectorAll('[data-signup-form]').forEach((form) => {
     const status = form.querySelector('[data-signup-status]');
     const submit = form.querySelector('.signup-submit');
 
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
       submit.disabled = true;
       status.className = 'signup-status';
       status.textContent = 'Signing you up…';
-      pending = { status, submit, form };
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString(),
+        });
+        if (res.ok) {
+          status.className = 'signup-status is-success';
+          status.textContent = "You're on the list. Watch your inbox for chapter news.";
+          form.reset();
+          form.dispatchEvent(new CustomEvent('signup:success'));
+        } else {
+          const data = await res.json().catch(() => ({}));
+          status.className = 'signup-status is-error';
+          status.textContent = res.status === 429
+            ? 'Too many signups right now. Please try again in a minute.'
+            : data.message || 'Something went wrong. Please try again.';
+        }
+      } catch {
+        status.className = 'signup-status is-error';
+        status.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        submit.disabled = false;
+      }
     });
   });
 });

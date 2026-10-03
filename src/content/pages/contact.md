@@ -12,4 +12,4 @@ Have a question, want to partner with us, or interested in joining? Reach out!
 - **TikTok:** [@queens.nsbe](https://www.tiktok.com/@queens.nsbe)
 - **LinkedIn:** [NSBE Queen's University](https://www.linkedin.com/company/nsbe-queen-s-university/posts/?feedView=all)
 
-Want updates on events and announcements? [Join our email list](https://preview.mailerlite.io/forms/2022036/176152616540047196/share).
+Want updates on events and announcements? [Join our email list](/join).

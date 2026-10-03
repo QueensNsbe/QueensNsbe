@@ -1,33 +1,28 @@
 ---
-// Branded replacement for the hosted MailerLite form. It posts to the same
-// MailerLite endpoint the hosted form uses, so subscribers still land in the
-// existing list. The POST targets a hidden iframe: MailerLite sends no CORS
-// headers, so a fetch() is blocked, but a native form submit is not.
+// Branded signup form. /js/main.js submits it to the Loops newsletter-form
+// endpoint below with fetch(), so subscribers land in the Loops audience.
 interface Props {
   variant?: 'page' | 'banner';
 }
 const { variant = 'page' } = Astro.props;
-const ML_ACTION = 'https://dashboard.mailerlite.com/jsonp/2022036/forms/176152616540047196/subscribe';
+const LOOPS_ACTION = 'https://app.loops.so/api/newsletter-form/cmtkay2t100bs0jyy522vnhah';
 ---
 <form
   class={`signup-form signup-form--${variant}`}
-  action={ML_ACTION}
+  action={LOOPS_ACTION}
   method="post"
-  target="ml-signup-frame"
   data-signup-form
 >
   <div class="signup-fields">
     <label class="signup-field">
       <span>Name</span>
-      <input type="text" name="fields[name]" autocomplete="name" placeholder="Your name" required>
+      <input type="text" name="firstName" autocomplete="name" placeholder="Your name" required>
     </label>
     <label class="signup-field">
       <span>Email</span>
-      <input type="email" name="fields[email]" autocomplete="email" placeholder="you@queensu.ca" required>
+      <input type="email" name="email" autocomplete="email" placeholder="you@queensu.ca" required>
     </label>
   </div>
-  <input type="hidden" name="ml-submit" value="1">
-  <input type="hidden" name="anticsrf" value="true">
   <button type="submit" class="btn btn-light signup-submit">Subscribe</button>
   <p class="signup-status" data-signup-status role="status" aria-live="polite"></p>
 </form>

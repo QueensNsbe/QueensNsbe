@@ -30,6 +30,7 @@ export default defineConfig({
         fields: [
           { type: 'string', name: 'title', label: 'Title', isTitle: true, required: true },
           { type: 'datetime', name: 'date', label: 'Date', required: true, ui: { dateFormat: 'YYYY-MM-DD' } },
+          { type: 'datetime', name: 'endDate', label: 'End Date', description: 'Only for multi-day events, e.g. a study week.', ui: { dateFormat: 'YYYY-MM-DD' } },
           { type: 'string', name: 'time', label: 'Time', description: 'e.g. 6:00 PM' },
           { type: 'string', name: 'location', label: 'Location' },
           { type: 'image', name: 'image', label: 'Image' },
@@ -39,8 +40,13 @@ export default defineConfig({
             label: 'Category',
             description: 'Controls the color tag shown on the event card and calendar.',
             options: [
-              { label: 'General Event', value: 'general' },
+              { label: 'Community & Social', value: 'community' },
+              { label: 'Academic Support', value: 'academic' },
+              { label: 'Professional Development', value: 'professional' },
               { label: 'Mentorship', value: 'mentorship' },
+              { label: 'Partnerships', value: 'partnerships' },
+              { label: 'Wellness', value: 'wellness' },
+              { label: 'Signature Events', value: 'signature' },
             ],
           },
           {

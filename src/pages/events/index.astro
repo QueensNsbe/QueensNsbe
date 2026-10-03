@@ -1,10 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { EVENT_CATEGORIES } from '../../eventCategories';
 
 const sorted = (await getCollection('events')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
+// Upcoming events only show on the calendar until their date has passed.
+const now = new Date();
+const recent = sorted.filter((e) => (e.data.endDate ?? e.data.date) < now);
 
 // "Community in Motion" collage. A `tall` tile spans two rows, so its cell is
 // portrait — only mark portrait photos tall, or `object-fit: cover` crops the
@@ -36,6 +40,7 @@ const fmtDate = (d: Date) =>
 // Feeds the calendar widget in /js/main.js (read from #calendar-data).
 const calendarData = sorted.map((e) => ({
   date: e.data.date.toISOString().slice(0, 10),
+  endDate: e.data.endDate?.toISOString().slice(0, 10),
   title: e.data.title,
   href: `/events/${e.id}`,
   category: e.data.category,
@@ -57,16 +62,16 @@ const calendarData = sorted.map((e) => ({
   <div class="container">
     <div class="section-head reveal">
       <p class="kicker">Recent Events</p>
-      <h2>Highlights From 2025&ndash;2026</h2>
+      <h2>Highlights From 2026&ndash;2027</h2>
     </div>
     <div class="event-grid reveal-stagger">
-      {sorted.map((e) => (
+      {recent.map((e) => (
         <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
           {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
           <div class="event-body">
             <div class="event-date">
-              {fmtDate(e.data.date)}
-              {e.data.category === 'mentorship' && <span class="event-tag event-tag--mentorship">Mentorship</span>}
+              {fmtDate(e.data.date)}{e.data.endDate && ` – ${fmtDate(e.data.endDate)}`}
+              <span class={`event-tag event-tag--${e.data.category}`}>{EVENT_CATEGORIES[e.data.category]}</span>
             </div>
             <h3>{e.data.title}</h3>
             {e.data.location && <p class="event-meta">{e.data.location}{e.data.time ? ` · ${e.data.time}` : ''}</p>}
@@ -74,7 +79,7 @@ const calendarData = sorted.map((e) => ({
         </a>
       ))}
     </div>
-    {sorted.length === 0 && <p class="text-center">No events logged yet, check back soon.</p>}
+    {recent.length === 0 && <p class="text-center">No events logged yet, check back soon.</p>}
   </div>
 </section>
 
@@ -86,8 +91,9 @@ const calendarData = sorted.map((e) => ({
       <h2>NSBE Queen's Events Calendar</h2>
       <p>Browse by month to see what's on. Days with a dot have a logged event. Click one, or pick from the list, to see details.</p>
       <div class="cal-legend">
-        <span><span class="cal-legend-dot cal-legend-dot--general"></span>General Event</span>
-        <span><span class="cal-legend-dot cal-legend-dot--mentorship"></span>Mentorship</span>
+        {Object.entries(EVENT_CATEGORIES).map(([key, label]) => (
+          <span><span class={`cal-legend-dot cal-legend-dot--${key}`}></span>{label}</span>
+        ))}
       </div>
     </div>
     <div class="cal-wrap reveal">

@@ -27,6 +27,15 @@
   --gray-200: #e4e0ec;
   --gray-100: #f1eef6;
 
+  /* Event categories (calendar dots, legend, card accents) */
+  --cat-community: var(--gold-500);
+  --cat-academic: #2f6fd6;
+  --cat-professional: var(--ink);
+  --cat-mentorship: var(--purple-600);
+  --cat-partnerships: #12938c;
+  --cat-wellness: #e0607e;
+  --cat-signature: #e8741c;
+
   --font-display: 'Space Grotesk', sans-serif;
   --font-serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Inter', sans-serif;
@@ -555,15 +564,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .cal-day.is-today { background: var(--gray-100); color: var(--ink); font-weight: 700; box-shadow: inset 0 0 0 1px var(--gray-200); }
 .cal-day .dots { display: flex; gap: 3px; }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
-.dot--general { background: var(--ink); }
-.dot--mentorship { background: var(--purple-600); }
+.dot--community, .cal-legend-dot--community { background: var(--cat-community); }
+.dot--professional, .cal-legend-dot--professional { background: var(--cat-professional); }
+.dot--mentorship, .cal-legend-dot--mentorship { background: var(--cat-mentorship); }
+.dot--partnerships, .cal-legend-dot--partnerships { background: var(--cat-partnerships); }
+.dot--wellness, .cal-legend-dot--wellness { background: var(--cat-wellness); }
+.dot--academic, .cal-legend-dot--academic { background: var(--cat-academic); }
+.dot--signature, .cal-legend-dot--signature { background: var(--cat-signature); }
 .cal-day.has-event { background: var(--gray-100); cursor: pointer; }
 .cal-day.has-event:hover { background: var(--ink); color: var(--white); }
-.cal-day.has-event:hover .dot--general { background: var(--white); }
-.cal-day.has-event:hover .dot--mentorship { background: var(--gold-400); }
 .cal-day.is-selected { background: var(--ink); color: var(--white); }
-.cal-day.is-selected .dot--general { background: var(--white); }
-.cal-day.is-selected .dot--mentorship { background: var(--gold-400); }
+/* On the dark selected/hover cell, lift the two dark dots so they stay visible. */
+.cal-day.has-event:hover .dot--professional, .cal-day.is-selected .dot--professional { background: var(--white); }
+.cal-day.has-event:hover .dot--mentorship, .cal-day.is-selected .dot--mentorship { background: var(--purple-400); }
 .cal-side { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px 24px; color: var(--gray-900); box-shadow: var(--shadow-sm); }
 .cal-side h3 { font-size: 1rem; margin-bottom: 14px; color: var(--ink); }
 .cal-event-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
@@ -573,14 +586,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .cal-event-title { font-size: 0.9rem; font-weight: 600; }
 .cal-event-title .dot { display: inline-block; margin-right: 7px; }
 .cal-side .btn { width: 100%; }
+.cal-more { display: block; width: 100%; margin: -8px 0 20px; padding: 10px; font-size: 0.82rem; font-weight: 700; color: var(--purple-600); border: 1px dashed var(--gray-200); border-radius: 2px; }
+.cal-more:hover { border-color: var(--purple-600); background: var(--gray-100); }
 .cal-empty { text-align: center; padding: 14px 0; color: var(--gray-400); font-size: 0.86rem; }
 
 /* ---------- Event category legend & tags ---------- */
 .cal-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 14px; }
 .cal-legend span { display: inline-flex; align-items: center; gap: 7px; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); }
 .cal-legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.cal-legend-dot--general { background: var(--ink); }
-.cal-legend-dot--mentorship { background: var(--purple-600); }
 
 .event-tag {
   display: inline-block;
@@ -588,9 +601,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   padding: 3px 9px; border-radius: 2px;
   margin-left: 8px; vertical-align: middle;
 }
+.event-tag--community { background: #fbf1cc; color: #7a5c00; }
+.event-tag--professional { background: var(--gray-100); color: var(--ink); }
 .event-tag--mentorship { background: var(--purple-100); color: var(--purple-700); }
-.page-hero-content .event-tag--mentorship { margin-left: 0; margin-bottom: 14px; background: rgba(255,255,255,0.16); color: var(--white); }
-.event-card--mentorship { border-top: 3px solid var(--purple-600); }
+.event-tag--partnerships { background: #d9f0ee; color: #0b5e5a; }
+.event-tag--wellness { background: #fbe1e6; color: #9c2945; }
+.event-tag--academic { background: #dfe9fb; color: #1d4c9e; }
+.event-tag--signature { background: #fde6d3; color: #93440b; }
+.page-hero-content .event-tag { margin-left: 0; margin-bottom: 14px; background: rgba(255,255,255,0.16); color: var(--white); }
+.event-card--community { border-top: 3px solid var(--cat-community); }
+.event-card--professional { border-top: 3px solid var(--cat-professional); }
+.event-card--mentorship { border-top: 3px solid var(--cat-mentorship); }
+.event-card--partnerships { border-top: 3px solid var(--cat-partnerships); }
+.event-card--wellness { border-top: 3px solid var(--cat-wellness); }
+.event-card--academic { border-top: 3px solid var(--cat-academic); }
+.event-card--signature { border-top: 3px solid var(--cat-signature); }
 
 /* ---------- Gallery ---------- */
 .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 190px; gap: 16px; }
@@ -1002,6 +1027,18 @@ a.cal-event-title:hover { text-decoration: underline; }
 
 @media (max-width: 860px) {
   .signup-banner { right: 16px; }
+}
+/* Phones: a narrower, tighter card so it doesn't cover the hero. */
+@media (max-width: 640px) {
+  .signup-banner { right: 12px; width: min(220px, calc(100vw - 24px)); padding: 11px; }
+  .signup-banner-copy { margin-bottom: 8px; }
+  .signup-banner-copy h3 { font-size: 0.8rem; }
+  .signup-banner-copy p { font-size: 0.68rem; }
+  .signup-banner .signup-form--banner .signup-field input { padding: 6px 9px; }
+  .signup-banner .signup-form--banner .signup-submit,
+  .signup-banner .signup-discord { padding: 6px 12px; font-size: 0.74rem; }
+  .signup-banner .signup-alt { margin-top: 8px; }
+  .signup-banner .signup-alt-rule { margin-bottom: 6px; }
 }
 
 /* ---------- Branded signup form ---------- */

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { ARROW } from '../components/icons';
+import { EVENT_CATEGORIES } from '../eventCategories';
 import { SOCIALS, ICON_PATHS } from '../socials';
 
 const execAll = await getCollection('exec');
@@ -13,7 +14,7 @@ const allEvents = (await getCollection('events')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 const now = new Date();
-const upcoming = allEvents.filter((e) => e.data.date >= now).reverse();
+const upcoming = allEvents.filter((e) => (e.data.endDate ?? e.data.date) >= now).reverse();
 const featured = upcoming.length > 0 ? upcoming.slice(0, 3) : allEvents.slice(0, 3);
 const eventsHeading = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
 
@@ -152,8 +153,8 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
             {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
             <div class="event-body">
               <div class="event-date">
-                {fmtDate(e.data.date)}
-                {e.data.category === 'mentorship' && <span class="event-tag event-tag--mentorship">Mentorship</span>}
+                {fmtDate(e.data.date)}{e.data.endDate && ` – ${fmtDate(e.data.endDate)}`}
+                <span class={`event-tag event-tag--${e.data.category}`}>{EVENT_CATEGORIES[e.data.category]}</span>
               </div>
               <h3>{e.data.title}</h3>
               {e.data.location && <p>{e.data.location}</p>}
