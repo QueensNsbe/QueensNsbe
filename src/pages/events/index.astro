@@ -60,7 +60,7 @@ const calendarData = sorted.map((e) => ({
 <!-- ============ RECENT EVENTS ============ -->
 <section class="section">
   <div class="container">
-    <div class="section-head reveal">
+    <div class="section-head section-head--sm reveal">
       <p class="kicker">Recent Events</p>
       <h2>Highlights From 2026&ndash;2027</h2>
     </div>
@@ -89,12 +89,6 @@ const calendarData = sorted.map((e) => ({
     <div class="section-head center reveal">
       <p class="kicker" style="justify-content:center;">Calendar</p>
       <h2>NSBE Queen's Events Calendar</h2>
-      <p>Browse by month to see what's on. Days with a dot have a logged event. Click one, or pick from the list, to see details.</p>
-      <div class="cal-legend">
-        {Object.entries(EVENT_CATEGORIES).map(([key, label]) => (
-          <span><span class={`cal-legend-dot cal-legend-dot--${key}`}></span>{label}</span>
-        ))}
-      </div>
     </div>
     <div class="cal-wrap reveal">
       <div class="nsbe-calendar">

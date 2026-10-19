@@ -237,12 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let viewYear = now.getFullYear();
     let viewMonth = now.getMonth();
     let selectedDate = null;
-    // The side list starts short; "Show all" reveals the rest.
-    const LIST_LIMIT = 5;
-    let listExpanded = false;
 
     // Multi-day events (endDate) mark every day in their range.
     const eventsOn = (dateStr) => calEvents.filter(e => dateStr >= e.date && dateStr <= (e.endDate || e.date));
+    // The list opens on the first event that hasn't finished yet; past events
+    // stay above it, reachable by scrolling up.
+    const nextEvent = calEvents.find(e => (e.endDate || e.date) >= todayStr);
 
     function renderCalendar() {
       calTitle.textContent = `${monthNames[viewMonth]} ${viewYear}`;
@@ -265,16 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
           + (dayEvents.length ? ' has-event' : '')
           + (dateStr === selectedDate ? ' is-selected' : '');
         const dots = dayEvents
-          .map((e) => `<span class="dot dot--${e.category}"></span>`)
+          .map((e) => `<span class="dot"></span>`)
           .join('');
         cell.innerHTML = `<span>${d}</span>` + (dayEvents.length ? `<span class="dots">${dots}</span>` : '');
         if (dayEvents.length) {
           cell.addEventListener('click', () => {
             selectedDate = dateStr;
-            // Expand the list if the picked event sits past the cut-off.
-            if (calEvents.findIndex((e) => eventsOn(dateStr).includes(e)) >= LIST_LIMIT) listExpanded = true;
             renderCalendar();
             renderEventList();
+            scrollListTo(calEventList.querySelector('.cal-event-item.is-active'));
           });
         }
         calGrid.appendChild(cell);
@@ -282,19 +281,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderEventList() {
+      // Clearing the list resets its scroll, so hold on to where the reader was.
+      const prevScroll = calEventList.scrollTop;
       calEventList.innerHTML = '';
       if (!calEvents.length) {
         calEventList.innerHTML = '<li class="cal-empty">No events logged yet — check back soon.</li>';
         return;
       }
-      const shown = listExpanded ? calEvents : calEvents.slice(0, LIST_LIMIT);
-      shown.forEach(e => {
+      calEvents.forEach(e => {
         const li = document.createElement('li');
         const fmt = (s) => new Date(s + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const label = e.endDate ? `${fmt(e.date)} – ${fmt(e.endDate)}` : fmt(e.date);
         const item = document.createElement('div');
         item.className = 'cal-event-item' + (eventsOn(selectedDate || '').includes(e) ? ' is-active' : '');
-        const dot = `<span class="dot dot--${e.category}"></span>`;
+        const dot = `<span class="dot"></span>`;
         item.innerHTML = e.href
           ? `<div class="cal-event-date">${label}</div><a class="cal-event-title" href="${e.href}">${dot}${e.title}</a>`
           : `<div class="cal-event-date">${label}</div><div class="cal-event-title">${dot}${e.title}</div>`;
@@ -306,23 +306,18 @@ document.addEventListener('DOMContentLoaded', () => {
           renderCalendar();
           renderEventList();
         });
+        if (e === nextEvent) li.dataset.next = '';
         li.appendChild(item);
         calEventList.appendChild(li);
       });
+      calEventList.scrollTop = prevScroll;
+    }
 
-      calEventList.nextElementSibling?.classList.contains('cal-more') && calEventList.nextElementSibling.remove();
-      if (calEvents.length > LIST_LIMIT) {
-        const more = document.createElement('button');
-        more.type = 'button';
-        more.className = 'cal-more';
-        more.textContent = listExpanded ? 'Show less' : `Show all ${calEvents.length} events`;
-        more.addEventListener('click', () => {
-          listExpanded = !listExpanded;
-          renderEventList();
-          if (!listExpanded) calEventList.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        });
-        calEventList.after(more);
-      }
+    // Scroll inside the list only (never the page) so `el` sits at the top.
+    function scrollListTo(el, smooth = true) {
+      if (!el) return;
+      const top = el.getBoundingClientRect().top - calEventList.getBoundingClientRect().top + calEventList.scrollTop;
+      calEventList.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
     }
 
     calPrev.addEventListener('click', () => {
@@ -345,6 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderCalendar();
     renderEventList();
+    if (nextEvent) scrollListTo(calEventList.querySelector('[data-next]'), false);
+    else calEventList.scrollTop = calEventList.scrollHeight;
   }
 });
 
