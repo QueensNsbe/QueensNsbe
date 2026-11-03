@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import SignupForm from '../components/SignupForm.astro';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -28,6 +29,7 @@ const fullTitle =
     <meta name="description" content={description} />
     <link rel="icon" href="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-80x80.png" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <Analytics />
   </head>
   <body>
     <div class="scroll-progress"></div>

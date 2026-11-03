@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExecLeadGrid from '../components/ExecLeadGrid.astro';
 import ExecGrid from '../components/ExecGrid.astro';
+import { getCollection } from 'astro:content';
+
+// The leadership block only shows co-president cards, so skip it until one is added.
+const hasPresidents = (await getCollection('exec')).some((e) => /president/i.test(e.data.role));
 
 const storyPhotos = [
   { src: '/images/uploads/IMG_9716-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
@@ -80,6 +84,7 @@ const pillars = [
 </section>
 
 <!-- ============ 4. LEADERSHIP ============ -->
+{hasPresidents && (
 <section class="section section-alt" id="leadership">
   <div class="container">
     <div class="section-head center">
@@ -88,6 +93,7 @@ const pillars = [
     <ExecLeadGrid style="margin-bottom:0;" />
   </div>
 </section>
+)}
 
 <!-- ============ 5. MESSAGE FROM THE PRESIDENTS ============ -->
 <section class="section-tight section-dark" id="president">
@@ -104,10 +110,10 @@ const pillars = [
 </section>
 
 <!-- ============ 6. TEAM ============ -->
-<section class="section" id="team">
+<section class="section section-lilac" id="team">
   <div class="container">
     <div class="section-head center">
-      <h2>Meet the 2025&ndash;2026 Executive Team</h2>
+      <h2>Meet the 2026&ndash;2027 Executive Team</h2>
     </div>
     <ExecGrid />
   </div>

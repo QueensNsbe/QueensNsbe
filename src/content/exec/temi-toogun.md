@@ -1,8 +1,8 @@
 ---
 name: "Temi Toogun"
-role: "Mentorship Coordinator"
+role: "Mentorship Co-Director"
 department: "Mentorship"
-photo: "/images/uploads/IMG_0034-modified-768x768.png"
+photo: "/images/uploads/exec-temi-toogun.jpg"
 linkedin: "https://www.linkedin.com/in/temi-toogun/"
-order: 7
+order: 10
 ---

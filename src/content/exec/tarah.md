@@ -1,8 +1,8 @@
 ---
 name: "Tara Gentles"
-role: "Events Coordinator"
+role: "Events Director"
 department: "Events"
-photo: "/images/uploads/IMG_3138_VSCO-modified-768x768.png"
+photo: "/images/uploads/exec-tarah.jpg"
 linkedin: "https://www.linkedin.com/in/tara-gentles-41804733b/"
-order: 5
+order: 9
 ---
