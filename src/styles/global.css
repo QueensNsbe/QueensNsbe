@@ -267,7 +267,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 .hero-scrim {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(12,17,21,0) 55%, rgba(12,17,21,0.75) 100%);
+  background: linear-gradient(180deg, rgba(12,17,21,0) 45%, rgba(12,17,21,0.5) 68%, rgba(12,17,21,0.72) 100%);
 }
 .hero-content { position: relative; z-index: 2; max-width: 780px; }
 .hero-content h1 {
@@ -474,21 +474,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .pillar-card p { color: var(--gray-600); font-size: 0.98rem; }
 
 /* ---------- Exec grid ---------- */
-.exec-lead-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-bottom: 64px; }
-.exec-lead-card {
-  display: flex; align-items: center; gap: 24px;
-  background: var(--purple-800);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  color: var(--white);
+/* Co-presidents use the same portrait cards as the team, two side by side. */
+.exec-grid.exec-lead-grid { grid-template-columns: repeat(2, 1fr); max-width: 560px; margin: 0 auto; }
+/* About page: co-president portraits beside their welcome note. */
+.leaders-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+.leaders-split .exec-lead-grid { margin: 0; max-width: none; }
+.leaders-note h2 { color: var(--white); margin-bottom: 22px; }
+.leaders-note p { color: rgba(255,255,255,0.8); font-size: 1.05rem; margin-bottom: 16px; }
+.leaders-note .leaders-sign { font-family: var(--font-display); font-weight: 700; color: var(--gold-400); margin: 26px 0 0; }
+.leaders-sign span { display: block; font-family: var(--font-body); font-weight: 500; color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+@media (max-width: 860px) {
+  .leaders-split { grid-template-columns: 1fr; gap: 40px; }
+  .leaders-split .exec-lead-grid { max-width: 560px; margin: 0 auto; width: 100%; }
 }
-.lead-avatar { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 3px solid var(--gold-500); flex-shrink: 0; }
-.lead-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
-.exec-lead-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
-.exec-lead-card .role { color: var(--gold-400); font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; }
-.exec-lead-card .li-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: rgba(255,255,255,0.75); font-weight: 600; }
-.exec-lead-card .li-link svg { width: 16px; height: 16px; }
-.exec-lead-card .li-link:hover { color: var(--white); }
 
 /* Portrait photo with a solid name/role bar underneath. */
 .exec-grid {
@@ -848,7 +846,6 @@ body::after {
   .split, .split.reverse .split-media { grid-template-columns: 1fr; order: 0; }
   .split { grid-template-columns: 1fr; gap: 40px; }
   .split-media img { height: 320px; }
-  .exec-lead-grid { grid-template-columns: 1fr; }
   .exec-grid { grid-template-columns: repeat(2, 1fr); }
   .event-grid { grid-template-columns: 1fr; }
   .mentor-grid { grid-template-columns: 1fr; }
@@ -991,10 +988,9 @@ a.cal-event-title:hover { text-decoration: underline; }
 .ig-badge svg { width: 15px; height: 15px; }
 
 /* ---------- About: story grid ---------- */
-.story-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
+.story-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: center; }
 .story-copy p { color: var(--gray-600); font-size: 1.06rem; margin-bottom: 18px; }
-.story-photos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-.story-photos img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); }
+.story-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); }
 
 /* ---------- Mentorship: first year block ---------- */
 .firstyear {
@@ -1257,6 +1253,13 @@ a.cal-event-title:hover { text-decoration: underline; }
   .hero-content { padding-top: 28px; }
   .hero-content h1 { margin-bottom: 16px; }
   .hero-content p.lead { margin-bottom: 28px; }
+
+  /* Inner-page banners (About, Events, Mentorship...) stack the same way, so
+     the whole photo shows instead of a narrow slice behind the title. */
+  .page-hero, .page-hero-short { display: block; min-height: 0; padding: 92px 0 40px; }
+  .page-hero-bg { position: relative; inset: auto; width: 100%; aspect-ratio: 3 / 2; background-position: center !important; transform: none; }
+  .page-hero-scrim { display: none; }
+  .page-hero-content { padding-top: 28px; }
 
   /* Footer (every page): Address and Email side by side, socials on one line. */
   .site-footer { padding: 40px 0 20px; }

@@ -1,5 +1,5 @@
 ---
-// Co-presidents, rendered as the larger "lead" cards.
+// Co-presidents, as the same portrait cards used for the rest of the team.
 import { getCollection } from 'astro:content';
 import { LI_PATH } from './icons';
 
@@ -11,17 +11,19 @@ const all = (await getCollection('exec')).sort(
 );
 const leads = all.filter((e) => /president/i.test(e.data.role));
 ---
-<div class="exec-lead-grid reveal-stagger" style={style}>
+<div class="exec-grid exec-lead-grid reveal-stagger" style={style}>
   {leads.map((e) => (
-    <div class="exec-lead-card">
-      <div class="lead-avatar"><img src={e.data.photo} alt={e.data.name} loading="lazy"></div>
-      <div>
-        <h3>{e.data.name}</h3>
+    <div class="exec-card">
+      <img src={e.data.photo} alt={e.data.name} loading="lazy">
+      <div class="exec-bar">
+        <h4>
+          <span class="first">{e.data.name.split(' ')[0]}</span>
+          {e.data.name.includes(' ') && <span class="last">{e.data.name.split(' ').slice(1).join(' ')}</span>}
+        </h4>
         <div class="role">{e.data.role}</div>
         {e.data.linkedin && (
-          <a class="li-link" href={e.data.linkedin} target="_blank" rel="noopener">
+          <a class="li-icon" href={e.data.linkedin} target="_blank" rel="noopener" aria-label={`${e.data.name} on LinkedIn`}>
             <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
-            LinkedIn
           </a>
         )}
       </div>
