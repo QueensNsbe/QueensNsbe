@@ -61,9 +61,14 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
 
   <!-- ============ MARQUEE ============ -->
   <div class="marquee">
+    {/* Two identical halves, each repeating the values enough times to be wider
+        than any screen, so the -50% loop never shows a gap. */}
     <div class="marquee-track">
-      <span>Excellence<span></span>Exposure<span></span>Community<span></span>Empathy<span></span>Leadership</span>
-      <span>Excellence<span></span>Exposure<span></span>Community<span></span>Empathy<span></span>Leadership</span>
+      {[0, 1].map(() => (
+        <span>{Array.from({ length: 4 }).map(() => (
+          <>Excellence<span></span>Exposure<span></span>Community<span></span>Empathy<span></span>Leadership<span></span></>
+        ))}</span>
+      ))}
     </div>
   </div>
 

@@ -319,7 +319,7 @@ body:has(.hero) .site-nav:not(.is-scrolled) .nav-toggle span { background: var(-
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 55s linear infinite;
+  animation: marquee 220s linear infinite;
   gap: 0;
 }
 .marquee:hover .marquee-track { animation-play-state: paused; }
@@ -337,6 +337,8 @@ body:has(.hero) .site-nav:not(.is-scrolled) .nav-toggle span { background: var(-
   white-space: nowrap;
 }
 .marquee-track span::after { content: ''; width: 4px; height: 4px; background: var(--gold-500); flex-shrink: 0; }
+/* Each half already ends with a dot separator, so skip the half's own. */
+.marquee-track > span::after { content: none; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ---------- Stats (simple, clean) ---------- */
