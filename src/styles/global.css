@@ -18,6 +18,7 @@
   --gold-500: #edc536;
   --gold-400: #f2d461;
   --gold-200: #f9e9ac;
+  --logo-purple: #5a2479;
   --white: #ffffff;
   --off-white: #faf8fc;
   --gray-900: #1c1a22;
@@ -275,7 +276,7 @@ body:has(.hero) .site-nav:not(.is-scrolled) .nav-toggle span { background: var(-
   font-style: normal;
   color: var(--gold-500);
 }
-.hero-content h1 .h1-lead { color: var(--purple-400); }
+.hero-content h1 .h1-lead { color: var(--logo-purple); }
 .hero-content h1, .hero-content p.lead { text-shadow: 0 2px 14px rgba(12,17,21,0.55); }
 /* On wide screens the whole group photo is in frame, so keep the text low and
    compact to stay clear of the faces. */
