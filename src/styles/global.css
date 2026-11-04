@@ -280,6 +280,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   color: var(--gold-500);
 }
 .hero-content h1 .h1-lead { color: var(--logo-purple); }
+/* The eyebrow sits on the light stone of Ontario Hall, where gold washes out,
+   so it takes the logo purple like "Welcome to". */
+.hero-content .kicker.on-dark { color: var(--logo-purple); font-weight: 800; text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,0.9); }
+.hero-content .kicker.on-dark::before { background: var(--logo-purple); }
 .hero-content h1, .hero-content p.lead { text-shadow: 0 2px 14px rgba(12,17,21,0.55); }
 /* On wide screens the whole group photo is in frame, so keep the text low and
    compact to stay clear of the faces. */
@@ -1019,9 +1023,10 @@ a.cal-event-title:hover { text-decoration: underline; }
   position: fixed; z-index: 900;
   right: 24px; top: calc(env(safe-area-inset-top, 0px) + 122px);
   width: min(268px, calc(100vw - 32px));
-  background: var(--gray-800);
-  color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--white);
+  color: var(--gray-900);
+  border: 1px solid var(--gray-200);
+  border-top: 2px solid var(--gold-500);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   padding: 14px;
@@ -1032,17 +1037,17 @@ a.cal-event-title:hover { text-decoration: underline; }
 }
 .signup-banner.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .signup-banner-copy { margin-bottom: 11px; padding-right: 22px; }
-.signup-banner-copy h3 { font-size: 0.86rem; margin-bottom: 2px; color: var(--white); }
-.signup-banner-copy p { font-size: 0.72rem; line-height: 1.4; color: rgba(255, 255, 255, 0.62); }
+.signup-banner-copy h3 { font-size: 0.86rem; margin-bottom: 2px; color: var(--ink); }
+.signup-banner-copy p { font-size: 0.72rem; line-height: 1.4; color: var(--gray-600); }
 .signup-close {
   position: absolute; top: 8px; right: 8px;
   width: 22px; height: 22px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--gray-400);
   background: transparent;
   transition: background 0.2s, color 0.2s;
 }
-.signup-close:hover { background: rgba(255, 255, 255, 0.1); color: var(--white); }
+.signup-close:hover { background: var(--gray-100); color: var(--ink); }
 .signup-close svg { width: 11px; height: 11px; }
 
 @media (max-width: 860px) {
@@ -1106,21 +1111,9 @@ a.cal-event-title:hover { text-decoration: underline; }
 .signup-form--banner .signup-submit { padding: 8px 16px; font-size: 0.79rem; }
 .signup-form--banner .signup-status { font-size: 0.72rem; }
 
-/* The banner sits on a dark card, so its fields invert. The join-page form
-   keeps the light treatment above. */
-.signup-banner .signup-field input {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: var(--white);
-}
-.signup-banner .signup-field input::placeholder { color: rgba(255, 255, 255, 0.45); }
-.signup-banner .signup-field input:focus {
-  border-color: var(--gold-500);
-  box-shadow: 0 0 0 3px rgba(237, 197, 54, 0.2);
-}
-.signup-banner .signup-status { color: rgba(255, 255, 255, 0.62); }
-.signup-banner .signup-status.is-success { color: var(--gold-400); }
-.signup-banner .signup-status.is-error { color: #ff9b8f; }
+/* The banner is a white card: light fields like the join page, black CTA. */
+.signup-banner .signup-submit { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.signup-banner .signup-submit:hover { background: var(--gray-800); border-color: var(--gray-800); color: var(--white); }
 
 /* "or Join our Discord" — the second way in. */
 .signup-alt { margin-top: 11px; }
@@ -1128,27 +1121,27 @@ a.cal-event-title:hover { text-decoration: underline; }
   display: flex; align-items: center; gap: 8px;
   font-family: var(--font-display);
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase; color: var(--gray-400);
   margin-bottom: 9px;
 }
 .signup-alt-rule::before, .signup-alt-rule::after {
-  content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.14);
+  content: ''; flex: 1; height: 1px; background: var(--gray-200);
 }
 .signup-discord {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   padding: 8px 16px;
   font-size: 0.79rem; font-weight: 600; letter-spacing: 0.02em;
-  color: var(--white);
+  color: var(--ink);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid var(--gray-200);
   border-radius: 2px;
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .signup-discord svg { width: 15px; height: 15px; flex-shrink: 0; }
 .signup-discord:hover {
-  background: var(--white);
-  border-color: var(--white);
-  color: var(--gray-900);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
 }
 
 /* ---------- Join page ---------- */
@@ -1251,6 +1244,9 @@ a.cal-event-title:hover { text-decoration: underline; }
   .hero-bg { position: relative; inset: auto; width: 100%; aspect-ratio: 3 / 2; background-position: center; transform: none !important; }
   .hero-scrim, .hero-scroll-cue { display: none; }
   .hero-content { padding-top: 28px; }
+  /* Below the photo the eyebrow is back on a dark band, so gold reads again. */
+  .hero-content .kicker.on-dark { color: var(--gold-400); text-shadow: none; }
+  .hero-content .kicker.on-dark::before { background: var(--gold-500); }
   .hero-content h1 { margin-bottom: 16px; }
   .hero-content p.lead { margin-bottom: 28px; }
 
