@@ -29,7 +29,7 @@ The official website for the National Society of Black Engineers (NSBE), Queen's
 
 ## Newsletter backend
 
-The email list is stored in our own Postgres database. No third-party form service is involved.
+The email list is stored in our own Postgres database, then synced to [Loops](https://loops.so), which sends the emails.
 
 ```
 SignupForm.tsx (React, in the browser)
@@ -39,12 +39,14 @@ src/actions/index.ts (server)       → Zod validates name + email, checks the s
    ▼
 src/lib/db.ts                       → rate limit per hashed IP, then INSERT … ON CONFLICT
    ▼
-Postgres  subscribers table         (schema in db/schema.sql)
+Postgres  subscribers table         (schema in db/schema.sql; the source of truth)
+   ▼
+src/lib/loops.ts                    → create/update the contact in Loops (4s timeout, never blocks a signup)
 ```
 
 - **Duplicates** are handled by a case-insensitive unique index, so each email is stored once. Returning visitors see "you're already on the list."
 - **Spam protection** uses a hidden honeypot field plus a limit of 5 signups per IP per hour. IPs are stored as salted hashes, never in raw form.
-- **Unsubscribe**: every subscriber gets a private link, `/unsubscribe?token=…`.
+- **Unsubscribe**: every subscriber gets a private link, `/unsubscribe?token=…`, which also unsubscribes them in Loops.
 - **Export**: `/admin/subscribers.csv` downloads the active list. The browser asks for a password, which is `ADMIN_PASSWORD`.
 
 ## Run it
@@ -53,7 +55,7 @@ You need Node.js 18 or newer.
 
 ```bash
 npm install
-cp .env.example .env   # then fill in DATABASE_URL, ADMIN_PASSWORD, IP_HASH_SALT
+cp .env.example .env   # then fill in DATABASE_URL, ADMIN_PASSWORD, IP_HASH_SALT (LOOPS_API_KEY optional)
 npm run dev
 ```
 

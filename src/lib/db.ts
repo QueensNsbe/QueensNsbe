@@ -79,14 +79,15 @@ export async function addSubscriber(input: {
   return row.was_unsubscribed ? 'resubscribed' : 'already-subscribed';
 }
 
-export async function unsubscribe(token: string): Promise<boolean> {
+/** Returns the email that was unsubscribed, or null if the token matched nobody. */
+export async function unsubscribe(token: string): Promise<string | null> {
   const pool = await db();
-  const { rowCount } = await pool.query(
+  const { rows } = await pool.query<{ email: string }>(
     `UPDATE subscribers SET unsubscribed_at = coalesce(unsubscribed_at, now())
-      WHERE unsubscribe_token = $1`,
+      WHERE unsubscribe_token = $1 RETURNING email`,
     [token],
   );
-  return (rowCount ?? 0) > 0;
+  return rows[0]?.email ?? null;
 }
 
 export async function listSubscribers() {

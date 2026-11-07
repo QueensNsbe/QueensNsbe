@@ -5,6 +5,7 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro/zod';
 import { addSubscriber, hashIp } from '../lib/db';
+import { syncContactToLoops } from '../lib/loops';
 
 export const server = {
   subscribe: defineAction({
@@ -38,6 +39,10 @@ export const server = {
       if (status === 'rate-limited') {
         throw new ActionError({ code: 'TOO_MANY_REQUESTS', message: 'Too many signups right now. Please try again later.' });
       }
+      // Saved in our database; now copy the contact to Loops so campaigns reach them.
+      // Awaited (not fire-and-forget) because serverless functions can freeze once
+      // the response is sent. It has its own timeout and never fails the signup.
+      await syncContactToLoops({ email: input.email, firstName: input.firstName, source: input.source });
       return { status };
     },
   }),
