@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import SignupForm from '../components/SignupForm.astro';
+import SignupForm from '../components/SignupForm';
 import Analytics from '@vercel/analytics/astro';
 
 interface Props {
@@ -41,7 +41,7 @@ const fullTitle =
         <h3>Stay in the loop</h3>
         <p>Event invites, mentorship openings, and chapter news.</p>
       </div>
-      <SignupForm variant="banner" />
+      <SignupForm variant="banner" client:idle />
       <div class="signup-alt">
         <span class="signup-alt-rule">or</span>
         <a class="signup-discord" href="https://discord.gg/8aCZBkS72" target="_blank" rel="noopener">

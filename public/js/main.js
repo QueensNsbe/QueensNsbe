@@ -345,45 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------- Branded signup form -> Loops ---------- */
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-signup-form]').forEach((form) => {
-    const status = form.querySelector('[data-signup-status]');
-    const submit = form.querySelector('.signup-submit');
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      submit.disabled = true;
-      status.className = 'signup-status';
-      status.textContent = 'Signing you up…';
-
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(form)).toString(),
-        });
-        if (res.ok) {
-          status.className = 'signup-status is-success';
-          status.textContent = "You're on the list. Watch your inbox for chapter news.";
-          form.reset();
-          form.dispatchEvent(new CustomEvent('signup:success'));
-        } else {
-          const data = await res.json().catch(() => ({}));
-          status.className = 'signup-status is-error';
-          status.textContent = res.status === 429
-            ? 'Too many signups right now. Please try again in a minute.'
-            : data.message || 'Something went wrong. Please try again.';
-        }
-      } catch {
-        status.className = 'signup-status is-error';
-        status.textContent = 'Something went wrong. Please try again.';
-      } finally {
-        submit.disabled = false;
-      }
-    });
-  });
-});
+/* Signup form: now a React component (src/components/SignupForm.tsx) that saves to our own database. */
 
 /* ---------- Email-list popup (fires 5s after arrival, once per session) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
@@ -400,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 5000);
   document.getElementById('signupClose')?.addEventListener('click', dismiss);
   // Give the success message a beat to read before the card slides away.
-  popup.querySelector('[data-signup-form]')?.addEventListener('signup:success', () => {
-    setTimeout(dismiss, 2600);
+  document.addEventListener('nsbe:signup-success', (e) => {
+    if (e.detail?.variant === 'banner') setTimeout(dismiss, 2600);
   });
 });

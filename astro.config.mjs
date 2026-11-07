@@ -1,9 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
+import react from '@astrojs/react';
+import vercel from '@astrojs/vercel';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://queensnsbe.ca',
+
   server: {
     // Bind every interface so http://localhost:4321 works in Safari too.
     // Without this the dev server binds IPv6 [::1] only, which Safari
@@ -11,4 +15,7 @@ export default defineConfig({
     host: true,
     port: 4321,
   },
+
+  integrations: [react()],
+  adapter: vercel(),
 });

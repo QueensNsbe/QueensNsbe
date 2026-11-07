@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # Tina regenerates these during the build
 tina/__generated__/
+.vercel

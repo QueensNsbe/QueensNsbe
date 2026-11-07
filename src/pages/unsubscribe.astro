@@ -1,0 +1,31 @@
+---
+// Rendered on the server for each visit (not at build time), because it
+// reads the token from the URL and updates the database.
+export const prerender = false;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { unsubscribe } from '../lib/db';
+
+const token = Astro.url.searchParams.get('token') ?? '';
+const isUuid = /^[0-9a-f-]{36}$/i.test(token);
+let ok = false;
+if (isUuid) {
+  try { ok = await unsubscribe(token); } catch (err) { console.error('unsubscribe failed', err); }
+}
+---
+<BaseLayout title="Unsubscribe" description="Manage your NSBE Queen's email subscription.">
+  <section class="section">
+    <div class="container" style="max-width: 640px; padding: 140px 0 100px;">
+      {ok ? (
+        <>
+          <h1>You're unsubscribed</h1>
+          <p>You won't get any more chapter emails. You can sign up again any time.</p>
+        </>
+      ) : (
+        <>
+          <h1>That link didn't work</h1>
+          <p>The unsubscribe link is invalid or has expired. Email the exec team and we'll remove you by hand.</p>
+        </>
+      )}
+    </div>
+  </section>
+</BaseLayout>

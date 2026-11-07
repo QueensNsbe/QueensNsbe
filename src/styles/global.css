@@ -1095,6 +1095,8 @@ a.cal-event-title:hover { text-decoration: underline; }
 .signup-submit { width: 100%; cursor: pointer; font-family: var(--font-body); }
 .signup-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
 .signup-status:empty { display: none; }
+/* Honeypot field: off-screen for people, still filled in by spam bots. */
+.signup-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .signup-status { font-size: 0.86rem; color: var(--gray-600); }
 .signup-status.is-success { color: var(--purple-600); font-weight: 600; }
 .signup-status.is-error { color: #c0392b; font-weight: 600; }
