@@ -15,11 +15,12 @@ export const server = {
       email: z.string({ error: 'Please enter your email.' }).trim().toLowerCase().pipe(z.email('Please enter a valid email.')).pipe(z.string().max(254)),
       source: z.enum(['page', 'banner']).default('page'),
       // Honeypot: hidden from people, but bots fill in every field.
-      company: z.string().optional(),
+      nsbe_hp_x7: z.string().optional(),
     }),
     handler: async (input, context) => {
-      if (input.company) {
+      if (input.nsbe_hp_x7) {
         // Pretend it worked so the bot doesn't learn anything.
+        console.warn('subscribe: honeypot filled, ignored', { source: input.source });
         return { status: 'subscribed' as const };
       }
 
@@ -42,7 +43,8 @@ export const server = {
       // Saved in our database; now copy the contact to Loops so campaigns reach them.
       // Awaited (not fire-and-forget) because serverless functions can freeze once
       // the response is sent. It has its own timeout and never fails the signup.
-      await syncContactToLoops({ email: input.email, firstName: input.firstName, source: input.source });
+      const loops = await syncContactToLoops({ email: input.email, firstName: input.firstName, source: input.source });
+      console.log('subscribe: saved', { status, source: input.source, loops });
       return { status };
     },
   }),

@@ -12,10 +12,15 @@ const connectionString = process.env.DATABASE_URL ?? import.meta.env.DATABASE_UR
 let pool: pg.Pool | undefined;
 function getPool(): pg.Pool {
   if (!connectionString) throw new Error('DATABASE_URL is not set');
+  const isLocal = /localhost|127\.0\.0\.1/.test(connectionString);
+  // Neon's URL carries sslmode=require, which newer pg versions warn about.
+  // Drop it and ask for full certificate verification explicitly instead.
+  const url = new URL(connectionString);
+  url.searchParams.delete('sslmode');
   pool ??= new pg.Pool({
-    connectionString,
+    connectionString: url.toString(),
     max: 3,
-    ssl: /localhost|127\.0\.0\.1/.test(connectionString) ? false : { rejectUnauthorized: false },
+    ssl: isLocal ? false : true,
   });
   return pool;
 }

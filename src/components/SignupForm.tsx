@@ -53,11 +53,10 @@ export default function SignupForm({ variant = 'page' }: Props) {
   return (
     <form className={`signup-form signup-form--${variant}`} method="post" onSubmit={onSubmit} noValidate={false}>
       <input type="hidden" name="source" value={variant} />
+      {/* Honeypot. Deliberately not called "company"/"website" etc., which Safari
+          and password managers autofill even when hidden. */}
       <div className="signup-hp" aria-hidden="true">
-        <label>
-          Company
-          <input type="text" name="company" tabIndex={-1} autoComplete="off" />
-        </label>
+        <input type="text" name="nsbe_hp_x7" tabIndex={-1} autoComplete="new-password" defaultValue="" />
       </div>
       <div className="signup-fields">
         <label className="signup-field">
