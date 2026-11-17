@@ -1,0 +1,300 @@
+---
+// "Meet the Executive Team": one section for every department's team photo
+// and its people.
+//
+// - Desktop and tablet: a row of team tabs. The chosen team's photo sits on
+//   the left and its people (headshot, role, LinkedIn) on the right.
+// - Phones: the same teams as swipeable cards, with the next card peeking in,
+//   plus arrow buttons and dots underneath.
+//
+// People come from the exec collection (matched on `department`); team photos
+// come from src/teams.ts (first entry: the Co-Presidents).
+import { getCollection } from 'astro:content';
+import { TEAMS } from '../teams';
+import { LI_PATH } from './icons';
+
+interface Person { name: string; role: string; photo?: string; linkedin?: string }
+interface TeamView { name: string; slug: string; photo?: string; alt?: string; focus?: string; mobileFocus?: string; people: Person[] }
+
+const exec = await getCollection('exec');
+const rank = (role: string) => (/director/i.test(role) ? 0 : 1);
+
+const toPeople = (dept: string, extraNames: string[] = []): Person[] => {
+  const listed = exec
+    .filter((e) => (e.data.department ?? '').toLowerCase() === dept.toLowerCase())
+    .sort((a, b) => rank(a.data.role) - rank(b.data.role) || a.data.order - b.data.order)
+    .map((e) => ({ name: e.data.name, role: e.data.role, photo: e.data.photo, linkedin: e.data.linkedin }));
+  // People in a team photo who don't have an exec card yet still get named.
+  const missing = extraNames
+    .filter((n) => !listed.some((p) => p.name.toLowerCase() === n.toLowerCase()))
+    .map((n) => ({ name: n, role: `${dept} Team` }));
+  return [...listed, ...missing];
+};
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+// Only teams with a team photo get a tab/card. A department without one
+// (IT, for now) appears once its photo is added to src/teams.ts.
+const teams: TeamView[] = TEAMS.map((t) => ({
+  name: t.name, slug: slug(t.name), photo: t.photo, alt: t.alt, focus: t.focus, mobileFocus: t.mobileFocus,
+  people: toPeople(t.department ?? t.name, t.members),
+}));
+
+const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+const photos = teams.filter((t) => t.photo).map((t) => ({ name: t.name, photo: t.photo, alt: t.alt, members: t.people.map((p) => p.name) }));
+---
+<section class="section section-lilac" id="team">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Meet the 2026&ndash;2027 Executive Team</h2>
+      <p class="tx-hint tx-hint--desktop">Pick a team to meet the people behind it.</p>
+      <p class="tx-hint tx-hint--mobile">Swipe through our teams to meet the people behind them.</p>
+    </div>
+
+    <div class="tx" data-tx>
+      <div class="tx-tabs" role="tablist" aria-label="Teams">
+        {teams.map((t, i) => (
+          <button class="tx-tab" type="button" role="tab" id={`tx-tab-${t.slug}`} aria-controls={`tx-panel-${t.slug}`}
+            aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-i={i}>
+            {t.name}<span class="tx-tab-count">{t.people.length}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="tx-track">
+        {teams.map((t, i) => (
+          <article class:list={['tx-panel', { 'is-active': i === 0, 'is-wide': t.people.length >= 4 }]} id={`tx-panel-${t.slug}`} role="tabpanel"
+            aria-labelledby={`tx-tab-${t.slug}`} data-i={i} style={`--cols:${Math.min(Math.max(t.people.length, 2), 4)}`}>
+            <div class="tx-photo">
+              {t.photo ? (
+                <button class="tx-photo-btn" type="button" data-photo={photos.findIndex((p) => p.name === t.name)} aria-label={`View the full ${t.name} team photo`}>
+                  <img src={t.photo} alt={t.alt} loading={i === 0 ? 'eager' : 'lazy'}
+                    style={`--focus:${t.focus ?? 'center'};--focus-sm:${t.mobileFocus ?? 'center 12%'}`}>
+                  <span class="tx-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+                </button>
+              ) : (
+                <div class="tx-nophoto">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span>Team photo coming soon</span>
+                </div>
+              )}
+            </div>
+            <div class="tx-body">
+              <header class="tx-head">
+                <h3>{t.name}</h3>
+                <span class="tx-count">{t.people.length} {t.people.length === 1 ? 'member' : 'members'}</span>
+              </header>
+              <ul class="tx-people">
+                {t.people.map((p) => (
+                  <li class="tx-person">
+                    {/* Phones: tapping the row opens this person's full card. */}
+                    <button class="tx-person-open" type="button" aria-label={`Show ${p.name}'s card`}
+                      data-name={p.name} data-role={p.role} data-photo={p.photo} data-linkedin={p.linkedin}></button>
+                    {p.photo
+                      ? <img src={p.photo} alt={p.name} loading="lazy">
+                      : <span class="tx-initials" aria-hidden="true">{initials(p.name)}</span>}
+                    <div class="tx-person-text">
+                      <span class="tx-name">{p.name}</span>
+                      <span class="tx-role">{p.role}</span>
+                    </div>
+                    {p.linkedin ? (
+                      <a class="tx-li" href={p.linkedin} target="_blank" rel="noopener" aria-label={`${p.name} on LinkedIn`}>
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+                      </a>
+                    ) : (
+                      // Placeholder so every card lines up; becomes a link once `linkedin` is set.
+                      <span class="tx-li is-empty" title="LinkedIn coming soon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="tx-controls" aria-label="Team cards">
+        <button class="tx-arrow prev" type="button" aria-label="Previous team">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="tx-dots">
+          {teams.map((t, i) => (
+            <button class:list={['tx-dot', { 'is-active': i === 0 }]} type="button" data-i={i} aria-label={`Go to ${t.name}`}></button>
+          ))}
+        </div>
+        <button class="tx-arrow next" type="button" aria-label="Next team">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="tx-sheet" aria-label="Team member">
+    <div class="tx-sheet-card">
+      <button class="tx-sheet-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <img class="tx-sheet-photo" alt="">
+      <span class="tx-sheet-initials" aria-hidden="true"></span>
+      <div class="tx-sheet-bar">
+        <h4 class="tx-sheet-name"></h4>
+        <p class="tx-sheet-role"></p>
+        <a class="tx-sheet-li" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg>
+          <span>View LinkedIn</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="team-viewer" aria-label="Team photo">
+    <button class="team-viewer-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="team-viewer-nav prev" type="button" aria-label="Previous team photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <figure>
+      <img alt="">
+      <figcaption>
+        <span class="team-name"></span>
+        <span class="team-members"></span>
+        <span class="team-count"></span>
+      </figcaption>
+    </figure>
+    <button class="team-viewer-nav next" type="button" aria-label="Next team photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </dialog>
+</section>
+
+<script is:inline define:vars={{ photos }}>
+  (() => {
+    const root = document.querySelector('[data-tx]');
+    const section = root.closest('section');
+    const tabs = [...root.querySelectorAll('.tx-tab')];
+    const panels = [...root.querySelectorAll('.tx-panel')];
+    const dots = [...root.querySelectorAll('.tx-dot')];
+    const track = root.querySelector('.tx-track');
+    const phone = window.matchMedia('(max-width: 860px)');
+
+    /* ---- Desktop: tabs ---- */
+    function select(i, focus) {
+      tabs.forEach((t, j) => {
+        t.setAttribute('aria-selected', String(j === i));
+        t.tabIndex = j === i ? 0 : -1;
+      });
+      panels.forEach((p, j) => p.classList.toggle('is-active', j === i));
+      if (focus) tabs[i].focus();
+    }
+    tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+    root.querySelector('.tx-tabs').addEventListener('keydown', (e) => {
+      const at = tabs.indexOf(document.activeElement);
+      if (at < 0) return;
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (step) { e.preventDefault(); select((at + step + tabs.length) % tabs.length, true); }
+      if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+      if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
+    });
+
+    /* ---- Phone: swipeable cards ---- */
+    const current = () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, dist = Infinity;
+      panels.forEach((p, i) => {
+        const d = Math.abs(p.offsetLeft + p.offsetWidth / 2 - mid);
+        if (d < dist) { dist = d; best = i; }
+      });
+      return best;
+    };
+    const goTo = (i) => {
+      i = Math.max(0, Math.min(panels.length - 1, i));
+      dots.forEach((d, j) => d.classList.toggle('is-active', j === i));
+      const p = panels[i];
+      track.scrollTo({ left: p.offsetLeft - (track.clientWidth - p.offsetWidth) / 2, behavior: 'smooth' });
+    };
+    track.addEventListener('scroll', () => {
+      const i = current();
+      dots.forEach((d, j) => d.classList.toggle('is-active', j === i));
+    }, { passive: true });
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+    root.querySelector('.tx-arrow.prev').addEventListener('click', () => goTo(current() - 1));
+    root.querySelector('.tx-arrow.next').addEventListener('click', () => goTo(current() + 1));
+
+    // Keep the same team in view when the layout switches between the two modes.
+    phone.addEventListener('change', (e) => {
+      if (e.matches) {
+        const i = panels.findIndex((p) => p.classList.contains('is-active'));
+        setTimeout(() => goTo(Math.max(0, i)), 0);
+      } else {
+        select(current());
+      }
+    });
+
+    /* ---- Phones: tap a member for their full card ---- */
+    const sheet = section.querySelector('.tx-sheet');
+    const sPhoto = sheet.querySelector('.tx-sheet-photo');
+    const sInit = sheet.querySelector('.tx-sheet-initials');
+    const sLi = sheet.querySelector('.tx-sheet-li');
+    root.querySelectorAll('.tx-person-open').forEach((b) => b.addEventListener('click', () => {
+      if (!phone.matches) return;
+      const { name: n, role, photo, linkedin } = b.dataset;
+      sheet.querySelector('.tx-sheet-name').textContent = n;
+      sheet.querySelector('.tx-sheet-role').textContent = role;
+      sPhoto.hidden = !photo;
+      if (photo) { sPhoto.src = photo; sPhoto.alt = n; }
+      sInit.hidden = Boolean(photo);
+      sInit.textContent = n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+      sLi.hidden = !linkedin;
+      if (linkedin) { sLi.href = linkedin; sLi.setAttribute('aria-label', `${n} on LinkedIn`); }
+      sheet.showModal();
+      document.documentElement.classList.add('viewer-open');
+    }));
+    sheet.addEventListener('close', () => document.documentElement.classList.remove('viewer-open'));
+    sheet.querySelector('.tx-sheet-close').addEventListener('click', () => sheet.close());
+    sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
+    let sheetY = null;
+    sheet.addEventListener('touchstart', (e) => { sheetY = e.touches[0].clientY; }, { passive: true });
+    sheet.addEventListener('touchend', (e) => {
+      if (sheetY !== null && e.changedTouches[0].clientY - sheetY > 80) sheet.close();
+      sheetY = null;
+    });
+
+    /* ---- Full-screen team photo viewer ---- */
+    const dlg = section.querySelector('.team-viewer');
+    const img = dlg.querySelector('img');
+    const [name, members, count] = dlg.querySelectorAll('figcaption span');
+    let at = 0, touchX = null;
+    function show(i) {
+      at = (i + photos.length) % photos.length;
+      const t = photos[at];
+      img.src = t.photo; img.alt = t.alt;
+      name.textContent = t.name;
+      members.textContent = t.members.join(' · ');
+      count.textContent = `${at + 1} / ${photos.length}`;
+    }
+    root.querySelectorAll('.tx-photo-btn').forEach((b) => b.addEventListener('click', () => {
+      show(Number(b.dataset.photo));
+      dlg.showModal();
+      document.documentElement.classList.add('viewer-open');
+    }));
+    dlg.addEventListener('close', () => document.documentElement.classList.remove('viewer-open'));
+    dlg.querySelector('.team-viewer-close').addEventListener('click', () => dlg.close());
+    dlg.querySelector('.prev').addEventListener('click', () => show(at - 1));
+    dlg.querySelector('.next').addEventListener('click', () => show(at + 1));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+    dlg.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+      touchX = null;
+    });
+  })();
+</script>

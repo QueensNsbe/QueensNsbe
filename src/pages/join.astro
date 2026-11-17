@@ -12,7 +12,8 @@ const perks = [
 ];
 ---
 <BaseLayout title="Become a Member" description="Join the NSBE Queen's email list for event invites, mentorship openings, and chapter news.">
-  <header class="page-hero page-hero-short">
+  {/* Phones keep a photo hero; desktop shows the photo beside the form instead. */}
+  <header class="page-hero page-hero-short join-hero-phone">
     <div class="page-hero-bg" style="background-image:url('/images/uploads/IMG_9703-2048x1365.jpg'); background-position: center 40%;"></div>
     <div class="page-hero-scrim"></div>
     <div class="container page-hero-content">
@@ -21,8 +22,11 @@ const perks = [
     </div>
   </header>
 
-  <section class="section">
-    <div class="container">
+  <section class="section join-split">
+    <div class="container join-grid">
+      <figure class="join-photo">
+        <img src="/images/uploads/join-exec-steps-1B6A7480-original.jpg" alt="The 2026–2027 NSBE Queen's executive team on the steps of Ontario Hall">
+      </figure>
       <div class="join-card reveal">
         <h2>Stay connected with NSBE Queen's</h2>
         <p>Receive updates on events, initiatives, and opportunities to get involved.</p>

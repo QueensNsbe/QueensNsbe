@@ -28,7 +28,9 @@ const stats = [
   { count: 16000, suffix: '+', label: 'Members Worldwide', icon: 'people' },
   { count: 500, suffix: '+', label: 'Chapters Globally', icon: 'globe' },
   { count: 1975, suffix: '', label: 'NSBE Founded (Est.)', icon: 'star' },
-  { count: execAll.length, suffix: '', label: "Queen's Exec Leaders", icon: 'cap' },
+  // Set by hand: the full 2026–2027 exec is 19, including members who don't
+  // have a card on the site yet (e.g. Reme Oko-oboh). Update each new year.
+  { count: Math.max(execAll.length, 19), suffix: '', label: "Queen's Exec Leaders", icon: 'cap' },
 ];
 
 // Managed in the CMS under "Social Videos" so exec can swap in recent posts.
