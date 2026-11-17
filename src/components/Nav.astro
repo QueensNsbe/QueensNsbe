@@ -6,13 +6,14 @@ const links = [
   { href: '/about', label: 'About' },
   { href: '/mentorship', label: 'Mentorship' },
   { href: '/events', label: 'Events' },
+  { href: '/sponsorship', label: 'Sponsorship' },
 ];
 ---
 <nav class="site-nav">
   <div class="container">
     <a href="/" class="nav-brand">
       <img src="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png" alt="NSBE Queen's logo">
-      <span>NSBE QUEEN'S UNIVERSITY</span>
+      <span>NSBE QUEEN'S</span>
     </a>
     <ul class="nav-links" id="navLinks">
       {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}

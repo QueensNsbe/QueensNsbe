@@ -21,8 +21,8 @@ export interface Team {
 export const PRESIDENTS_PHOTO: Team | undefined = {
   name: 'Co-Presidents',
   members: ['Golden Onyekere', 'Mahuel Bunsie'],
-  photo: '/images/uploads/team-co-presidents-1B6A7578.jpg',
-  alt: 'Co-Presidents Golden Onyekere and Mahuel Bunsie in the Integrated Learning Centre atrium',
+  photo: '/images/uploads/team-co-presidents-1B6A7564.jpg',
+  alt: 'Co-Presidents Golden Onyekere and Mahuel Bunsie in a glass elevator',
   focus: 'center 45%',
 };
 
