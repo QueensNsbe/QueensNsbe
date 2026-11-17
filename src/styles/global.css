@@ -808,11 +808,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .tx-count { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-600); white-space: nowrap; }
 .tx-people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 22px 18px; }
 /* Teams of 4 keep the same photo size as every other team; their four cards share one row. */
+/* Teams of 4 (Events): two rows of two so each card is close to the size of
+   the 2-person teams' cards; the photo stretches to the same height. */
 @media (min-width: 861px) {
-  .tx-panel.is-wide .tx-people { gap: 18px 12px; }
-  .tx-panel.is-wide .tx-person-text { padding: 9px 8px 11px; }
-  .tx-panel.is-wide .tx-name { font-size: 0.86rem; }
-  .tx-panel.is-wide .tx-role { font-size: 0.74rem; }
+  .tx-panel.is-active.is-wide { align-items: stretch; grid-template-columns: minmax(0, 500px) minmax(0, 1fr); }
+  .tx-panel.is-wide .tx-people { grid-template-columns: repeat(2, minmax(0, 212px)); gap: 16px 18px; }
+  .tx-panel.is-wide .tx-photo, .tx-panel.is-wide .tx-photo-btn { height: 100%; }
+  .tx-panel.is-wide .tx-photo-btn img { height: 100%; aspect-ratio: auto; }
 }
 .tx-person { display: flex; flex-direction: column; background: var(--purple-800); box-shadow: var(--shadow-md); position: relative; }
 .tx-person img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
