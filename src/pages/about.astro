@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExecLeadGrid from '../components/ExecLeadGrid.astro';
 import ExecGrid from '../components/ExecGrid.astro';
-import { PRESIDENTS_PHOTO as presidentsPhoto } from '../teams';
 import { getCollection } from 'astro:content';
 
 // The leadership block only shows co-president cards, so skip it until one is added.
@@ -72,12 +71,7 @@ const pillars = [
 <!-- ============ 3. LEADERSHIP + NOTE FROM THE CO-PRESIDENTS ============ -->
 <section class="section section-ink" id="leadership">
   <div class="container leaders-split">
-    {presidentsPhoto ? (
-      <figure class="leaders-photo reveal">
-        <img src={presidentsPhoto.photo} alt={presidentsPhoto.alt} loading="lazy" style={presidentsPhoto.focus && `object-position:${presidentsPhoto.focus}`}>
-        <figcaption>{presidentsPhoto.members.join(' & ')}<span>{presidentsPhoto.name}</span></figcaption>
-      </figure>
-    ) : hasPresidents && <ExecLeadGrid />}
+    {hasPresidents && <ExecLeadGrid />}
     <div class="leaders-note reveal" id="president">
       <p class="kicker on-dark">A Note From Our Co-Presidents</p>
       <h2>Welcome to NSBE Queen's University!</h2>

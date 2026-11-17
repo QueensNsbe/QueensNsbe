@@ -1,5 +1,6 @@
 ---
-// The whole exec team as portrait cards with a name/role bar, grouped by team
+// Everyone except the co-presidents (they sit beside their letter, see
+// ExecLeadGrid) as portrait cards with a name/role bar, grouped by team
 // in the order of src/teams.ts (Co-Presidents, Events, Finance, ...). Teams not
 // listed there (e.g. IT) follow at the end. Within a team, directors come first.
 import { getCollection } from 'astro:content';
@@ -13,7 +14,7 @@ const teamRank = (dept = '') => {
 };
 const roleRank = (role: string) => (/president|director/i.test(role) ? 0 : 1);
 
-const all = (await getCollection('exec')).sort(
+const all = (await getCollection('exec')).filter((e) => !/president/i.test(e.data.role)).sort(
   (a, b) =>
     teamRank(a.data.department) - teamRank(b.data.department) ||
     (a.data.department ?? '').localeCompare(b.data.department ?? '') ||
