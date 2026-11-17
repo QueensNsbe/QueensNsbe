@@ -10,7 +10,7 @@ import { LI_PATH } from '../components/icons';
 // links straight to it. Until then the buttons open an email asking for it.
 const REPORT_FILE = 'sponsorship-report.pdf';
 const REPORT_YEAR = '2026–2027';
-const CONTACT_EMAIL = 'nsbe@engsoc.queensu.ca';
+const CONTACT_EMAIL = 'nsbe.sponsorship@engsoc.queensu.ca';
 const hasReport = fs.existsSync(new URL(`../../public/${REPORT_FILE}`, import.meta.url));
 const requestHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`NSBE Queen's ${REPORT_YEAR} Sponsorship Report`)}`;
 const report = hasReport
@@ -81,7 +81,7 @@ const team = exec
 
 <!-- ============ HERO ============ -->
 <header class="page-hero">
-  <div class="page-hero-bg" style="background-image:url('/images/uploads/internship-panel-01.jpg'); background-position: center 40%;"></div>
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/hunt-conference-04.jpg'); background-position: center 45%;"></div>
   <div class="page-hero-scrim"></div>
   <div class="container page-hero-content">
     <h1>Partner With NSBE Queen's</h1>
