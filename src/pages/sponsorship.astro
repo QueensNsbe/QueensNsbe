@@ -1,0 +1,251 @@
+---
+import fs from 'node:fs';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { EVENT_CATEGORIES, type EventCategory } from '../eventCategories';
+import { LI_PATH } from '../components/icons';
+
+// ---- The sponsorship report ----
+// Drop the PDF at public/sponsorship-report.pdf and every "Download" button
+// links straight to it. Until then the buttons open an email asking for it.
+const REPORT_FILE = 'sponsorship-report.pdf';
+const REPORT_YEAR = '2026–2027';
+const CONTACT_EMAIL = 'nsbe@engsoc.queensu.ca';
+const hasReport = fs.existsSync(new URL(`../../public/${REPORT_FILE}`, import.meta.url));
+const requestHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`NSBE Queen's ${REPORT_YEAR} Sponsorship Report`)}`;
+const report = hasReport
+  ? { href: `/${REPORT_FILE}`, label: 'Download the Sponsorship Report', attrs: { target: '_blank', rel: 'noopener' } }
+  : { href: requestHref, label: 'Request the Sponsorship Report', attrs: {} };
+
+const events = (await getCollection('events')).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const exec = await getCollection('exec');
+
+// ---- Sponsor types: each one sees the parts of the chapter that matter to them ----
+interface Fit { key: string; label: string; title: string; pitch: string; ways: string[]; cats: EventCategory[] }
+const fits: Fit[] = [
+  {
+    key: 'engineering', label: 'Engineering & Industry',
+    title: 'Meet engineers before they graduate',
+    pitch: 'Our members are Black engineering students across every discipline at Queen’s, looking for co-ops, QUIP placements and new-grad roles.',
+    ways: [
+      'Present at our Internship / QUIP Panel or Career Prep Workshop',
+      'Put your brand in front of members at signature chapter events',
+      'Share open roles with members through our channels',
+    ],
+    cats: ['professional', 'signature'],
+  },
+  {
+    key: 'tech', label: 'Tech & Software',
+    title: 'Reach builders in computing and engineering',
+    pitch: 'Members range from first-years writing their first lines of code to upper-years shipping projects. Be the company that helped them get there.',
+    ways: [
+      'Back our study sessions and Grind Labs during midterm season',
+      'Run a hands-on technical workshop or info session',
+      'Connect members with internship and new-grad pipelines',
+    ],
+    cats: ['academic', 'professional'],
+  },
+  {
+    key: 'business', label: 'Finance & Consulting',
+    title: 'Find analytical problem-solvers early',
+    pitch: 'Engineers make strong analysts and consultants. Meet members who want to apply technical thinking to business problems.',
+    ways: [
+      'Join a professional development or career prep session',
+      'Partner on a fundraiser or joint event with other student groups',
+      'Support members’ travel to NSBE conferences',
+    ],
+    cats: ['professional', 'partnerships'],
+  },
+  {
+    key: 'community', label: 'Alumni & Community',
+    title: 'Invest in belonging and retention',
+    pitch: 'Students stay and succeed when they feel at home. Your support funds the mentorship, socials and wellness events that make that happen.',
+    ways: [
+      'Support the peer mentorship program and Mentor Mixer',
+      'Sponsor a community dinner, social or wellness night',
+      'Share your own path with members as a guest or mentor',
+    ],
+    cats: ['mentorship', 'community', 'wellness'],
+  },
+];
+
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+const DOWNLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>';
+
+const team = exec
+  .filter((e) => (e.data.department ?? '').toLowerCase() === 'sponsorship')
+  .sort((a, b) => (/director/i.test(a.data.role) ? 0 : 1) - (/director/i.test(b.data.role) ? 0 : 1) || a.data.order - b.data.order);
+---
+<BaseLayout title="Sponsorship" description={`Partner with NSBE Queen's University. See our ${REPORT_YEAR} sponsorship report and the ways your organization can support Black engineering students at Queen's.`}>
+
+<!-- ============ HERO ============ -->
+<header class="page-hero">
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/internship-panel-01.jpg'); background-position: center 40%;"></div>
+  <div class="page-hero-scrim"></div>
+  <div class="container page-hero-content">
+    <h1>Partner With NSBE Queen's</h1>
+    <p>Support the next generation of Black engineers at Queen's, and meet them first.</p>
+    <div class="sp-hero-actions">
+      <a href={report.href} class="btn btn-gold" {...report.attrs}><Fragment set:html={DOWNLOAD} /> {report.label}</a>
+      <a href="#contact" class="btn btn-outline">Talk to Our Team</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ THE REPORT ============ -->
+<section class="section" id="report">
+  <div class="container sp-report">
+    <div class="sp-cover-wrap reveal">
+      <a href={report.href} class="sp-cover" {...report.attrs} aria-label={report.label}>
+        <img src="/images/uploads/cropped-NSBE-Logo-Redesigned-2025-Transparent-150x150.png" alt="" class="sp-cover-logo">
+        <span class="sp-cover-kicker">NSBE Queen's University</span>
+        <span class="sp-cover-title">Sponsorship<br>Report</span>
+        <span class="sp-cover-year">{REPORT_YEAR}</span>
+        <span class="sp-cover-photo" style="background-image:url('/images/uploads/internship-panel-02.jpg')"></span>
+      </a>
+    </div>
+    <div class="sp-report-body reveal">
+      <p class="kicker">Our {REPORT_YEAR} Sponsorship Report</p>
+      <h2>Everything a partner needs, in one place</h2>
+      <p>Our sponsorship report walks you through who our members are, what we have planned this year, and the ways your organization can get involved.</p>
+      <ul class="sp-checks">
+        <li>Who our members are and what they study</li>
+        <li>This year’s event calendar and where support goes</li>
+        <li>Partnership levels and what each one includes</li>
+        <li>Highlights and impact from past years</li>
+      </ul>
+      <div class="sp-actions">
+        <a href={report.href} class="btn btn-purple" {...report.attrs}><Fragment set:html={DOWNLOAD} /> {report.label}</a>
+      </div>
+      {!hasReport && <p class="sp-note">We’ll email you the PDF directly.</p>}
+    </div>
+  </div>
+</section>
+
+<!-- ============ FIND YOUR FIT ============ -->
+<section class="section section-rule" id="fit">
+  <div class="container">
+    <div class="section-head center">
+      <p class="kicker" style="justify-content:center;">Find Your Fit</p>
+      <h2>What partnering looks like for you</h2>
+      <p>Every organization wants something different out of a student partnership. Pick the one closest to yours.</p>
+    </div>
+
+    <div class="sp-fit" data-sp-fit>
+      <div class="sp-tabs" role="tablist" aria-label="Sponsor type">
+        {fits.map((f, i) => (
+          <button class="sp-tab" type="button" role="tab" id={`sp-tab-${f.key}`} aria-controls={`sp-panel-${f.key}`}
+            aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{f.label}</button>
+        ))}
+      </div>
+
+      {fits.map((f, i) => {
+        const matches = events.filter((e) => f.cats.includes(e.data.category));
+        return (
+          <div class={`sp-panel${i === 0 ? ' is-active' : ''}`} role="tabpanel" id={`sp-panel-${f.key}`} aria-labelledby={`sp-tab-${f.key}`} hidden={i !== 0}>
+            <div class="sp-panel-main">
+              <h3>{f.title}</h3>
+              <p>{f.pitch}</p>
+              <ul class="sp-ways">
+                {f.ways.map((w) => <li>{w}</li>)}
+              </ul>
+            </div>
+            <aside class="sp-panel-events">
+              <p class="sp-panel-label">Events that fit</p>
+              <ul>
+                {matches.map((e) => (
+                  <li>
+                    <a href={`/events/${e.id}`}>
+                      <span class="sp-ev-date">{fmt(e.data.date)}</span>
+                      <span class="sp-ev-title">{e.data.title}</span>
+                      <span class={`sp-ev-cat sp-ev-cat--${e.data.category}`}>{EVENT_CATEGORIES[e.data.category]}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY NSBE ============ -->
+<section class="section">
+  <div class="container split">
+    <div class="split-media reveal">
+      <img src="/images/uploads/internship-panel-07.jpg" alt="Members talking with an industry representative at the NSBE Internship Panel" loading="lazy">
+      <div class="frame-accent"></div>
+    </div>
+    <div class="split-body reveal">
+      <p class="kicker">Why NSBE Queen's</p>
+      <h2>More than a logo on a poster</h2>
+      <p>NSBE’s mission is to increase the number of culturally responsible Black engineers who excel academically, succeed professionally and positively impact the community. Our chapter brings that to Queen’s through mentorship, study support, career events and conferences.</p>
+      <p>Sponsors don’t just fund that work. They get to know the students doing it, year after year, as they move from first year into internships and careers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT / TEAM ============ -->
+<section class="section section-ink" id="contact">
+  <div class="container sp-contact">
+    <div class="sp-contact-body">
+      <p class="kicker on-dark">Get in Touch</p>
+      <h2>Let’s build something together</h2>
+      <p>Our sponsorship team will walk you through the report and put together a partnership that fits your goals and budget.</p>
+      <div class="sp-actions">
+        <a href={report.href} class="btn btn-gold" {...report.attrs}><Fragment set:html={DOWNLOAD} /> {report.label}</a>
+        <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Sponsoring NSBE Queen’s')}`} class="btn btn-outline">Email Us <Fragment set:html={ARROW} /></a>
+      </div>
+      <p class="sp-email">{CONTACT_EMAIL}</p>
+    </div>
+    {team.length > 0 && (
+      <ul class="sp-team">
+        {team.map((m) => (
+          <li class="sp-person">
+            {m.data.photo && <img src={m.data.photo} alt={m.data.name} loading="lazy">}
+            <div>
+              <p class="sp-person-name">{m.data.name}</p>
+              <p class="sp-person-role">{m.data.role}</p>
+              {m.data.linkedin && (
+                <a href={m.data.linkedin} target="_blank" rel="noopener" class="sp-person-li" aria-label={`${m.data.name} on LinkedIn`}>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d={LI_PATH}/></svg> LinkedIn
+                </a>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<script>
+  // Sponsor-type tabs: click or use arrow keys to switch.
+  const root = document.querySelector('[data-sp-fit]');
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.sp-tab')];
+    const panels = [...root.querySelectorAll<HTMLElement>('.sp-panel')];
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, j) => {
+        const on = i === j;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[j].hidden = !on;
+        panels[j].classList.toggle('is-active', on);
+      });
+      if (focus) tabs[i].focus();
+      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(i));
+      t.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') select((i + 1) % tabs.length, true);
+        if (e.key === 'ArrowLeft') select((i - 1 + tabs.length) % tabs.length, true);
+      });
+    });
+  }
+</script>
+</BaseLayout>

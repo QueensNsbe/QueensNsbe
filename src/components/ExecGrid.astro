@@ -1,15 +1,29 @@
 ---
-// Everyone who isn't a president, as portrait cards with a name/role bar.
+// The whole exec team as portrait cards with a name/role bar, grouped by team
+// in the order of src/teams.ts (Co-Presidents, Events, Finance, ...). Teams not
+// listed there (e.g. IT) follow at the end. Within a team, directors come first.
 import { getCollection } from 'astro:content';
+import { TEAMS } from '../teams';
 import { LI_PATH } from './icons';
 
+const teamOrder = TEAMS.map((t) => (t.department ?? t.name).toLowerCase());
+const teamRank = (dept = '') => {
+  const i = teamOrder.indexOf(dept.toLowerCase());
+  return i === -1 ? teamOrder.length : i;
+};
+const roleRank = (role: string) => (/president|director/i.test(role) ? 0 : 1);
+
 const all = (await getCollection('exec')).sort(
-  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
+  (a, b) =>
+    teamRank(a.data.department) - teamRank(b.data.department) ||
+    (a.data.department ?? '').localeCompare(b.data.department ?? '') ||
+    roleRank(a.data.role) - roleRank(b.data.role) ||
+    a.data.order - b.data.order ||
+    a.data.name.localeCompare(b.data.name)
 );
-const rest = all.filter((e) => !/president/i.test(e.data.role));
 ---
 <div class="exec-grid reveal-stagger">
-  {rest.map((e) => (
+  {all.map((e) => (
     <div class="exec-card">
       <img src={e.data.photo} alt={e.data.name} loading="lazy">
       <div class="exec-bar">

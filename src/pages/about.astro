@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExecLeadGrid from '../components/ExecLeadGrid.astro';
-import TeamExplorer from '../components/TeamExplorer.astro';
+import ExecGrid from '../components/ExecGrid.astro';
 import { PRESIDENTS_PHOTO as presidentsPhoto } from '../teams';
 import { getCollection } from 'astro:content';
 
@@ -89,6 +89,13 @@ const pillars = [
   </div>
 </section>
 
-<!-- ============ 4. TEAM (team photos + headshots, by department) ============ -->
-<TeamExplorer />
+<!-- ============ 4. TEAM (headshots, grouped by team) ============ -->
+<section class="section section-lilac" id="team">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Meet the 2026&ndash;2027 Executive Team</h2>
+    </div>
+    <ExecGrid />
+  </div>
+</section>
 </BaseLayout>
