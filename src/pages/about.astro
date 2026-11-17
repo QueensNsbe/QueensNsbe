@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExecLeadGrid from '../components/ExecLeadGrid.astro';
-import ExecGrid from '../components/ExecGrid.astro';
+import TeamExplorer from '../components/TeamExplorer.astro';
+import { PRESIDENTS_PHOTO as presidentsPhoto } from '../teams';
 import { getCollection } from 'astro:content';
 
 // The leadership block only shows co-president cards, so skip it until one is added.
@@ -16,7 +17,7 @@ const pillars = [
 <BaseLayout title="About Us" description="Learn about NSBE Queen's University, our mission, our pillars of impact, and the executive team leading the chapter.">
 <!-- ============ PAGE HERO ============ -->
 <header class="page-hero">
-  <div class="page-hero-bg" style="background-image:url('/images/uploads/bsse-group-railing.jpg'); background-position: center 42%;"></div>
+  <div class="page-hero-bg" style="background-image:url('/images/uploads/bsse-group-railing.jpg'); background-position: center 18%;"></div>
   <div class="page-hero-scrim"></div>
   <div class="container page-hero-content">
     <h1>About NSBE Queen's</h1>
@@ -43,7 +44,7 @@ const pillars = [
 <!-- ============ 2. WHO WE ARE + PILLARS ============ -->
 <section class="section section-rule" id="who">
   <div class="container split">
-    <div class="split-media reveal">
+    <div class="split-media reveal hide-on-phone">
       <img src="/images/uploads/IMG_9703-2048x1365.jpg" alt="NSBE Queen's members together at a chapter event" loading="lazy">
       <div class="frame-accent"></div>
     </div>
@@ -71,7 +72,12 @@ const pillars = [
 <!-- ============ 3. LEADERSHIP + NOTE FROM THE CO-PRESIDENTS ============ -->
 <section class="section section-ink" id="leadership">
   <div class="container leaders-split">
-    {hasPresidents && <ExecLeadGrid />}
+    {presidentsPhoto ? (
+      <figure class="leaders-photo reveal">
+        <img src={presidentsPhoto.photo} alt={presidentsPhoto.alt} loading="lazy" style={presidentsPhoto.focus && `object-position:${presidentsPhoto.focus}`}>
+        <figcaption>{presidentsPhoto.members.join(' & ')}<span>{presidentsPhoto.name}</span></figcaption>
+      </figure>
+    ) : hasPresidents && <ExecLeadGrid />}
     <div class="leaders-note reveal" id="president">
       <p class="kicker on-dark">A Note From Our Co-Presidents</p>
       <h2>Welcome to NSBE Queen's University!</h2>
@@ -83,13 +89,6 @@ const pillars = [
   </div>
 </section>
 
-<!-- ============ 4. TEAM ============ -->
-<section class="section section-lilac" id="team">
-  <div class="container">
-    <div class="section-head center">
-      <h2>Meet the 2026&ndash;2027 Executive Team</h2>
-    </div>
-    <ExecGrid />
-  </div>
-</section>
+<!-- ============ 4. TEAM (team photos + headshots, by department) ============ -->
+<TeamExplorer />
 </BaseLayout>

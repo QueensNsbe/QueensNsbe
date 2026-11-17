@@ -10,30 +10,6 @@ const sorted = (await getCollection('events')).sort(
 const now = new Date();
 const recent = sorted.filter((e) => (e.data.endDate ?? e.data.date) < now);
 
-// "Community in Motion" collage. A `tall` tile spans two rows, so its cell is
-// portrait — only mark portrait photos tall, or `object-fit: cover` crops the
-// middle out of a landscape shot and cuts people's heads off.
-const gallery = [
-  { src: '/images/uploads/IMG_9716-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
-  { src: '/images/uploads/IMG_9682-scaled-e1758409214405-758x1024.jpg', alt: "NSBE Queen's event moment", tall: true },
-  { src: '/images/uploads/Black-Engineer-Mixer-09-1-768x512.jpg', alt: 'Black Engineer Mixer' },
-  { src: '/images/uploads/IMG_9731-scaled.jpg', alt: "NSBE Queen's social" },
-  { src: '/images/uploads/IMG_9834-1024x683.jpg', alt: "NSBE Queen's mentorship event" },
-  { src: '/images/uploads/IMG_9730-scaled.jpg', alt: "NSBE Queen's members connecting" },
-  { src: '/images/uploads/VAL2415-1-scaled.jpg', alt: "NSBE Queen's community event" },
-  { src: '/images/uploads/hunt-conference-01.jpg', alt: "NSBE Queen's members at the HUNT Conference" },
-  { src: '/images/uploads/IMG_5515-1-768x1024.jpg', alt: "NSBE Queen's members walking on campus", tall: true },
-  { src: '/images/uploads/internship-panel-01.jpg', alt: "NSBE Queen's members at the Internship Panel" },
-  { src: '/images/uploads/internship-panel-04.jpg', alt: 'A past intern speaking during the panel discussion' },
-  { src: '/images/uploads/IMG_9703-2048x1365.jpg', alt: "NSBE Queen's group photo" },
-  { src: '/images/uploads/IMG_9721-1024x683.jpg', alt: "NSBE Queen's members at a chapter social" },
-  { src: '/images/uploads/bsse-group-railing.jpg', alt: "NSBE Queen's members together on campus" },
-  { src: '/images/uploads/black-history-month-social-2026.jpg', alt: 'Black History Month social' },
-  { src: '/images/uploads/IMG_9728-1-1024x741.jpg', alt: "NSBE Queen's mentorship session" },
-  { src: '/images/uploads/VAL2415-2-1024x683.jpg', alt: "NSBE Queen's members at a chapter event" },
-  { src: '/images/uploads/IMG_7027-768x576.jpg', alt: "NSBE Queen's members" },
-];
-
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
@@ -108,24 +84,6 @@ const calendarData = sorted.map((e) => ({
         <ul class="cal-event-list" id="calEventList"></ul>
         <a href="/join" class="btn btn-ink btn-sm">Get Notified of New Events</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ GALLERY ============ -->
-<section class="section">
-  <div class="container">
-    <div class="section-head center">
-      <p class="kicker" style="justify-content:center;">Moments</p>
-      <h2>Community in Motion</h2>
-      <p>A look back at the socials, conferences, and gatherings that make NSBE Queen's a home away from home.</p>
-    </div>
-    <div class="gallery-grid reveal-stagger">
-      {gallery.map((g) => (
-        <a href={g.src} target="_blank" rel="noopener" class={g.tall ? 'tall' : undefined}>
-          <img src={g.src} alt={g.alt} loading="lazy">
-        </a>
-      ))}
     </div>
   </div>
 </section>
