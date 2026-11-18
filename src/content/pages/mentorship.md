@@ -22,7 +22,7 @@ and careers, and help students navigate challenges with confidence. In the
 process, you'll grow your own leadership, communication, and networking
 skills.
 
-[Apply to be a Mentor](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUNDJUV0RNMVZDWjJGWlcwVDdYMlZQWEZSMS4u)
+Interested? Email [nsbe.mentorship@engsoc.queensu.ca](mailto:nsbe.mentorship@engsoc.queensu.ca) or [contact the team](/contact).
 
 ### 🌱 Become a Mentee
 
@@ -31,7 +31,7 @@ professionals who have already walked the path you're on. Gain advice on
 studying, career opportunities, and personal growth while building
 meaningful connections that will carry you through university and beyond.
 
-[Apply to be a Mentee](https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=eCPPiRaKW0S_qx14hTcxIUxNBzg-5Z9Ev1b3atp6EKFUM1NERzRVVkpBNjNMREQ4QlpWWURYVlA0VC4u)
+Interested? Email [nsbe.mentorship@engsoc.queensu.ca](mailto:nsbe.mentorship@engsoc.queensu.ca) or [contact the team](/contact).
 
 ## Building Lasting Relationships
 
