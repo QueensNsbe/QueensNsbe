@@ -4,5 +4,5 @@ role: "Outreach Director"
 department: "Outreach"
 photo: "/images/uploads/exec-mariana-baraki-1B6A7473.jpg"
 linkedin: "https://www.linkedin.com/in/mariana-baraki-985b151b2/"
-order: 12
+order: 13
 ---

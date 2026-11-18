@@ -157,7 +157,6 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
       <div class="event-grid event-grid--swipe reveal-stagger">
         {featured.map((e) => (
           <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
-            {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
             <div class="event-body">
               <div class="event-date">
                 {fmtDate(e.data.date)}{e.data.endDate && ` – ${fmtDate(e.data.endDate)}`}

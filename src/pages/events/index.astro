@@ -43,7 +43,6 @@ const calendarData = sorted.map((e) => ({
     <div class="event-grid reveal-stagger">
       {recent.map((e) => (
         <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
-          {e.data.image && <div class="event-img"><img src={e.data.image} alt={e.data.title} loading="lazy"></div>}
           <div class="event-body">
             <div class="event-date">
               {fmtDate(e.data.date)}{e.data.endDate && ` – ${fmtDate(e.data.endDate)}`}

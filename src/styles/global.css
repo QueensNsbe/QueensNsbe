@@ -1015,6 +1015,10 @@ html.viewer-open { overflow: hidden; }
 .mentor-card.mentee .btn:hover { background: var(--purple-800); border-color: var(--purple-800); }
 .mentor-card.mentee h3 { color: var(--purple-950); }
 .mentor-card.mentee p { color: var(--gray-600); }
+.mentor-actions { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; }
+.mentor-link { font-weight: 600; font-size: 0.95rem; text-decoration: underline; text-underline-offset: 3px; color: inherit; opacity: 0.85; }
+.mentor-link:hover { opacity: 1; }
+.mentor-card.mentee .mentor-link { color: var(--purple-800); }
 
 /* ---------- Resource / package callout ---------- */
 .resource-box {
@@ -1398,23 +1402,56 @@ a.cal-event-title:hover { text-decoration: underline; }
 .chapter-motion h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
 
 /* ---------- Event photo collage ---------- */
-.event-gallery {
-  margin-top: 52px;
-  display: grid;
+/* Event photo grid: a lead photo, then the rest in even rows. Every photo
+   shows on the page; clicking one opens it full screen. */
+.event-photos { margin-top: 40px; }
+.photo-collage {
+  display: grid; gap: 8px;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-auto-rows: clamp(150px, 20vw, 220px);
+  grid-auto-flow: dense;
 }
-.event-gallery a {
-  display: block;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  aspect-ratio: 3 / 2;
-  background: var(--gray-100);
+.photo-collage--1 { grid-template-columns: 1fr; grid-auto-rows: clamp(260px, 50vw, 480px); }
+.photo-collage--2 { grid-template-columns: 1fr 1fr; grid-auto-rows: clamp(220px, 36vw, 380px); }
+.photo-collage--3 .photo-tile:first-child { grid-column: span 2; grid-row: span 2; }
+.photo-tile {
+  position: relative; display: block; padding: 0; border: 0; margin: 0;
+  border-radius: var(--radius-sm); background: var(--gray-100);
+  cursor: zoom-in; overflow: hidden; min-height: 0;
 }
-.event-gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-.event-gallery a:hover img { transform: scale(1.06); }
-@media (max-width: 860px) { .event-gallery { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .event-gallery { grid-template-columns: 1fr; } }
+.photo-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease), filter 0.3s; }
+.photo-tile:hover img { transform: scale(1.04); filter: brightness(0.92); }
+.photo-tile:focus-visible { outline: 3px solid var(--gold-500); outline-offset: 2px; }
+@media (max-width: 560px) {
+  .photo-collage, .photo-collage--2 { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
+  .photo-collage--1 { grid-auto-rows: 280px; }
+  .photo-collage--3 .photo-tile:first-child { grid-row: span 2; }
+}
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(8, 5, 16, 0.94);
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 56px 16px;
+}
+.lightbox[hidden] { display: none; }
+.lb-figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: min(1100px, 100%); }
+.lb-img { max-width: 100%; max-height: calc(100vh - 140px); object-fit: contain; border-radius: 6px; }
+.lb-count { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+.lb-close, .lb-nav {
+  background: rgba(255,255,255,0.1); color: #fff; border: 0; cursor: pointer;
+  border-radius: 999px; display: grid; place-items: center; transition: background 0.2s;
+}
+.lb-close:hover, .lb-nav:hover { background: rgba(255,255,255,0.22); }
+.lb-close { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; font-size: 1.8rem; line-height: 1; }
+.lb-nav { width: 48px; height: 48px; flex-shrink: 0; }
+.lb-nav[hidden] { display: none; }
+.lb-nav svg { width: 24px; height: 24px; }
+@media (max-width: 640px) {
+  .lb-nav { position: absolute; bottom: 14px; }
+  .lb-prev { left: calc(50% - 60px); }
+  .lb-next { right: calc(50% - 60px); }
+}
 
 /* ---------- Phone polish ----------
    Keeps the laptop layout's feel on small screens: tighter rhythm, fewer
