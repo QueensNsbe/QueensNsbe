@@ -1,8 +1,14 @@
 ---
 title: "Internship / QUIP Panel"
-date: 2026-11-18
+date: 2026-11-23
+time: "5:00 – 7:30 PM"
+location: "Rose Innovation Hub, Mitchell Hall"
 category: professional
 image: "/images/uploads/internship-panel-01.jpg"
+sponsors:
+  - name: "Dunin-Deshpande Innovation Centre at Queen's University"
+    logo: "/images/uploads/sponsor-ddqic.png"
+    url: "https://www.queensu.ca/innovationcentre/"
 gallery:
   - image: "/images/uploads/internship-panel-01.jpg"
     alt: "Members and panellists at the NSBE Internship / QUIP Panel"

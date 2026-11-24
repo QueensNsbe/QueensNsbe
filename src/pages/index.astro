@@ -18,6 +18,11 @@ const upcoming = allEvents.filter((e) => (e.data.endDate ?? e.data.date) >= now)
 const featured = upcoming.length > 0 ? upcoming.slice(0, 3) : allEvents.slice(0, 3);
 const eventsHeading = upcoming.length > 0 ? 'Upcoming Events' : 'Recent Events';
 
+// Sponsor spotlight: the most recent event that lists sponsors in the CMS.
+const spotlightEvent = allEvents.find((e) => (e.data.sponsors ?? []).length > 0);
+const spotlightSponsors = spotlightEvent?.data.sponsors ?? [];
+const spotlightNames = spotlightSponsors.map((s) => s.name).join(' & ');
+
 const JOIN_URL = '/join';
 const IG_URL = SOCIALS.instagram;
 
@@ -91,12 +96,43 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
     </div>
   </section>
 
+  <!-- ============ SPONSOR SPOTLIGHT ============ -->
+  {spotlightEvent && (
+    <section class="sponsor-spotlight" aria-labelledby="spotlight-title">
+      <div class="container sponsor-spotlight-inner reveal">
+        <div class="sponsor-spotlight-copy">
+          <p class="kicker on-dark">Sponsor Spotlight</p>
+          <h2 id="spotlight-title">Thank you to our sponsor{spotlightSponsors.length > 1 ? 's' : ''}</h2>
+          <p>
+            Our <a href={`/events/${spotlightEvent.id}`}>{spotlightEvent.data.title}</a> was made possible
+            by the {spotlightNames}. We're grateful for their support of engineering students at Queen's.
+          </p>
+          <div class="sponsor-spotlight-actions">
+            <a href={`/events/${spotlightEvent.id}`} class="btn btn-gold">See the Event <Fragment set:html={ARROW} /></a>
+            <a href="/sponsorship" class="btn btn-outline">Become a Sponsor</a>
+          </div>
+        </div>
+        <div class="sponsor-spotlight-logos">
+          {spotlightSponsors.map((s) => {
+            const Tag = s.url ? 'a' : 'div';
+            return (
+              <Tag href={s.url} target={s.url ? '_blank' : undefined} rel={s.url ? 'noopener' : undefined} class="sponsor-spotlight-logo">
+                <img src={s.logo} alt={s.name} onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                <span class="sponsor-spotlight-name" hidden>{s.name}</span>
+              </Tag>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ============ WHO WE ARE (+ member voices) ============ -->
   <section class="section">
     <div class="container split">
       <div class="split-body reveal">
         <p class="kicker">Who We Are</p>
-        <h2>Building culturally responsible Black engineers.</h2>
+        <h2>Building culturally responsible engineers.</h2>
         <p>The Queen's University National Society of Black Engineers (NSBE) chapter is one of the many chapters of the North American NSBE organization. Our mission is to increase the number of culturally responsible black engineers who excel academically, succeed professionally and positively impact the community.</p>
         <p>Through our events, mentorship, and leadership opportunities, we support academic success and celebrate Black excellence on campus.</p>
         <a href="/about" class="btn btn-purple">Learn More <Fragment set:html={ARROW} /></a>
