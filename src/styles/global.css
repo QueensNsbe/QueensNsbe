@@ -1401,6 +1401,52 @@ a.cal-event-title:hover { text-decoration: underline; }
 .chapter-motion { margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--gray-200); align-items: center; }
 .chapter-motion h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
 
+/* ---------- Events: collapsible recent events ---------- */
+.event-grid.is-collapsed .event-card--extra { display: none; }
+.event-grid-toggle { display: flex; justify-content: center; margin-top: 32px; }
+.event-grid-toggle .btn { display: inline-flex; align-items: center; gap: 8px; }
+.event-grid-toggle svg { width: 16px; height: 16px; transition: transform 0.3s var(--ease); }
+.event-grid-toggle .btn.is-collapsed svg { transform: rotate(180deg); }
+
+/* ---------- Home: sponsor spotlight ---------- */
+.sponsor-spotlight {
+  position: relative; overflow: hidden;
+  background: var(--ink); color: var(--white);
+  padding: clamp(56px, 8vw, 96px) 0;
+  border-top: 3px solid var(--gold-500);
+}
+.sponsor-spotlight::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(237, 197, 54, 0.14), transparent 70%);
+}
+.sponsor-spotlight-inner {
+  position: relative; display: grid; align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(32px, 6vw, 80px);
+}
+.sponsor-spotlight h2 { color: var(--white); margin-bottom: 16px; }
+.sponsor-spotlight-copy p:not(.kicker) { color: rgba(255, 255, 255, 0.78); font-size: 1.05rem; max-width: 46ch; }
+.sponsor-spotlight-copy p a { color: var(--gold-400); text-decoration: underline; text-underline-offset: 3px; }
+.sponsor-spotlight-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.sponsor-spotlight-logos { display: grid; gap: 20px; }
+.sponsor-spotlight-logo {
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+a.sponsor-spotlight-logo:hover { border-color: var(--gold-500); background: rgba(255, 255, 255, 0.06); }
+.sponsor-spotlight-name {
+  font-family: var(--font-display); font-weight: 700; text-align: center;
+  font-size: clamp(1.3rem, 2.6vw, 2rem); line-height: 1.2; color: var(--white);
+}
+.sponsor-spotlight-logo img[hidden], .sponsor-spotlight-name[hidden] { display: none; }
+.sponsor-spotlight-logo img { display: block; width: 100%; max-width: 560px; max-height: 180px; height: auto; object-fit: contain; }
+@media (max-width: 860px) {
+  .sponsor-spotlight-inner { grid-template-columns: 1fr; }
+  .sponsor-spotlight-logos { order: -1; }
+}
+
 /* ---------- Event photo collage ---------- */
 /* Event photo grid: a lead photo, then the rest in even rows. Every photo
    shows on the page; clicking one opens it full screen. */

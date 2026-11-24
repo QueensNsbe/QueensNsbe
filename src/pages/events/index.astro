@@ -9,6 +9,8 @@ const sorted = (await getCollection('events')).sort(
 // Upcoming events only show on the calendar until their date has passed.
 const now = new Date();
 const recent = sorted.filter((e) => (e.data.endDate ?? e.data.date) < now);
+// Recent events beyond this many are tucked away behind a "Show all" button.
+const RECENT_SHOWN = 3;
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
@@ -40,9 +42,9 @@ const calendarData = sorted.map((e) => ({
       <p class="kicker">Recent Events</p>
       <h2>Highlights From 2026&ndash;2027</h2>
     </div>
-    <div class="event-grid reveal-stagger">
-      {recent.map((e) => (
-        <a class={`event-card event-card--${e.data.category}`} href={`/events/${e.id}`}>
+    <div class="event-grid reveal-stagger" id="recentGrid">
+      {recent.map((e, i) => (
+        <a class={`event-card event-card--${e.data.category}${i >= RECENT_SHOWN ? ' event-card--extra' : ''}`} href={`/events/${e.id}`}>
           <div class="event-body">
             <div class="event-date">
               {fmtDate(e.data.date)}{e.data.endDate && ` – ${fmtDate(e.data.endDate)}`}
@@ -54,6 +56,14 @@ const calendarData = sorted.map((e) => ({
         </a>
       ))}
     </div>
+    {recent.length > RECENT_SHOWN && (
+      <div class="event-grid-toggle">
+        <button type="button" class="btn btn-ink btn-sm" id="recentToggle" aria-controls="recentGrid" aria-expanded="true" hidden>
+          <span class="label">Show less</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+        </button>
+      </div>
+    )}
     {recent.length === 0 && <p class="text-center">No events logged yet, check back soon.</p>}
   </div>
 </section>
@@ -90,3 +100,26 @@ const calendarData = sorted.map((e) => ({
 <!-- ============ FOOTER ============ -->
 <script type="application/json" id="calendar-data" set:html={JSON.stringify(calendarData)} is:inline></script>
 </BaseLayout>
+
+<script>
+  // Collapse older recent events behind a toggle. Without JS every card shows.
+  const grid = document.getElementById('recentGrid');
+  const btn = document.getElementById('recentToggle');
+  if (grid && btn) {
+    const extra = grid.querySelectorAll('.event-card--extra').length;
+    const label = btn.querySelector('.label')!;
+    const set = (collapsed: boolean) => {
+      grid.classList.toggle('is-collapsed', collapsed);
+      btn.setAttribute('aria-expanded', String(!collapsed));
+      btn.classList.toggle('is-collapsed', collapsed);
+      label.textContent = collapsed ? `Show all events (${extra} more)` : 'Show less';
+    };
+    set(true);
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      const collapsing = !grid.classList.contains('is-collapsed');
+      set(collapsing);
+      if (collapsing) grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  }
+</script>

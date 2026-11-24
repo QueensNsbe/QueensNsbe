@@ -23,6 +23,17 @@ const events = defineCollection({
     gallery: z
       .array(z.object({ image: z.string(), alt: z.string().optional() }))
       .optional(),
+    // Organisations that sponsored this event. The most recent event with
+    // sponsors is featured in the home page Sponsor Spotlight.
+    sponsors: z
+      .array(
+        z.object({
+          name: z.string(),
+          logo: z.string(),
+          url: z.string().url().optional(),
+        })
+      )
+      .optional(),
   }),
 });
 
