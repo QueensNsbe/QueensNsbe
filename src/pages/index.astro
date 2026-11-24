@@ -181,6 +181,84 @@ const STAR = '<path d="M12 2l2.9 6.4L22 9l-5 5 1.2 7L12 17.8 5.8 21 7 14 2 9l7.1
     </div>
   </section>
 
+  <!-- ============ OPEN INTERNSHIPS (from the chapter Discord) ============ -->
+  <section class="section section-rule internships" id="internships" hidden>
+    <div class="container">
+      <div class="section-head center">
+        <p class="kicker" style="justify-content:center;">Career Board</p>
+        <h2>Open Internships</h2>
+        <p>Fresh opportunities shared by our presidents in the NSBE Queen's Discord. Apply early, since many close fast.</p>
+      </div>
+      <p class="internships-sample" hidden>Sample postings. Real ones appear once the Discord bot is connected.</p>
+      <div class="internship-grid"></div>
+      {SOCIALS.discord && (
+        <a class="internships-discord" href={SOCIALS.discord} target="_blank" rel="noopener">
+          <span class="internships-discord-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d={ICON_PATHS.discord} /></svg>
+          </span>
+          <span class="internships-discord-copy">
+            <strong>See all open internships</strong>
+            <span>These are the 3 newest. Every posting, plus deadlines and tips, is in <b>#job-oppurtunities</b> on our Discord.</span>
+          </span>
+          <span class="btn btn-gold internships-discord-btn">Join Our Discord <Fragment set:html={ARROW} /></span>
+        </a>
+      )}
+    </div>
+  </section>
+  <script>
+    const section = document.getElementById('internships');
+    const grid = section?.querySelector('.internship-grid');
+
+    function ago(iso: string) {
+      const h = Math.round((Date.now() - Date.parse(iso)) / 3_600_000);
+      if (h < 1) return 'Just posted';
+      if (h < 24) return `${h}h ago`;
+      const d = Math.round(h / 24);
+      return d === 1 ? 'Yesterday' : `${d} days ago`;
+    }
+
+    function el(tag: string, cls: string, text?: string) {
+      const n = document.createElement(tag);
+      n.className = cls;
+      if (text) n.textContent = text;
+      return n;
+    }
+
+    fetch('/api/internships.json')
+      .then((r) => (r.ok ? r.json() : { postings: [] }))
+      .then(({ postings, sample }) => {
+        if (!section || !grid || !postings?.length) return;
+        // Only the 3 newest show here; the Discord box below links to the rest.
+        for (const p of postings.slice(0, 3)) {
+          const card = el('a', 'internship-card') as HTMLAnchorElement;
+          card.href = p.link;
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+          const meta = el('div', 'internship-meta');
+          meta.append(el('span', 'internship-posted', ago(p.postedAt)));
+          if (p.deadline) meta.append(el('span', 'internship-deadline', `Due ${p.deadline}`));
+          if (p.category) card.append(el('p', 'internship-category', p.category));
+          card.append(meta, el('h3', '', p.title));
+          const facts = el('ul', 'internship-facts');
+          for (const [label, value] of [['Location', p.location], ['Pay', p.pay], ['Term', p.term]]) {
+            if (!value) continue;
+            const li = el('li', '');
+            li.append(el('span', 'internship-fact-label', label), document.createTextNode(value));
+            facts.append(li);
+          }
+          if (facts.childElementCount) card.append(facts);
+          if (p.details) card.append(el('p', 'internship-details', p.details));
+          const foot = el('div', 'internship-foot');
+          foot.append(el('span', 'internship-site', p.site), el('span', 'internship-apply', 'Apply →'));
+          card.append(foot);
+          grid.append(card);
+        }
+        if (sample) section.querySelector<HTMLElement>('.internships-sample')!.hidden = false;
+        section.hidden = false;
+      })
+      .catch(() => {});
+  </script>
+
   <!-- ============ EVENTS TEASER ============ -->
   <section class="section">
     <div class="container">
