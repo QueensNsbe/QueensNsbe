@@ -11,7 +11,7 @@ export const SOCIALS = {
   instagram: 'https://www.instagram.com/nsbe.queens/',
   linkedin: 'https://www.linkedin.com/company/nsbe-queen-s-university/posts/?feedView=all',
   tiktok: 'https://www.tiktok.com/@queens.nsbe',
-  discord: '',
+  discord: 'https://discord.gg/emvrZtaJJy',
 };
 
 export const ICON_PATHS = {
